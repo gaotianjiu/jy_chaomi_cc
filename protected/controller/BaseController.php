@@ -6,6 +6,8 @@ class BaseController extends Controller {
     public $layout = "";
     function init() {
         header("Content-type: text/html; charset=utf-8");
+        require(APP_DIR . '/protected/include/functions.php'); // 加载全局函数
+        require(APP_DIR . '/protected/include/spFunctions.php'); // 加载全局函数
     }
 
     function tips($msg, $url) {
@@ -27,4 +29,3 @@ class BaseController extends Controller {
     //	exit;
     //}
 }
-require(APP_DIR . '/protected/include/functions.php'); // 加载全局函数

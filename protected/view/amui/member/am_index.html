@@ -135,7 +135,7 @@
                         <div class="am-u-sm-12 am-u-md-6">
 							<div class="am-panel am-panel-default am-panel-bd" style="padding: .8rem 1.25rem;min-height:130px;">
 								<div style="font-weight: 600;padding-bottom:5px;">最新公告</div>		
-									<{foreach from=$announce_list_ret item=r}>
+									<{foreach $announce_list_ret as $r}>
                                    <div style="padding-bottom:5px;margin-bottom:0px;">    
                                         <div class="panel-box"><i></i> <a href="/announce/view?id=<{$r.id}>" target="_blank" style="font-size:14px;"><{$r.title}></a><span class="am-fr"> <{$r.update_time}></span></div>
     								</div>
@@ -150,7 +150,7 @@
                         <div class="am-u-sm-12 am-u-md-6">
 							<div class="am-panel am-panel-default am-panel-bd" style="padding: .8rem 1.25rem;min-height:130px;">
 								<div style="font-weight: 600;padding-bottom:5px;">站内短信</div>		
-									<{foreach from=$web_msg_ret item=r}>
+									<{foreach  $web_msg_ret as $r}>
                                    <div style="padding-bottom:5px;margin-bottom:0px;">    
                                         <div class="panel-box"><i></i> <a href="/user/msg_content?id=<{$r.content_id}>" target="_blank" style="font-size:14px;">【系统消息】<{$r.title}></a><span class="am-fr"> <{$r.to_time}></span></div>
     								</div>
@@ -187,7 +187,7 @@
 										<td colspan="8" style="text-align:center;line-height: 250px;">暂无委托</td>
 									</tr>
 									<{/if}>									
-                                 <{foreach item=v from=$reg key=k}>
+                                 <{foreach $reg as $k}>
                                     <tr>
                                         <td><{$v.order_time}></td>
                                         <td><{$v.name}><{if $v.typeid>800000}><br/><span style="color:#888;font-size:12px;">到期时间：<{$v.pt_zb}></span><{/if}></td>

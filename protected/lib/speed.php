@@ -98,7 +98,9 @@ function url($c = 'main', $a = 'index', $param = array()){
                 } else {
                     $c = $param['c']; unset($param['c']);
                 }
-		$a = $param['a']; unset($param['a']);
+                if(isset($param['a'])){
+                    $a = $param['a']; unset($param['a']);
+                }
 	}
 	$params = empty($param) ? '' : '&'.http_build_query($param);
 	if(strpos($c, '/') !== false){
@@ -512,13 +514,13 @@ function _err_handle($errno, $errstr, $errfile, $errline){
 	err("$msg: $errstr in $errfile on line $errline");
 }
 
-function spClass($class){
-    $gb = null;
-    if($class){
-        $gb = new $class();
-    }
-    return $gb;
-}
+//function spClass($class){
+//    $gb = null;
+//    if($class){
+//        $gb = new $class();
+//    }
+//    return $gb;
+//}
 
 function err($msg){
 	$msg = htmlspecialchars($msg);

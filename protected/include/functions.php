@@ -329,7 +329,6 @@ function json_s($array) {
   echo cache_a('666',null); 删
  */
 function cache_a($cache_name, $cache_value = '', $cache_time = 60) {
-    return false;
     if (empty($cache_name))
         return false; //缓存名字及缓存数据两者不能为空
     $cache_name = 'lock_' . $cache_name; //前面加上lock_ 防止冲突
@@ -395,21 +394,20 @@ function write_log_shiwu($text) {
   echo cache_s('666',null); 删
  */
 function cache_s($cache_name, $cache_value = '', $cache_time = 60) {
-    return false;
-//    if (empty($cache_name))
-//        return false; //缓存名字及缓存数据两者不能为空
-//    if ('' === $cache_value) { // 获取缓存
-//        return spAccess('r', $cache_name); //缓存数据为空时=读取缓存数据
-//    } elseif (is_null($cache_value)) { // 删除缓存
-//        return spAccess('c', $cache_name); //缓存数据为null时=删除缓存
-//    } else { // 缓存数据
-//        try {
-//            $ret = spAccess('w', $cache_name, $value = $cache_value, $life_time = $cache_time); //写入缓存
-//            return $ret;
-//        } catch (Exception $e) {
-//            return false;
-//        }
-//    }
+    if (empty($cache_name))
+        return false; //缓存名字及缓存数据两者不能为空
+    if ('' === $cache_value) { // 获取缓存
+        return spAccess('r', $cache_name); //缓存数据为空时=读取缓存数据
+    } elseif (is_null($cache_value)) { // 删除缓存
+        return spAccess('c', $cache_name); //缓存数据为null时=删除缓存
+    } else { // 缓存数据
+        try {
+            $ret = spAccess('w', $cache_name, $value = $cache_value, $life_time = $cache_time); //写入缓存
+            return $ret;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
 
 /**

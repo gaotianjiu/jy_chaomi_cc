@@ -34,11 +34,16 @@ $domain = array(
             'MYSQL_PASS' => 'Q3b095bGPYzWbJ4SFfP',
             'MYSQL_CHARSET' => 'utf8',
         ),
+        "G_SP" => array('sp_cache' => __DIR__. "/tmp", //为兼容老版的一些函数增加的参数。
+            'sp_app_id' => ''
+        ) 
     ), 
     "speedphp.com" => array(//线上配置
         'debug' => 0,
         'mysql' => array(),
     ),
+    
+    
 );
 // 为了避免开始使用时会不正确配置域名导致程序错误，加入判断
 //if (empty($domain[$_SERVER["HTTP_HOST"]]))
