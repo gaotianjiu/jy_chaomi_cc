@@ -41,7 +41,7 @@
                                 </thead>
                                 <tbody>
 
-                                    <{foreach from=$team item=domain}>
+                                    <{foreach $team as $domain}>
                                     <tr>
                                         <td><input type="checkbox" name="id[]" value="<{$domain['id']}>"/>"<{$domain['id']}>" </td>
                                         <td><{$domain.teamName}></td>
@@ -86,7 +86,7 @@
                                         <li><a href="<{spUrl c=trading a=domainList page=$pager.first_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">首页</a></li>
                                         <li><a href="<{spUrl c=trading a=domainList page=$pager.prev_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">上一页</a></li>
                                         <{/if}>
-                                        <{foreach from=$pager.all_pages item=thepage}>
+                                        <{foreach $pager.all_pages as $thepage}>
                                         <{if $thepage != $pager.current_page}>
                                         <li><a href="<{spUrl c=trading a=domainList page=$thepage pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>"><{$thepage}></a></li>
                                         <{else}>

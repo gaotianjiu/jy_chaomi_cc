@@ -47,7 +47,7 @@
 								<div class="am-form-group">停放周期：
 									<select data-am-selected="{btnSize: 'sm'}"  name="cycle_time" style="width:200px;">
 										<option value="0">全部</option>
-										<{foreach item=v from=$cycle_time_arr key=k}>
+										<{foreach $cycle_time_arr as $k => $v}>
 										<option value="<{$k}>" <{if $cond.cycle_time==$k}>selected<{/if}>><{$v}></option>
 										<{/foreach}>
 									</select>
@@ -57,7 +57,7 @@
 								<div class="am-form-group">停放状态：
 									<select data-am-selected="{btnSize: 'sm'}"  name="status" style="width:200px;">
 										<option value="0">全部</option>
-										<{foreach item=v from=$status_arr key=k}>
+										<{foreach $status_arr as $k => $v}>
 										<option value="<{$k}>" <{if $cond.status==$k}>selected<{/if}>><{$v}></option>
 										<{/foreach}>
 									</select>
@@ -105,7 +105,7 @@
 											<td colspan="12" style="text-align:center;line-height: 50px;">暂无停放数据</td>
 										</tr>
 										<{/if}>			
-									 <{foreach item=v from=$ret key=k}> 
+									 <{foreach $ret as $k => $v}> 
                                         <tr>
                                             <td><{$v.id}></td>
                                             <td><{$v.domain}></td>
@@ -147,7 +147,7 @@
 													<li><a href="<{spUrl c=parking a=applyList typeid=$cond.typeid cycle_time=$cond.cycle_time status=$cond.status page=$pager.first_page}>">首页</a></li>
 													<li><a href="<{spUrl c=parking a=applyList typeid=$cond.typeid cycle_time=$cond.cycle_time status=$cond.status page=$pager.prev_page}>">上一页</a></li>
 												<{/if}>
-												<{foreach from=$pager.all_pages item=thepage}>
+												<{foreach $pager.all_pages as $thepage}>
 													<{if $thepage != $pager.current_page}>
 														<li><a href="<{spUrl c=parking a=applyList typeid=$cond.typeid cycle_time=$cond.cycle_time status=$cond.status page=$thepage}>"><{$thepage}></a></li>
 													<{else}>

@@ -60,7 +60,7 @@
 										<label class="am-u-sm-3 am-form-label">兑换一级域名品种</label>
 										<div class="am-u-sm-9">
 											<select data-am-selected="" id="typeid">
-                                                                                                <{foreach item=type from=$types key=enname}>
+                                                                                                <{foreach $types as $enname => $type}>
                                                                                                 <option value="<{$type.id}>"><{$type.name}></option>
                                                                                                 <{/foreach}>
 											</select>

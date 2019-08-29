@@ -3,7 +3,6 @@ set_error_handler("_err_handle");
 defined('DS') or define('DS', DIRECTORY_SEPARATOR);
 $GLOBALS = require(APP_DIR.DS.'protected'.DS.'config.php');
 
-
 if($GLOBALS['debug']){
 	error_reporting(-1);
 	ini_set("display_errors", "On");

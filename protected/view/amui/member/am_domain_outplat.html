@@ -56,7 +56,7 @@
                                     <{if $status==0}>
                                     <tbody>
                                     <{if $result}>
-                                    <{foreach from=$result item=v}>
+                                    <{foreach $result as $v}>
                                     <tr id="t_id_<{$v.id}>">
                                         <input type="hidden" name="domain[]" value="<{str_replace('.','_',$v.domain)}>"/>
                                         <td><{$v.domain}></td>
@@ -65,9 +65,9 @@
                                         <td>
                                             <select name="pt[]">
                                                 <{if $webpt}>
-													<{foreach from=$webpt item=v1}>
+													<{foreach $webpt as $v1}>
 														<{if $v1['pt'] == $v['pingtai']}>
-															<{foreach from=$v1.ptnum item=v2}>
+															<{foreach $v1.ptnum as $v2}>
 																<option value="<{$v2.id}>"><{$v2.name}></option>
 															<{/foreach}>
 														<{/if}>

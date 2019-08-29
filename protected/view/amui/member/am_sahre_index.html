@@ -52,7 +52,7 @@
 											<td colspan="8" style="text-align:center;line-height: 50px;">暂无数据</td>
 										</tr>
 										<{/if}>			
-									 <{foreach item=v from=$ret key=k}> 
+									 <{foreach $ret as $k => $v}> 
                                         <tr>
                                             <td><{$v.reg_mid}></td>
                                             <td><{$v.create_time}></td>
@@ -72,7 +72,7 @@
 													<li><a href="<{spUrl c=share a=index page=$pager.first_page}>">首页</a></li>
 													<li><a href="<{spUrl c=share a=index page=$pager.prev_page}>">上一页</a></li>
 												<{/if}>
-												<{foreach from=$pager.all_pages item=thepage}>
+												<{foreach $pager.all_pages as $thepage}>
 													<{if $thepage != $pager.current_page}>
 														<li><a href="<{spUrl c=share a=index page=$thepage}>"><{$thepage}></a></li>
 													<{else}>

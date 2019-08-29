@@ -37,7 +37,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-									<{foreach item=v from=$ret key=k}><tr>
+									<{foreach $ret as $k => $v}><tr>
 									<td><{$v['date']}></td>
 									<td><{$v['am_price']}></td>
 									<td><{$v['em_price']}></td>

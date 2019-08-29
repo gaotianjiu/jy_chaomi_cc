@@ -1,5 +1,16 @@
 <?php
 
+bcscale(2); //设置保留两位小数********请勿删除********
+define('bRate','0.000');
+define('sRate','0.02');//卖出手续费
+define('withdraw','0.01');
+define('bFund','0.00');
+define('sFund','0.00');
+define('expire_limit',20);
+define('suppose_price',700);
+define('admin',88888);
+define('pgsize',20);
+
 function domain_typeid() {
     // return array('all','411104','411107','411109','411113','411101','411102','411103','411106','412102','614101');//全局品种ID，一般用于更新成交缓存等，如添加品种需要添加上数组
     $data = get_type_list();

@@ -41,7 +41,7 @@
 											<td colspan="6" style="text-align:center;line-height: 50px;">暂无持有域名，您可<a href="/check/index">提交域名入盘</a>或<a href="http://jy.chaomi.cc/">买入域名</a></td>
 										</tr>
 										<{/if}>
-                                    <{foreach from=$ret item=r}>
+                                    <{foreach $ret as $r}>
                                     <tr>
                                         <td><{$r.name}></td>
                                         <td><span style="color:#F37B1D; font-weight:bold;"><{$r.num}></span></td>

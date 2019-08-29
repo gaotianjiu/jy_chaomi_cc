@@ -114,7 +114,7 @@
 													<{if !$domain_list}>
 														<tr style="height:40px;"><td colspan="3" style="text-align:center;line-height: 40px;">暂无域名</td></tr>
 													<{/if}>
-													<{foreach item=v from=$domain_list key=k}>
+													<{foreach $domain_list as $k => $v}>
 													<tr style="height:40px;">
 														<td><{$v.domain}></td>
 														<td><{$v.name}></td>

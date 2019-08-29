@@ -8,6 +8,11 @@ class BaseController extends Controller {
         header("Content-type: text/html; charset=utf-8");
         require(APP_DIR . '/protected/include/functions.php'); // 加载全局函数
         require(APP_DIR . '/protected/include/spFunctions.php'); // 加载全局函数
+        
+        $this->cm_nav='jy';
+        $this->module='';
+        $this->act='';
+        $this->msg_count=0;
     }
 
     function tips($msg, $url) {

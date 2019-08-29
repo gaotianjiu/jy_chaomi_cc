@@ -61,7 +61,7 @@
 											<td colspan="8" style="text-align:center;line-height: 50px;">暂无相关记录</td>
 										</tr>
 										<{/if}>									
-									 <{foreach item=v from=$domain_zip key=k}> 
+									 <{foreach $domain_zip as $k => $v}> 
                                         <tr>
                                             <td><{$v.id}></td>
                                             <td><a href="<{spUrl c=check a=applyId id=$v.id}>" target="_blank"><{$v.domain_zip}></a></td>
@@ -92,7 +92,7 @@
 													<li><a href="<{spUrl c=check a=applyList page=$pager.first_page status=$status}>">首页</a></li>
 													<li><a href="<{spUrl c=check a=applyList page=$pager.prev_page status=$status}>">上一页</a></li>
 												<{/if}>
-												<{foreach from=$pager.all_pages item=thepage}>
+												<{foreach $pager.all_pages as $thepage}>
 													<{if $thepage != $pager.current_page}>
 														<li><a href="<{spUrl c=check a=applyList page=$thepage status=$status}>"><{$thepage}></a></li>
 													<{else}>

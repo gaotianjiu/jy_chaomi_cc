@@ -71,7 +71,7 @@
 											<td colspan="9" style="text-align:center;line-height: 50px;">暂无数据</td>
 										</tr>
 										<{/if}>			
-									 <{foreach item=v from=$ret key=k}> 
+									 <{foreach $ret as $k => $v}> 
                                         <tr>
                                             <!-- <td><{$v.id}></td> -->
                                             <td style="max-width:250px;word-wrap:break-word; word-break:break-all;">
@@ -124,7 +124,7 @@
 													<li><a href="<{spUrl c=push a=accept_list page=$pager.first_page}>">首页</a></li>
 													<li><a href="<{spUrl c=push a=accept_list page=$pager.prev_page}>">上一页</a></li>
 												<{/if}>
-												<{foreach from=$pager.all_pages item=thepage}>
+												<{foreach $pager.all_pages as $thepage}>
 													<{if $thepage != $pager.current_page}>
 														<li><a href="<{spUrl c=push a=accept_list page=$thepage}>"><{$thepage}></a></li>
 													<{else}>

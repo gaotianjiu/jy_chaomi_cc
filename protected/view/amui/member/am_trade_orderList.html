@@ -51,7 +51,7 @@
 											<td colspan="9" style="text-align:center;line-height: 50px;">暂无相关委单数据</td>
 										</tr>
 										<{/if}>										
-									 <{foreach item=v from=$ret key=k}> 
+									 <{foreach $ret as $k => $v}> 
                                         <tr>
                                             <td><{$v.order_time}></td>
                                             <td><{$v.name}><{if $v.typeid>800000}><br/><span style="color:#888;font-size:12px;">到期时间：<{$v.pt_zb}></span><{/if}></td>
@@ -81,7 +81,7 @@
 													<li><a href="<{spUrl c=trading a=orderList page=$pager.first_page status=$status}>">首页</a></li>
 													<li><a href="<{spUrl c=trading a=orderList page=$pager.prev_page status=$status}>">上一页</a></li>
 												<{/if}>
-												<{foreach from=$pager.all_pages item=thepage}>
+												<{foreach $pager.all_pages as $thepage}>
 													<{if $thepage != $pager.current_page}>
 														<li><a href="<{spUrl c=trading a=orderList page=$thepage status=$status}>"><{$thepage}></a></li>
 													<{else}>

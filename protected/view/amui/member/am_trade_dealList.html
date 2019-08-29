@@ -85,7 +85,7 @@
 											<td colspan="8" style="text-align:center;line-height: 50px;">暂无相关成交数据</td>
 										</tr>
 										<{/if}>											
-                                    <{foreach item=v from=$reg key=k}>
+                                    <{foreach $reg as $k => $v}>
                                     <tr class="change">
                                         <td><{$v.name}><{if $v.typeid>800000}><br/><span style="color:#888;font-size:12px;">到期时间：<{$v.pt_zb}></span><{/if}></td>
                                         <td><{if $v.sta==1}><span class="font-red">买入</span><{else}><span class="font-blue">卖出</span><{/if}></td>
@@ -112,7 +112,7 @@
 													<li><a href="<{spUrl c=trading a=find_order page=$pager.first_page type=$type status=$status start_time=$start_time end_time=$end_time }>">首页</a></li>
 													<li><a href="<{spUrl c=trading a=find_order page=$pager.prev_page type=$type status=$status start_time=$start_time end_time=$end_time }>">上一页</a></li>
 												<{/if}>
-												<{foreach from=$pager.all_pages item=thepage}>
+												<{foreach $pager.all_pages as $thepage}>
 													<{if $thepage != $pager.current_page}>
 														<li><a href="<{spUrl c=trading a=find_order page=$thepage type=$type status=$status start_time=$start_time end_time=$end_time }>"><{$thepage}></a></li>
 													<{else}>

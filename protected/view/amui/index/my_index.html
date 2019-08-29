@@ -85,7 +85,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-									<{foreach item=v from=$deal_data key=k}><tr>
+									<{foreach $deal_data as $k => $v}><tr>
 									<td><{$k+1}></td><td><{$v.domain}></td><td><{$v.deal_price}>元</td><td><{$v.name}></td><td><{$v.deal_time}></td>
 									<td>
 										<{if $v.deal_status==1}><span class="font-blue">卖出</span><{/if}>

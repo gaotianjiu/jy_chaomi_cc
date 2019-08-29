@@ -48,7 +48,7 @@
                                     </thead>
                                     <tbody>
                                     <{if $result}>
-                                    <{foreach from=$result item=v}>
+                                    <{foreach $result as $v}>
                                     <tr id="t_id_<{$v.id}>">
                                         <td><{$v.id}></td>
                                         <td><{$v.domain}></td>
@@ -81,7 +81,7 @@
                                         <li><a href="<{spUrl c=tradeList a=shopcart act=list page=$pager.first_page  }>">首页</a></li>
                                         <li><a href="<{spUrl c=tradeList a=shopcart act=list page=$pager.prev_page }>">上一页</a></li>
                                         <{/if}>
-                                        <{foreach from=$pager.all_pages item=thepage}>
+                                        <{foreach $pager.all_pages as $thepage}>
                                         <{if $thepage != $pager.current_page}>
                                         <li><a href="<{spUrl c=tradeList a=shopcart act=list page=$thepage}>"><{$thepage}></a></li>
                                         <{else}>

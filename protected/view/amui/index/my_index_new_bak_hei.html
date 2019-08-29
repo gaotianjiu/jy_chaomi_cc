@@ -148,7 +148,7 @@ body {
 											</tr>
 										</thead>
 										<tbody>
-												<{foreach item=v from=$deal_datas key=k}>
+												<{foreach $deal_datas as $k => $v}>
 												<tr>
 													<td><{$v.deal_time}></td><td><{$v.domain}></td><td class="<{if $v.deal_status==2}> font-red<{/if}><{if $v.deal_status==1}> font-green<{/if}>"><{$v.deal_price}></td>
 												</tr>

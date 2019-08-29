@@ -46,7 +46,7 @@
 											<td colspan="8" style="text-align:center;line-height: 50px;">暂无相关记录</td>
 										</tr>
 										<{/if}>										
-									 <{foreach item=v from=$res key=k}> 
+									 <{foreach $res as $k => $v}> 
                                         <tr>
                                             <td><{$v.id}></td>
                                             <td><{$v.website}></td>

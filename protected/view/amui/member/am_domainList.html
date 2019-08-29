@@ -54,7 +54,7 @@
                                                     <font>域名后缀：</font>
                                                     <select data-am-selected name="suffix">
                                                         <option value="0">未选定</option>
-                                                        <{foreach from=$suffix_rec item=suffix}>
+                                                        <{foreach $suffix_rec as $suffix}>
                                                         <option value="<{$suffix['id']}>" <{if $suffix['id']==$cond['suffix']}>  selected<{/if}>   ><{$suffix['name']}></option>
                                                         <{/foreach}>
                                                     </select>
@@ -68,7 +68,7 @@
                                                     <font>域名分组：</font>
                                                     <select name="team_select" data-am-selected="{btnSize: 'sm'}" onchange="setteam('<{$domain.id}>')" >
                                                         <option value="0">未分组</option>
-                                                        <{foreach from=$rs_team item=team}>
+                                                        <{foreach $rs_team as $team}>
                                                         <option value="<{$team.id}>" <{if $cond['team_select']==$team.id}> selected<{/if}>><{$team.teamName}></option>
                                                         <{/foreach}>
                                                     </select>
@@ -263,7 +263,7 @@
                                         <td colspan="8" style="text-align:center;line-height: 50px;">暂无持有域名，您可<a href="/check/index">提交域名入盘</a>或<a href="http://jy.chaomi.cc/">买入域名</a></td>
                                     </tr>
                                     <{/if}>
-                                    <{foreach from=$reggg item=domain}>
+                                    <{foreach $reggg as $domain}>
                                     <tr>
                                         <td><input type="checkbox" name="id[]"<{if $domain.locked==2 || $domain.locked==5}> disabled="disabled" <{/if}>value="<{$domain.id}>"/></td>
                                         <td><{$domain.domain}></td>
@@ -294,7 +294,7 @@
                                         <td>
                                             <select name="team-<{$domain.id}>" data-am-selected="{btnSize: 'sm'}" onchange="setteam('<{$domain.id}>')" >
                                                 <option value="0">未分组</option>
-                                                <{foreach from=$rs_team item=team}>
+                                                <{foreach $rs_team as $team}>
                                                 <option value="<{$team.id}>" <{if $domain.team_id==$team.id}> selected<{/if}>><{$team.teamName}></option>
                                                 <{/foreach}>
                                             </select>
@@ -359,7 +359,7 @@
                                         <li><a href="<{spUrl c=trading a=domainList page=$pager.first_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">首页</a></li>
                                         <li><a href="<{spUrl c=trading a=domainList page=$pager.prev_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">上一页</a></li>
                                         <{/if}>
-                                        <{foreach from=$pager.all_pages item=thepage}>
+                                        <{foreach $pager.all_pages as $thepage}>
                                         <{if $thepage != $pager.current_page}>
                                         <li><a href="<{spUrl c=trading a=domainList page=$thepage pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>"><{$thepage}></a></li>
                                         <{else}>
@@ -394,7 +394,7 @@
         <div id="div_fz" style="display: none ">
             <select id="team-plfz" style="width: 200px" >
                 <option value="0">未分组</option>
-                <{foreach from=$rs_team item=team}>
+                <{foreach $rs_team as $team}>
                 <option value="<{$team.id}>" ><{$team.teamName}></option>
                 <{/foreach}>
             </select>

@@ -49,7 +49,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    <{foreach from=$yk_list item=i}>
+                                    <{foreach $yk_list as $i}>
                                     <tr>
                                         <td><{$i.type}></td>
                                         <td><{if $i.type=='卖出'}><span class='font-black'>- </span><{else}><span class='font-red'>+</span><{/if}><{$i.count}>个</td>

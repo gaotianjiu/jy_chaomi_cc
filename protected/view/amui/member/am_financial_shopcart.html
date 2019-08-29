@@ -50,7 +50,7 @@
                                     </thead>
                                     <tbody>
                                     <{if $result}>
-                                    <{foreach from=$result item=v}>
+                                    <{foreach $result as $v}>
                                     <tr>
 										<input type="hidden" name="id[]" value="<{$v.id}>"/>
                                         <td><{$v.id}></td>

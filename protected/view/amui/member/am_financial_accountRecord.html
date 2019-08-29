@@ -48,7 +48,7 @@
 										</tr>
 										<{/if}>											
                                     <{if $res}>
-                                    <{foreach from=$res item=v}>
+                                    <{foreach $res as $v}>
                                     <tr>
                                         <td><span <{if $v.type==500}>class="font-blue"<{elseif $v.type==501}>class="font-red"<{/if}>><{$v.statename}></span></td>
                                         <td><{date('Y-m-d H:i:s',$v.deal_time)}></td>
@@ -70,7 +70,7 @@
 													<li><a href="<{spUrl c=capital a=capitalRecord  page=$pager.first_page status=$status}>">首页</a></li>
 													<li><a href="<{spUrl c=capital a=capitalRecord  page=$pager.prev_page status=$status}>">上一页</a></li>
 												<{/if}>
-												<{foreach from=$pager.all_pages item=thepage}>
+												<{foreach $pager.all_pages as $thepage}>
 													<{if $thepage != $pager.current_page}>
 														<li><a href="<{spUrl c=capital a=capitalRecord  page=$thepage status=$status}>"><{$thepage}></a></li>
 													<{else}>

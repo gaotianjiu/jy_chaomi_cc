@@ -112,7 +112,7 @@
 											<td colspan="10" style="text-align:center;line-height: 50px;">暂无数据</td>
 										</tr>
 										<{/if}>
-                                    <{foreach from=$ret item=r}>
+                                    <{foreach $ret as $r}>
                                     <tr>
                                         <td style="font-weight:bold;color:#3374CA;"><{$r.domain}></td>
                                         <td><{$r.name}></td>
@@ -137,7 +137,7 @@
 													<li><a href="<{spUrl c=ykj page=$pager.first_page typeid=$cond.typeid domain=$cond.domain}>">首页</a></li>
 													<li><a href="<{spUrl c=ykj page=$pager.prev_page typeid=$cond.typeid domain=$cond.domain}>">上一页</a></li>
 												<{/if}>
-												<{foreach from=$pager.all_pages item=thepage}>
+												<{foreach $pager.all_pages as $thepage}>
 													<{if $thepage != $pager.current_page}>
 														<li><a href="<{spUrl c=ykj page=$thepage typeid=$cond.typeid domain=$cond.domain}>"><{$thepage}></a></li>
 													<{else}>

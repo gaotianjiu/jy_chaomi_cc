@@ -40,7 +40,7 @@
                                         <div class="am-u-sm-9 am-u-end">
                                            <select data-am-selected="" name="bankid" id="bankid">
                                                <option value="0">请选择银行卡</option>
-                                               <{foreach from=$bank item=v}>
+                                               <{foreach $bank as $v}>
                                                <option value="<{$v['id']}>"><{$v['bankname']}>[<{$v['username']}>][<{$v['bankno']}>][<{$v['bankadder']}>]</option>
                                                <{/foreach}>
                                            </select>
