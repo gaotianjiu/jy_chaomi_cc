@@ -1,0 +1,332 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>PUSH域名 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:300px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $act=='push_apply'}> class="active"<{/if}>><a href="<{url c='push' a='apply'}>">PUSH域名</a></li>
+							  <li<{if $act=='push_accept_list'}> class="active"<{/if}>><a href="<{url c='push' a='accept_list'}>">收到的请求</a></li>
+							  <li<{if $act=='push_send_list'}> class="active"<{/if}>><a href="<{url c='push' a='send_list'}>">发送的请求</a></li>
+							</ul>						
+                        </div>						
+                    </div>				
+                <div class="tpl-block">
+                    <div class="am-g">
+							<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+								<p>
+								温馨提示：发送push请求后，如果对方接收成功域名就不再属于您所有，请认真正确核对PUSH的域名、索要的金额、对方的会员ID等重要信息。
+								</p>
+							</div>					
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-10">
+								<div class="am-form am-form-horizontal">
+								
+									<div class="am-form-group">
+										<div class="am-u-sm-4 am-u-sm-push-3 am-fl">
+											<button type="button" class="am-btn am-btn-sm am-btn-warning am-btn-block am-radius" id="tq_ac_box"><i class="am-icon-location-arrow"></i> 点击这里可快速提取域名列表</button>
+										</div>
+									</div>
+									<div id="tq_box" style="display:none;">
+										<div class="am-form-group">
+												<label class="am-u-sm-3 am-form-label">需提取品种</label>
+												<div class="am-u-sm-9">
+													<select data-am-selected="" id="tq_typeid">
+														<option></option>
+														<{foreach item=tp from=$type_options}>
+														<option value="<{$tp.id}>"><{$tp.name}></option>
+														<{/foreach}>  
+													</select>	
+												</div>
+										</div>											
+										<div class="am-form-group">
+												<label class="am-u-sm-3 am-form-label">需提取数量</label>
+												<div class="am-u-sm-9">
+													<div class="am-fl">
+													<input type="text" style="width:100px" id="tq_count" maxlength="9">
+													</div>
+													<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+														<div style="margin-top:.7rem;">个</div>
+													</div>												
+												</div>
+										</div>		
+										<div class="am-form-group">
+												<label class="am-u-sm-3 am-form-label"></label>
+												<div class="am-u-sm-9">
+													<div class="am-fl">
+													<button type="button" class="am-btn am-btn-sm am-btn-primary am-btn-block am-radius" style="min-width:80px;" id="tq_action">提取</button>
+													</div>
+													<div class="am-fl am-padding-left">
+													<button type="button" class="am-btn am-btn-sm am-btn-default am-btn-block am-radius" style="min-width:80px;" id="tq_empty">清空</button>
+													</div>												
+												</div>
+										</div>	
+									</div>		
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">要转移的域名</label>
+										<div class="am-u-sm-9">
+												<textarea rows="8" onkeyup="this.value=this.value.replace(/[, ]/g,'')" style="width:550px;" id="domain" placeholder="一行一个域名，一次最多200个"><{$domain_list}></textarea>
+										</div>
+									</div>
+									
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">对方的会员ID</label>
+										<div class="am-u-sm-9">
+													<input type="text" style="width:350px" id="tomid" maxlength="9" placeholder="谨慎填写，并确认校验信息">
+										</div>
+									</div>
+									<div class="am-form-group" id="tomid_info_div" style="display:none;">
+										<label class="am-u-sm-3 am-form-label">对方校验手机/姓名</label>
+										<div class="am-u-sm-9">
+											<div style="margin-top:.7rem;color:#3374CA;"><span id="tomid_info"></span></div>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">校验对方的姓名</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="text" style="width:250px" id="to_username" maxlength="9" placeholder="校验对方的姓名">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;">选填</div>
+												</div>										
+										</div>
+									</div>									
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">索要金额</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="text" style="width:250px" id="money" maxlength="9" value="0" placeholder="">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;">元</div>
+												</div>										
+										</div>
+									</div>	
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">手续费</label>
+										<div class="am-u-sm-9">
+											<div style="margin-top:.7rem;">0%</div>
+										</div>
+									</div>	
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">备注</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="text" style="width:250px" id="note" maxlength="255" value="" placeholder="">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;"></div>
+												</div>										
+										</div>
+									</div>										
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">图形验证码</label>
+										<div class="am-u-sm-9">
+											<div class="am-fl am-margin-right">
+												<input id="validate" name="validate" style="width:200px" type="text" class="am-input-field" maxlength="4" placeholder="请输入右侧验证码"/>
+											</div>
+											<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;">
+												 <img title="点击刷新" alt="点击刷新" id="yzm_img" src="/sso/yzm" onclick="this.src='/sso/yzm?t='+Math.random();"></img>
+											</div>													
+										</div>
+									</div>				
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">交易密码</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="password" style="width:200px" id="safecode" placeholder="">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;"><a href="/user/safeCode" target="_blank">设置密码?</a></div>
+												</div>
+										</div>
+									</div>											
+									<div class="am-form-group">
+										<div class="am-u-sm-5 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交PUSH中...'}" id="sub_push">提交PUSH</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-cf" style="margin-top:100px;"></div>		
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+	$(function() {
+		$("#tomid").blur(function(){
+			var tomid  = $(this).val();
+			if(tomid){
+				$.ajax({
+					url:"<{spUrl c=push a=apply from=tomid_info}>",
+					data:{'tomid':tomid},
+					type:"post",
+					success:function(ret){
+						if(ret.status>=200){
+							$('#tomid_info').html(ret.msg);
+							$('#tomid_info_div').show();
+						}
+					}
+				})
+			}else{
+				$('#tomid_info_div').hide();
+			}
+		});
+		$("#tq_ac_box").click(function(){
+			$('#tq_box').show();
+			//$('#tq_ac_box').hide();
+		});				
+		$("#tq_action").click(function(){
+			var tq_typeid  = $('#tq_typeid').val();
+			var tq_count  = $('#tq_count').val();
+			$('#domain').empty();
+			if(!tq_typeid){
+				layer.msg("请先选择提取的域名品种")
+				return;
+			}				
+			if(tq_count<=0){
+				$('#tq_count').focus();
+				layer.msg("提取数量不能小于1个")
+				return;
+			}
+			if(tq_count>200){
+				$('#tq_count').focus();
+				layer.msg("提取数量不能大于200个")
+				return;
+			}		
+			$.ajax({
+				url:"<{spUrl c=push a=apply from=tq}>",
+				data:{'tq_typeid':tq_typeid,'tq_count':tq_count},
+				type:"post",
+				success:function(ret){
+					if(ret.status==200){
+						$('#domain').html(ret.domain_list);
+						return;
+					}
+					if(ret.status>0){
+						layer.msg(ret.msg);
+					}					
+				}
+			})
+		});
+		$("#tq_empty").click(function(){
+			$('#domain').empty();
+		});		
+		$("#sub_push").click(function(){	
+			var domain = $.trim($("#domain").val());
+			// ----以行转换成数组
+			domain = domain.replace(/^\s*[\r\n]/gm,'');
+			domain = domain.replace(/[ \t\r\f\v]/g,'');
+			var domainArr = domain.split('\n');
+			var domainCount = domainArr.length;
+			if(domainCount==0 || domain==''){
+				layer.tips('请输入要转移的域名', '#domain');
+				$('#domain').focus();
+				 return false;				
+			}
+			if(domainCount>200){
+				layer.tips('一次最多可提交200个域名', '#domain');
+				$('#domain').focus();
+				 return false;				
+			}		
+			var tomid=$('#tomid').val();
+			var to_username=$('#to_username').val();
+			var money=$('#money').val();
+			var note=$('#note').val();
+			var validate=$('#validate').val();
+			var safecode=$('#safecode').val();
+			patrn = /^\w{4}$/; //四位验证码
+			
+			if(!tomid){
+				layer.tips('请输入正确的对方会员ID', '#tomid');
+				$('#tomid').focus();
+				 return false;				
+			}					
+			if(!money){
+				layer.tips('请输入向对方索要的金额', '#money');
+				$('#money').focus();
+				 return false;				
+			}		
+			if(!patrn.exec(validate)){
+				layer.tips('请输入图形里的操作验证码', '#yzm_img');
+				$('#validate').focus();
+				 return false;
+			}
+			if(!safecode){
+				layer.tips('请输入交易密码', '#safecode');
+				$('#safecode').focus();
+				 return false;				
+			}	
+			layer.confirm("您提交了<span class='font-red'> "+domainCount+" </span>"+"个域名，确认push至炒米ID：<span class='font-red'>"+tomid+"</span>，并向对方索要金额<span class='font-red'> "+money+" </span>元？",{btn:['确认PUSH','取消PUSH'],title:'操作提示',area:['550px'],closeBtn: 0}
+			,function(){
+				$("#sub_push").button('loading');
+				$.ajax({
+					data: {
+						'domain':domainArr,
+						'tomid':tomid,
+						'to_username':to_username,
+						'money':money,
+						'note':note,
+						'validate':validate,
+						'safecode':safecode
+					},
+					type: "post",
+					url: "<{spUrl c=push a=apply from=create}>", 
+					success: function (ret) {
+						if(ret.status==209){
+							layer.msg(ret.msg)
+							$("#validate").val(""); 
+							$('#validate').focus();
+							$("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  							
+						}
+						if(ret.status==210){
+							layer.confirm(ret.msg+"<br/>域名参数错误，请核对检查域名是否正确",{btn:['好的，了解'],title:'错误提示',area:['450px'],closeBtn: 0});
+						
+							$("#sub_push").button('reset');
+							return;
+						}						
+						if(ret.status>1){
+							layer.msg(ret.msg)
+							$("#sub_push").button('reset');
+						}
+						if(ret.status==200){
+							layer.confirm("已成功PUSH <span class='font-red'>"+domainCount+"</span>"+" 个域名，发送至炒米ID：<span class='font-red'>"+tomid+"</span>",{btn:['好的'],title:'提示'}
+							,function(){
+								window.location.href = "<{url c='push' a='send_list'}>";
+							});
+						}
+					},
+					error: function () {
+						layer.msg("提交出错，请稍候重试");
+						$("#sub_push").button('reset');
+					}
+				});
+			}
+		   );
+		})
+	});
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

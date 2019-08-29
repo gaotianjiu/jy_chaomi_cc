@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>转入域名包详情 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">增加新分组名</div>
+                </div>
+                <div class="am-form-group">
+                    <form action="/ym_team/team_add_post" method="post">
+                        <input type="hidden" value="<{$uid}>"/>
+                        <input type="text" style="border:1px solid #131313 " name="team_name"/>
+                        <input type="submit" value="提交分组"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

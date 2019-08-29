@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>转出域名 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+<script type="text/javascript" src="//static.chaomi.cc/js/jquery.form.min.js"></script>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">转出域名</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li class="active"><a href="/tradeList/outplat">待确认转出</a></li>
+							  <li><a href="/tradeList/outplat?act=list">转出记录</a></li>
+							</ul>						
+                        </div>						
+                    </div>				
+                <div class="tpl-block">
+                    <div class="am-g">
+						<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+							<p>提示：请对应域名选择正确需转出到注册商平台帐号ID，请一定注意核对正确。<a href="/user/memberAccountAdd"><i class="am-icon-plus"></i> 添加绑定注册商平台帐号信息</a></p>					 
+						</div>								
+                        <div class="am-u-sm-12 am-u-md-4">
+							<p>目前每次最多可批量提交转出50条</p>
+                        </div>
+                        <div class="am-fr am-padding-right">
+                            <a class="am-btn am-btn-warning am-radius" href="<{url c='trading' a='domainList'}>">选择域名转出</a>
+                        </div>
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <form name="form" method="post" id="ret_post" action="<{url c='tradeList' a='outplat_post'}>">
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <th>转出域名</th>
+                                            <th>所在平台</th>
+                                            <th>域名到期时间</th>
+                                            <th>转出平台(ID)</th>
+                                            <th>操作<{if $status>0}>时间<{/if}></th>
+                                        </tr>
+                                    </thead>
+                                    <{if $status==0}>
+                                    <tbody>
+                                    <{if $result}>
+                                    <{foreach from=$result item=v}>
+                                    <tr id="t_id_<{$v.id}>">
+                                        <input type="hidden" name="domain[]" value="<{str_replace('.','_',$v.domain)}>"/>
+                                        <td><{$v.domain}></td>
+                                        <td><{$v.pingtai}></td>
+                                        <td><{$v.expire_time}></td>
+                                        <td>
+                                            <select name="pt[]">
+                                                <{if $webpt}>
+													<{foreach from=$webpt item=v1}>
+														<{if $v1['pt'] == $v['pingtai']}>
+															<{foreach from=$v1.ptnum item=v2}>
+																<option value="<{$v2.id}>"><{$v2.name}></option>
+															<{/foreach}>
+														<{/if}>
+													<{/foreach}>
+                                                <{/if}>
+                                            </select></td>
+                                        <td><a onclick="del('<{$v.id}>','<{$v.domain}>');">删除</a></td>
+                                    </tr>
+                                    <{/foreach}>
+                                    <{else}>
+                                    <tr style="height:60px;">
+                                        <td colspan="7"  style="text-align:center;line-height:50px;">您的转出列表里有没有任何要转出的域名!<a href="<{url c='trading' a='domainList'}>">查看我的域名</a></td>
+                                    </tr>
+                                    <{/if}>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr style="height:40px;line-height:40px;background-color:#f5f5f5;">
+                                            <td colspan="6">
+                                            <div class="am-g">
+                                                <div class="am-u-sm-12">
+													安全码 / 交易密码：<input type="password" name="safecode" id="safecode" maxlength="16" placeholder="请输入安全码" style="width:150px;_width:150px;line-height:24px;border:1px solid #ccc;padding:.2em;font-size:1.6rem;margin-right:5px;"> <button type="submit" class="am-btn am-btn-primary am-radius am-btn-sm" id="ret_post_sub" data-am-loading="{spinner: 'spinner', loadingText: '提交转出中...'}" >确认转出</button>
+                                                </div>
+                                            </div>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                    <{else}>
+                                        <tbody>
+                                        <{if $result}>
+                                        <{foreach from=$result item=v key=k}>
+                                        <tr >
+                                            <td><{$v.domain}></td>
+                                            <td><{$v.pingtai}></td>
+                                            <td><{$v.expire_time}></td>
+                                            <td><{$v.domain_website}></td>
+                                            <td><{$v.deal_time}></td>
+                                        </tr>
+                                        <{/foreach}>
+                                        <{/if}>
+                                        </tbody>
+                                    <{/if}>
+                                </table>
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>
+<script type="text/javascript">
+    //删除域名转出，ID
+    function del(id,domain){
+        $.post('<{url c="tradeList" a="delOutOrder"}>',{'id':id},function(ret){
+            if(ret.status==200){
+                layer.msg('域名：'+domain+' '+ret.msg);
+				$('#t_id_'+id).remove();
+            }else {
+                layer.msg(ret.msg);
+            }
+        },"json");
+    }
+	//提交转出
+	$(document).ready(function(){
+			//------------提交表单
+			var options = {
+				 type:"POST",//请求方式：get或post
+				 dataType:"json",//数据返回类型：xml、json、script
+				 beforeSerialize:function(){				 
+						 if($('#safecode').val()==''){
+							layer.tips('请输入安全码','#safecode')
+							$('#safecode').focus();
+							return false;
+						 }						 
+				 },
+				 beforeSubmit:function(){	
+						$("#ret_post_sub").button('loading'); //显示loading
+				 },
+				 success:function(ret){//表单提交成功回调函数
+					$("#ret_post_sub").button('reset');
+					if(ret.status==200){
+							layer.open({title:'提示',content:ret.msg,btn: ['继续提交转出', '查看转出记录'],closeBtn: 0
+							  ,yes: function(index, layero){
+									layer.close(index);
+									location.reload(true)
+							  },btn2: function(index, layero){
+									layer.close(index);
+									window.open("<{spUrl c=tradeList a=outplat act=list}>");
+									//location.reload(true)
+							  }
+							});
+						return;	
+					}
+					if(ret.status==203){
+						$('#safecode').focus();
+					}
+					if(ret.status>1){
+						layer.msg(ret.msg)
+					}
+				 },
+				 error:function(err){
+					layer.msg('请求提交错误，请稍候重试')
+					$("#ret_post_sub").button('reset');
+				 }
+			};
+			$("#ret_post").ajaxForm(options);	
+	});			
+</script>

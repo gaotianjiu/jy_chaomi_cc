@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title><{$title}> - 管理中心 - 炒米网</title>
+        <{include file="amui/am_i_header_css_js.html"}>
+    </head>
+    <body class="tpl-bg">
+        <style>
+            .code_wrap {height: 50px;margin-top:10px;line-height: 30px;z-index:100;}
+        </style>
+        <!----------顶部通栏块 begin--------->
+        <{include file="amui/am_i_ot_header.html"}>
+        <!----------顶部通栏块 end--------->
+        <!----------右侧内容框 begin--------->
+        <div class="am-g tpl-content-wrapper-i">
+            <div class="tpl-portlet-components-i am-padding-bottom-0">
+                <div class="am-g tpl-tabs">
+                    <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+                        <ul class="am-fl">
+                            <li class="active"><a href="<{url c='sso' a='login'}>">会员登录</a></li>
+                            <li><a href="<{url c='sso' a='register_email'}>">通过邮箱注册帐号</a></li>
+                            <li><a href="<{url c='sso' a='findpsw_email'}>">通过邮件找回密码</a></li>					
+                        </ul>
+                    </div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g" style="margin:25px 0 200px 0;">
+                        <div class="am-u-sm-12 am-u-md-10 am-u-md-push-1">
+                            <div class="am-alert am-alert-secondary am-margin-left am-margin-right"><p>提示：原使用邮箱注册炒米网的用户，可直接进行登录，无须再注册。</p></div>					
+                            <div class="am-alert am-alert-secondary am-margin-left am-margin-right" id="mid-list" style="display:none;"></div>					
+                            <form class="am-form am-form-horizontal" id="login_post" method="post" action="/sso/login?act=post">
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">帐号</label>
+                                    <div class="am-u-sm-6 am-u-end">
+                                        <input type="text" id="username" name="username" maxlength="50" placeholder="ID/手机号/邮箱">
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">密码</label>
+
+                                    <div class="am-u-sm-6 am-u-end">
+                                        <input type="password" id="password" name="password" maxlength="16" placeholder="请输入登录密码">
+                                        <div class="am-cf am-fr" style="margin-top:5px;"><a href="<{url c='sso' a='findpsw'}>" target="_blank">忘记密码?</a></div>									
+                                    </div>	
+                                </div>
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-6 am-u-sm-push-2">									
+                                        <button type="submit" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交登录中...'}" id="login_post_sub">确认登录</button>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <div class="am-u-sm-6 am-u-sm-push-2">									
+                                        <div class="am-cf am-fr">没有帐号？您可通过 <a href="<{url c='sso' a='register'}>"><span class="am-icon-mobile am-icon-sm"></span> 手机号</a> 或 <a href="<{url c='sso' a='register_email'}>"><span class="am-icon-envelope-o"></span> 邮箱</a> 注册帐号</div>
+                                    </div>
+                                </div>								
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>		
+        <!----------右侧内容框 end--------->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                //------------提交表单
+                var options = {
+                    type: "POST", //请求方式：get或post
+                    dataType: "json", //数据返回类型：xml、json、script
+                    beforeSerialize: function () {
+                        if ($('#username').val() == '') {
+                            layer.tips('请输入ID/手机号/邮箱', '#username')
+                            $('#username').focus();
+                            return false;
+                        }
+                        patrn = /^(\S){6,16}$/; //6-16个空格符之外的所有字符
+                        if (!patrn.exec($('#password').val())) {
+                            layer.tips('6-16个字母+数字组合，不能带有空格、区分大小写', '#password')
+                            $('#password').focus();
+                            return false;
+                        }
+                    },
+                    beforeSubmit: function () {
+                        $("#login_post_sub").button('loading'); //显示loading
+                    },
+                    success: function (data) {//表单提交成功回调函数
+                        if (data.status == 210) {
+                            //------一个手机号绑定多个帐号ID的情况下需要单独处理
+                            $("#login_post_sub").button('reset');
+                            $('#username').val('')
+                            $('#mid-list').show()
+                            $('#mid-list').html('<span class="label label-danger">登录提示：</span> ' + data.msg)
+                            return;
+                        }
+                        if (data.status > 1) {
+                            layer.msg(data.msg)
+                        }
+                        if (data.ids != '') {
+                            $(data.ids).focus();
+                        }
+                        if (data.status == 200) {
+                            $('#login_post')[0].reset() //重置表单
+                            location.reload(true)
+                        }
+                        $("#login_post_sub").button('reset');
+                    },
+                    error: function (err) { 
+                        layer.msg(err.responseText+'请求提交错误，请稍候重试'); 
+                        $("#login_post_sub").button('reset');
+                    }
+                };
+                $("#login_post").ajaxForm(options);
+            });
+        </script>
+        <!----------底部通栏块 begin--------->
+        <{include file="amui/am_footer.html"}>
+        <!----------底部通栏块 end--------->
+    </body>
+</html>

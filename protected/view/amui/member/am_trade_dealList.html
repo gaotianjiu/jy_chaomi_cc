@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>成交记录 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">成交记录</div>
+                </div>
+                <div class="tpl-block">
+                    <form action="<{url c='trading' a='find_order'}>" method="get">
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-4">
+                            <div class="am-form-group">订单类型：
+                                <select data-am-selected="{btnSize: 'sm'}"  name="status" >
+                                    <option value="-1" <{if $status==-1}>selected<{/if}>>全部</option>
+                                    <option value="1" <{if $status==1&&$status!=''}>selected<{/if}>>买入</option>
+                                    <option value="2" <{if $status==2&&$status!=''}>selected<{/if}>>卖出</option>
+								</select>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-4" style="float:left;">
+                            <div class="am-form-group">域名类型：
+                                <select name="type" data-am-selected="{btnSize: 'sm'}">
+                                    <option value="0">全部</option>
+                                    <{foreach item=tp from=$types}>
+                                    <option value="<{$tp.id}>" <{if $type==$tp.id}>selected<{/if}>><{$tp.name}></option>
+                                    <{/foreach}>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-4">
+                            <div class="am-form-group">
+                                <label style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;">开始日期：</label>
+                                <input type="text" size="14" id="doc-ipt-3-a" value="<{$start_time}>" name="start_time" class="am-form-field" data-am-datepicker readonly  style="width:200px;border:1px solid #c2cad8;"/>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-4" >
+                            <div class="am-form-group">
+                                <label for="doc-ipt-4-a" style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;">结束日期：</label>
+                                <input type="text" size="14" id="doc-ipt-4-a" value="<{$end_time}>" name="end_time" class="am-form-field" data-am-datepicker readonly style="width:200px;border:1px solid #c2cad8;"/>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-4">
+                            <div class="am-form-group">
+                                <input type="submit" value="搜索" class="am-btn am-btn-sm am-btn-primary am-radius"/>
+                                <a href="<{url c='trading' a='find_order'}>" class="am-btn am-btn-sm am-btn-primary am-radius">重置</a>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                    <div class="am-g">
+                        <div class="am-u-sm-12" id="ds">
+						<div style="font-size:16px; padding-bottom:10px">搜索结果：<span style="color:#F37B1D; font-weight:bold;"><{$pager.total_count}></span></div>
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <th>品种</th>
+                                            <th>类型</th>
+                                            <th>委单时间</th>
+                                            <th>交易时间</th>
+                                            <!-- <th>总数量</th> -->
+                                            <th>已成交数</th>
+                                            <!-- <th>委托单价</th> -->
+                                            <th>成交单价</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if $pager.total_count==0}>
+										<tr style="height:60px;">
+											<td colspan="8" style="text-align:center;line-height: 50px;">暂无相关成交数据</td>
+										</tr>
+										<{/if}>											
+                                    <{foreach item=v from=$reg key=k}>
+                                    <tr class="change">
+                                        <td><{$v.name}><{if $v.typeid>800000}><br/><span style="color:#888;font-size:12px;">到期时间：<{$v.pt_zb}></span><{/if}></td>
+                                        <td><{if $v.sta==1}><span class="font-red">买入</span><{else}><span class="font-blue">卖出</span><{/if}></td>
+                                        <td><{$v.order_time}></td>
+                                        <td><{$v.deal_time}></td>
+                                        <!-- <td><{$v.number}></td> -->
+                                         <td><{$v.deal_num}>  <!--<a href="javascript:;" onClick="showh('<{$k+1}>');">(具体域名)</a>--></td> 
+                                        <!-- <td>￥<{$v.price}></td> -->
+                                        <td>￥<{$v.deal_price}></td>
+                                    </tr>
+                                    <tr style="display:none;" id="hidd-<{$k+1}>">
+                                        <!-- <td colspan="10" style="font-size:14px;"><{str_replace(',',"&#12288;,&#12288;",$v.note)}></td> -->
+                                    </tr>
+                                    <{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=trading a=find_order page=$pager.first_page type=$type status=$status start_time=$start_time end_time=$end_time }>">首页</a></li>
+													<li><a href="<{spUrl c=trading a=find_order page=$pager.prev_page type=$type status=$status start_time=$start_time end_time=$end_time }>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=trading a=find_order page=$thepage type=$type status=$status start_time=$start_time end_time=$end_time }>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=trading a=find_order type=$type status=$status start_time=$start_time end_time=$end_time }>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=trading a=find_order page=$pager.next_page type=$type status=$status start_time=$start_time end_time=$end_time }>">下一页</a></li>
+													<li><a href="<{spUrl c=trading a=find_order page=$pager.last_page type=$type status=$status start_time=$start_time end_time=$end_time }>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>
+<script>
+    function showh(i){
+        var hidd='#hidd-'+i;
+        $(hidd).slideToggle('slow');
+    }
+</script>

@@ -1,0 +1,815 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>我的域名 - 管理中心 - 炒米网</title>
+        <{include file="amui/am_header_css_js.html"}>
+        <link rel="stylesheet" href="https://static.baiyewang.com/chaomi/css/domainList.css" type="text/css" >
+    </head>
+    <body>
+        <!----------顶部通栏块 begin--------->
+        <{include file="amui/am_header.html"}>
+        <!----------顶部通栏块 end--------->
+        <!----------左侧导航菜单 begin--------->
+        <{include file="amui/am_left_nav.html"}>
+        <!----------左侧导航菜单 end--------->
+        <!----------右侧内容框 begin--------->
+        <style>
+            .am-selected {width:140px;_width:140px;}
+        </style>
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components"<{if $pager.total_count==0}> style="padding-bottom:200px;"<{/if}>>
+                 <div class="portlet-title">
+                    <div class="caption">我的域名</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g am-form am-form-horizontal">
+                        <form action="/trading/domainList" method="get">
+                            <!---------右侧 头部 搜索框  begin----------------->
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="item1">
+                                            <!--域名关键字-->
+                                            <div class="keywords">
+                                                <div class="am-form-group am-form-group-sm">
+                                                    <font>域名关键字：</font>
+                                                    <input type="text" name="domain" value="<{$cond['domain']}>" id="doc-ipt-3-a" class="am-form-field am-radius"placeholder="可用,分隔" style="width:140px;float: left;">
+                                                    <span class="am-padding-left-sm">
+                                                        <label class="am-checkbox-inline">
+                                                            <input  name="domain_fix[]" type="checkbox" value="1" <{if $cond['domain_fix'][0]=='1'}> checked<{/if}> >开头
+                                                        </label>
+                                                        <label class="am-checkbox-inline">
+                                                            <input name="domain_fix[]" type="checkbox" value="2" <{if $cond['domain_fix'][0]=='2' or $cond['domain_fix'][1]=='2' }> checked<{/if}> >结尾
+                                                        </label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="item2">
+                                            <!--域名后缀-->
+                                            <div class="postfix">
+                                                <div class="am-form-group">
+                                                    <font>域名后缀：</font>
+                                                    <select data-am-selected name="suffix">
+                                                        <option value="0">未选定</option>
+                                                        <{foreach from=$suffix_rec item=suffix}>
+                                                        <option value="<{$suffix['id']}>" <{if $suffix['id']==$cond['suffix']}>  selected<{/if}>   ><{$suffix['name']}></option>
+                                                        <{/foreach}>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="item3">
+                                            <!--域名分组-->
+                                            <div class="group">
+                                                <div class="am-form-group">
+                                                    <font>域名分组：</font>
+                                                    <select name="team_select" data-am-selected="{btnSize: 'sm'}" onchange="setteam('<{$domain.id}>')" >
+                                                        <option value="0">未分组</option>
+                                                        <{foreach from=$rs_team item=team}>
+                                                        <option value="<{$team.id}>" <{if $cond['team_select']==$team.id}> selected<{/if}>><{$team.teamName}></option>
+                                                        <{/foreach}>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="item1">
+                                            <!--排除关键字-->
+                                            <div class="debar_keywords">
+                                                <div class="am-form-group ">
+                                                    <font>排除关键字：</font>
+                                                    <input type="text" name="paichu_key" value="<{$cond['paichu_key']}>" id="doc-ipt-3-a" class="am-form-field am-radius"placeholder="可用,分隔" style="width:140px;float: left;">
+                                                    <span class="am-padding-left-sm">
+                                                        <label class="am-checkbox-inline">
+                                                            <input name="paichu_key_fix[]"  type="checkbox" value="1" <{if $cond['paichu_key_fix'][0]=='1'}> checked <{/if}>>开头
+                                                        </label>
+                                                        <label class="am-checkbox-inline">
+                                                            <input name="paichu_key_fix[]" type="checkbox" value="2" <{if $cond['paichu_key_fix'][0]=='2' or $cond['paichu_key_fix'][1]=='2'  }> checked <{/if}> >结尾
+                                                        </label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="item2">
+                                            <!--域名分类-->
+                                            <div class="category">
+                                                <div class="am-form-group">
+                                                    <font>域名分类：</font>
+                                                    <select multiple data-am-selected  name="tag[]">
+                                                        <option value="0">无选择</option>
+                                                        <{foreach  from=$lib_ym_tag_rec  item=tag_rec  key=k}>
+                                                        <{if $k == 0}>
+                                                        <optgroup label="<{$tag_rec['team']}>">
+                                                            <{elseif $lib_ym_tag_rec[$k-1]['team']!=$tag_rec['team']}>
+                                                        </optgroup>
+                                                        <optgroup label="<{$tag_rec['team']}>">
+                                                            <{/if}>
+                                                            <option value="<{$tag_rec['id']}>"  <{if in_array( $tag_rec['id'],$cond['tag'])}> selected<{/if}> ><{$tag_rec['tag']}></option>
+                                                            <{/foreach}>
+                                                        </optgroup>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="item3">
+                                            <!--域名状态-->
+                                            <div class="state">
+                                                <div class="am-form-group">
+                                                    <font>域名状态：</font>
+                                                    <select data-am-selected="{btnSize: 'sm'}"  name="status">
+                                                        <option value="-1" <{if $cond.status==-1}>selected<{/if}>>全部</option>
+                                                        <option value="0" <{if $cond.status==0&&$cond.status!=''}>selected<{/if}>>正常</option>
+                                                        <option value="2" <{if $cond.status==2&&$cond.status!=''}>selected<{/if}>>委单中</option>
+                                                        <!-- <option value="9" <{if $cond.status==9&&$cond.status!=''}>selected<{/if}>>停放中</option> -->
+                                                        <!-- <option value="11" <{if $cond.status==11&&$cond.status!=''}>selected<{/if}>>一口价中</option> -->
+                                                        <option value="13" <{if $cond.status==13&&$cond.status!=''}>selected<{/if}>>PUSH中</option>
+                                                        <option value="1" <{if $cond.status==1&&$cond.status!=''}>selected<{/if}>>锁定中</option>
+                                                        <option value="4" <{if $cond.status==4&&$cond.status!=''}>selected<{/if}>>转出中</option>
+                                                        <option value="3" <{if $cond.status==3&&$cond.status!=''}>selected<{/if}>>待续费</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="item1">
+                                            <!--注册时间-->
+                                            <div class="zhuce_time">
+                                                <div class="am-form-group am-form-group-sm">
+                                                    <font>注册时间：</font>
+                                                    <input name="zhuce_start" type="text" value="<{$code['zhuce_start']}>" class="am-form-field am-radius" placeholder="" id="my-start-2" style="width:117px;float: left;" data-am-datepicker="{format: 'yyyy-mm-dd'}" />
+                                                    <span class="am-padding-horizontal-sm am-fl">-</span>
+                                                    <input name="zhuce_end" type="text" value="<{$code['zhuce_end']}>" class="am-form-field am-radius" placeholder="" id="my-end-2" style="width:117px;float: left;" data-am-datepicker="{format: 'yyyy-mm-dd'}"/>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="item2">
+                                            <!--注册商-->
+                                            <div class="registrars">
+                                                <div class="am-form-group">
+                                                    <font>注册商：</font>
+
+                                                    <select data-am-selected="{btnSize: 'sm'}" name="registrar" >
+                                                        <option value="0">全部</option>
+                                                        <{foreach from=$websites item=vv key=a}>
+                                                        <option value="<{$a}>" <{if $cond.registrar==$a}>selected<{/if}>><{$vv}></option>
+                                                        <{/foreach}>
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="item3">
+                                            <!--长度-->
+                                            <div class="length">
+                                                <div class="am-form-group">
+                                                    <font>长度：</font>
+                                                    <select name="domain_len1" data-am-selected="{btnSize: 'sm',btnWidth:'60'}"  >
+                                                        <option value="0">不限</option>
+                                                        <option value="1" <{if $cond['domain_len1']=='1'}> selected<{/if}> >1</option>
+                                                        <option value="2" <{if $cond['domain_len1']=='2'}> selected<{/if}>>2</option>
+                                                        <option value="3" <{if $cond['domain_len1']=='3'}> selected<{/if}>>3</option>
+                                                        <option value="4"<{if $cond['domain_len1']=='4'}> selected<{/if}>>4</option>
+                                                        <option value="5"<{if $cond['domain_len1']=='5'}> selected<{/if}>>5</option>
+                                                        <option value="6"<{if $cond['domain_len1']=='6'}> selected<{/if}>>6</option>
+                                                        <option value="7"<{if $cond['domain_len1']=='7'}> selected<{/if}>>7</option>
+                                                        <option value="8"<{if $cond['domain_len1']=='8'}> selected<{/if}>>8</option>
+                                                        <option value="9"<{if $cond['domain_len1']=='9'}> selected<{/if}>>9</option>
+                                                    </select>
+                                                    <span class="am-padding-horizontal-xs">-</span>
+                                                    <select name="domain_len2" data-am-selected="{btnSize: 'sm',btnWidth:'60'}"  >
+                                                        <option value="0">不限</option>
+                                                        <option value="1"<{if $cond['domain_len2']=='1'}> selected<{/if}> >1</option>
+                                                        <option value="2" <{if $cond['domain_len2']=='2'}> selected<{/if}> >2</option>
+                                                        <option value="3" <{if $cond['domain_len2']=='3'}> selected<{/if}>>3</option>
+                                                        <option value="4" <{if $cond['domain_len2']=='4'}> selected<{/if}>>4</option>
+                                                        <option value="5" <{if $cond['domain_len2']=='5'}> selected<{/if}>>5</option>
+                                                        <option value="6" <{if $cond['domain_len2']=='6'}> selected<{/if}>>6</option>
+                                                        <option value="7" <{if $cond['domain_len2']=='7'}> selected<{/if}>>7</option>
+                                                        <option value="8"<{if $cond['domain_len2']=='8'}> selected<{/if}>>8</option>
+                                                        <option value="9"<{if $cond['domain_len2']=='9'}> selected<{/if}>>9</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="item1">
+                                            <!--过期时间-->
+                                            <div class="guoqi_time">
+                                                <div class="am-form-group am-form-group-sm">
+                                                    <font>过期时间：</font>
+                                                    <input name="expri_start" value="<{$cond['experi_start']}>"  type="text" class="am-form-field am-radius" placeholder="" id="my-start-3" style="width:117px;float: left;" data-am-datepicker="{format: 'yyyy-mm-dd'}" />
+                                                    <span class="am-padding-horizontal-sm am-fl">-</span>
+                                                    <input  name="expri_end" value="<{$cond['experi_end']}>"  type="text" class="am-form-field am-radius" placeholder="" id="my-end-3" style="width:117px;float: left;" data-am-datepicker="{format: 'yyyy-mm-dd'}" />
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="item2">
+                                            <!--每页显示-->
+                                            <div class="show">
+                                                <div class="am-form-group">
+                                                    <font>每页显示：</font>
+                                                    <select data-am-selected="{btnSize: 'sm'}" name="pagesize" >
+                                                        <option value="30" <{if $cond['pagesize']==30}> selected <{/if}> >30</option>
+                                                        <option value="50"  <{if $cond['pagesize']==50}> selected <{/if}>  >50</option>
+                                                        <option value="100"  <{if $cond['pagesize']==100}> selected <{/if}> >100</option>
+                                                        <option value="200"  <{if $cond['pagesize']==200}> selected <{/if}> >200</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <!--重置、搜索按钮-->
+                                            <div class="am-g">
+                                                <div class="am-u-sm-12">
+                                                    <div class="am-form-group group-btn am-center">
+                                                        <a href="https://my.chaomi.cc/trading/domainList" class="am-btn am-btn-sm am-btn-default am-radius am-margin-horizontal-sm">重置</a>
+                                                        <input type="submit" value="搜索" class="am-btn am-btn-sm am-btn-primary am-radius am-margin-horizontal-sm">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <div style="font-size:16px; padding-bottom:10px">搜索结果：<span style="color:#F37B1D; font-weight:bold;"><{$pager.total_count}></span></div>
+                            <table class="am-table am-table-hover tpl-table-uppercase" id="filter">
+                                <thead>
+                                    <tr>
+                                        <{if $pager.total_count>0}>	<th><input type="checkbox" name="selectall" id="selectall"/></th><{/if}>
+                                        <th class="table-type">域名</th>
+                                        <th>品种</th>
+                                        <th>注册商</th>
+                                        <th>到期时间</th>
+                                        <th>状态</th>
+                                        <th>分组</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <{if $pager.total_count==0}>
+                                    <tr style="height:60px;">
+                                        <td colspan="8" style="text-align:center;line-height: 50px;">暂无持有域名，您可<a href="/check/index">提交域名入盘</a>或<a href="http://jy.chaomi.cc/">买入域名</a></td>
+                                    </tr>
+                                    <{/if}>
+                                    <{foreach from=$reggg item=domain}>
+                                    <tr>
+                                        <td><input type="checkbox" name="id[]"<{if $domain.locked==2 || $domain.locked==5}> disabled="disabled" <{/if}>value="<{$domain.id}>"/></td>
+                                        <td><{$domain.domain}></td>
+                                        <td><{$domain.name}></td>
+                                        <td><{if $domain.is_twos}>-<{else}><{$domain.pingtai}><{/if}></td>
+                                        <td><{if $domain.is_twos}>-<{else}><{$domain.expire_time}><{/if}></td>
+                                        <td>
+                                            <{if $domain.locked eq 0}>
+                                            <span class="font-black">正常</span>
+                                            <{else if $domain.locked eq 1}>
+                                            <span class="font-black">已锁定</span>
+                                            <{else if $domain.locked eq 2}>
+                                            <span class="font-red">委单中</span>
+                                            <{else if $domain.locked eq 4}>
+                                            <span class="font-green">转出中</span>
+                                            <{else if $domain.locked eq 3}>
+                                            <span class="font-blue">待续费</span>
+                                            <{else if $domain.locked eq 6}>
+                                            <span class="font-black">后台锁定</span>
+                                            <{else if $domain.locked eq 9}>
+                                            <span class="font-blue">停放中</span>
+                                            <{else if $domain.locked eq 11}>
+                                            <span class="font-red">一口价中</span>
+                                            <{else if $domain.locked eq 13}>
+                                            <span class="font-red">PUSH中</span>
+                                            <{/if}>
+                                        </td>
+                                        <td>
+                                            <select name="team-<{$domain.id}>" data-am-selected="{btnSize: 'sm'}" onchange="setteam('<{$domain.id}>')" >
+                                                <option value="0">未分组</option>
+                                                <{foreach from=$rs_team item=team}>
+                                                <option value="<{$team.id}>" <{if $domain.team_id==$team.id}> selected<{/if}>><{$team.teamName}></option>
+                                                <{/foreach}>
+                                            </select>
+                                        </td>
+                                        <td>
+
+                                            <{if $domain.locked eq 0                                                }>
+                                            <a class="am-badge am-radius am-badge-primary am-btn-sm" onclick="locking('<{$domain.id}>')">锁定</a>
+                                            <{elseif $domain.locked eq 1}>
+                                            <a class="am-badge am-radius am-badge-primary am-btn-sm" onclick="unlock('<{$domain.id}>')">解锁</a>
+                                            <{elseif $domain.locked eq 3}>
+                                            <a class="am-badge am-badge-primary am-radius am-btn-sm" onclick="renew('<{$domain.id}>')">续费</a>
+                                            <a class="am-badge am-badge-primary am-radius am-btn-sm" onclick="transfer('<{$domain.id}>')">转出</a>
+                                            <{else}>
+
+                                            <{/if}>
+                                            <{if $domain.is_ykj}>
+                                            <!-- <a class="am-badge am-radius am-badge-primary am-btn-sm" href="/first/apply?from=all&id[]=<{$domain.id}>" target="_blank">一口价</a> -->
+                                            <{/if}>
+
+                                        </td>
+                                    </tr>
+                                    <{/foreach}>
+                                    <{if $pager.total_count>0}>
+                                <tfoot>
+                                    <tr style="height:40px;line-height:40px;background-color:#f5f5f5;">
+                                        <td colspan="12">
+                                            <div class="am-g">
+                                                <div class="am-u-sm-12">
+                                                    <input type="checkbox" name="selectall1" id="selectall1" /> 全选
+                                                    <select id="action" style="padding:5px;font-size:14px;margin-left:10px;padding-right:20px;border: 1px solid #ccc;border-radius: 3px;">
+                                                        <option>请选择批量操作</option>
+                                                        <option value="1">批量一口价</option>
+                                                        <option value="13">批量PUSH域名</option>
+                                                        <option value="2">转出选中域名</option>
+                                                        <option value="3">续费选中域名</option>
+                                                        <option value="4">锁定选中域名</option>
+                                                        <option value="5">解锁选中域名</option>
+                                                        <option value="6">全部TXT导出</option>
+                                                        <option value="7">批量分组</option>
+                                                    </select>
+                                                    <span><input type="button" value="执行批量操作" class="am-btn am-radius am-btn-primary am-btn-xs am-margin-left" onClick="return _action()" /></span>
+                                                    <!-- <span><input type="button" name="lock" value="批量锁定域名" class="am-btn am-radius am-btn-primary am-btn-xs am-margin-left" onClick="return alllock()" /></span> -->
+                                                    <!-- <span><input type="button" name="unlock" value="批量解锁域名" class="am-btn am-radius am-btn-primary am-btn-xs am-margin-left" onClick="return allunlock()" /></span> -->
+                                                    <!-- <span><input type="button" name="transfer" value="批量转出域名" class="am-btn am-radius am-btn-primary am-btn-xs am-margin-left" onClick="alltransfer()" /></span> -->
+                                                    <!-- <span><input type="button" name="renew" value="批量续费域名" class="am-btn am-radius am-btn-primary am-btn-xs am-margin-left" onClick="return allrenew()" /></span> -->
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                                <{/if}>
+                                </tbody>
+                            </table>
+                            <div class="am-cf">
+                                <!--分页部分 begin-->
+                                <div class="am-fr">
+                                    <ul class="am-pagination tpl-pagination">
+                                        <{if $pager}>
+                                        <li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+                                        <{if $pager.current_page != $pager.first_page}>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$pager.first_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">首页</a></li>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$pager.prev_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">上一页</a></li>
+                                        <{/if}>
+                                        <{foreach from=$pager.all_pages item=thepage}>
+                                        <{if $thepage != $pager.current_page}>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$thepage pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>"><{$thepage}></a></li>
+                                        <{else}>
+                                        <li class="am-active"><a href="<{spUrl c=trading a=domainList page=$thepage  pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>"><{$thepage}></a></li>
+                                        <{/if}>
+                                        <{/foreach}>
+                                        <{if $pager.current_page != $pager.last_page}>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$pager.next_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">下一页</a></li>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$pager.last_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">末页</a></li>
+                                        <{/if}>
+                                        <{/if}>
+                                    </ul>
+                                </div>
+                                <!--分页部分 end-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+                        <p>关于管理域名说明：</p>
+                        <p>状态：正常，可将域名卖出、锁定、转出</p>
+                        <p>状态：锁定，不可将域名卖出、转出</p>
+                        <p>显示委单中的域名如何撤销？请前往<a href="/trading/orderList?status=2" target="_blank">委托订单</a>页面撤销对应的委托订单</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!----------右侧内容框 end--------->
+        <!----------底部通栏块 begin--------->
+        <{include file="amui/am_footer.html"}>
+        <!----------底部通栏块 end--------->
+
+        <div id="div_fz" style="display: none ">
+            <select id="team-plfz" style="width: 200px" >
+                <option value="0">未分组</option>
+                <{foreach from=$rs_team item=team}>
+                <option value="<{$team.id}>" ><{$team.teamName}></option>
+                <{/foreach}>
+            </select>
+        </div>
+    </body>
+</html>
+<script type="text/javascript">
+    function _action() {
+        var action = $("#action").val();
+        if (action == 1) {
+            allfirst();
+        } else if (action == 2) {
+            alltransfer();
+        } else if (action == 3) {
+            allrenew();
+        } else if (action == 4) {
+            alllock();
+        } else if (action == 5) {
+            allunlock();
+        } else if (action == 6) {
+            window.open("<{spUrl c=trading a=domainList txt=all}>");
+        } else if (action == 7) {
+            plfz();
+        } else if (action == 13) {
+            allpush();
+        } else {
+            layer.msg(action);
+        }
+    }
+    $('#selectall').click(function () {
+        if ($('#selectall').prop('checked') == true) {
+            var checkboxs = document.getElementsByName("id[]");
+            for (var i = 0; i < checkboxs.length; i++) {
+                var e = checkboxs[i];
+                if ($(e).attr("disabled") != "disabled")
+                    e.checked = true;
+            }
+            $('#selectall1').prop('checked', true);
+        } else {
+            var checkboxs = document.getElementsByName("id[]");
+            for (var i = 0; i < checkboxs.length; i++) {
+                var e = checkboxs[i];
+                e.checked = false;
+            }
+            $('#selectall1').prop('checked', false);
+        }
+    });
+    $('#selectall1').click(function () {
+        if ($('#selectall1').prop('checked') == true) {
+            var checkboxs = document.getElementsByName("id[]");
+            for (var i = 0; i < checkboxs.length; i++) {
+                var e = checkboxs[i];
+                if ($(e).attr("disabled") != "disabled")
+                    e.checked = true;
+            }
+            $('#selectall').prop('checked', true);
+        } else {
+            var checkboxs = document.getElementsByName("id[]");
+            for (var i = 0; i < checkboxs.length; i++) {
+                var e = checkboxs[i];
+                e.checked = false;
+            }
+            $('#selectall').prop('checked', false);
+        }
+    });
+    //批量PUSH
+    function allpush() {
+        var chk_value = [];
+        var str = "";
+        $('input[name="id[]"]:checked').each(function () {
+            chk_value.push($(this).val());
+            str += "&id[]=" + $(this).val();
+        });
+        if (chk_value.length == 0) {
+            layer.msg('您还没有选择任何域名！');
+            return;
+        }
+
+        $.post('<{spUrl c=push a=apply from=check}>', {"id": chk_value}, function (ret) {
+            if (ret.status == 201) {
+                layer.msg(ret.msg);
+                return;
+            }
+            if (ret.status == 200) {
+                window.open("/push/apply?from=all" + str);
+                return;
+            }
+        }, "json");
+    }
+    //批量一口价
+    function allfirst() {
+        var chk_value = [];
+        var str = "";
+        $('input[name="id[]"]:checked').each(function () {
+            chk_value.push($(this).val());
+            str += "&id[]=" + $(this).val();
+        });
+        if (chk_value.length == 0) {
+            layer.msg('您还没有选择任何域名！');
+            return;
+        }
+
+        $.post('<{spUrl c=first a=apply from=check}>', {"id": chk_value}, function (ret) {
+            if (ret.status == 201) {
+                layer.msg(ret.msg);
+                return;
+            }
+            if (ret.status == 200) {
+                window.open("/first/apply?from=all" + str);
+                return;
+            }
+        }, "json");
+    }
+    //单个锁定域名
+    function locking(id) {
+        layer.confirm("确认将域名锁定？锁定后的域名不可操作交易、转出", {btn: ['确认锁定', '取消'], title: '提示', closeBtn: 0}
+        , function () {
+            $.post('<{url c="tradeList" a="locking"}>', 'id=' + id, function (ret) {
+                if (ret.status > 1) {
+                    var btn_str = '好的，我检查下';
+                    if (ret.status == 200)
+                        btn_str = '好的，我知道了';
+                    layer.alert(ret.msg, {btn: [btn_str], title: '提示', closeBtn: 0}, function (index) {
+                        layer.close(index);
+                        location.reload(true)
+                    });
+                }
+            }, "json");
+        }
+        , function () {
+            //layer.msg("取消锁定!");
+        }
+        );
+    }
+    //单个解锁域名
+    function unlock(id) {
+        layer.confirm("确认将域名解锁？解锁后的域名可操作交易、转出", {btn: ['确认解锁', '取消'], title: '提示', closeBtn: 0}
+        , function () {
+            $.post('<{url c="tradeList" a="unlock"}>', 'id=' + id, function (ret) {
+                if (ret.status > 1) {
+                    var btn_str = '好的，我检查下';
+                    if (ret.status == 200)
+                        btn_str = '好的，我知道了';
+                    layer.alert(ret.msg, {btn: [btn_str], title: '提示', closeBtn: 0}, function (index) {
+                        layer.close(index);
+                        location.reload(true)
+                    });
+                }
+            }, "json");
+        }
+        , function () {
+            //layer.msg("取消解除!");
+        }
+        );
+    }
+    //批量锁定域名
+    function alllock() {
+        var chk_value = [];
+        $('input[name="id[]"]:checked').each(function () {
+            chk_value.push($(this).val());
+        });
+        if (chk_value.length == 0) {
+            layer.msg('您还没有选择任何域名！');
+            return;
+        }
+        layer.confirm("确认将选中的" + chk_value.length + "个域名批量锁定？锁定后的域名不可操作交易、转出", {btn: ['确认批量锁定', '取消'], title: '提示', closeBtn: 0}
+        , function () {
+            $.post('<{url c="tradeList" a="locking"}>', {"id": chk_value}, function (ret) {
+                if (ret.status > 1) {
+                    var btn_str = '好的，我检查下';
+                    if (ret.status == 200)
+                        btn_str = '好的，我知道了';
+                    layer.alert(ret.msg, {btn: [btn_str], title: '提示', closeBtn: 0}, function (index) {
+                        layer.close(index);
+                        location.reload(true)
+                    });
+                }
+            }, "json");
+        }
+        , function () {
+            //layer.msg('取消锁定操作');
+        }
+        );
+    }
+    //批量解锁域名
+    function allunlock() {
+        var chk_value = [];
+        $('input[name="id[]"]:checked').each(function () {
+            chk_value.push($(this).val());
+        });
+        if (chk_value.length == 0) {
+            layer.msg('您还没有选择任何域名！');
+            return;
+        }
+        layer.confirm("确认将选中的" + chk_value.length + "个域名批量解锁？解锁后的域名可操作交易、转出", {btn: ['确认批量解锁', '取消'], title: '提示', closeBtn: 0}
+        , function () {
+            $.post('<{url c="tradeList" a="unlock"}>', {"id": chk_value}, function (ret) {
+                if (ret.status > 1) {
+                    var btn_str = '好的，我检查下';
+                    if (ret.status == 200)
+                        btn_str = '好的，我知道了';
+                    layer.alert(ret.msg, {btn: [btn_str], title: '提示', closeBtn: 0}, function (index) {
+                        layer.close(index);
+                        location.reload(true);
+                    });
+                }
+            }, "json");
+        }
+        );
+    }
+    //单个转出域名
+    function transfer(id) {
+        layer.confirm("确认将域名转出到注册商平台？", {btn: ['确认提交转出', '取消'], title: '提示', closeBtn: 0}
+        , function () {
+            $.post('<{url c="tradeList" a="transfer"}>', 'id=' + id, function (ret) {
+                if (ret.status == 200 || ret.status == 205) {
+                    layer.open({title: '转出提示', content: ret.msg, btn: ['前往转出列表', '一会再处理'], closeBtn: 0
+                        , yes: function (index, layero) {
+                            layer.close(index);
+                            location.reload(true)
+                            window.open("<{url c='tradeList' a='outplat'}>");
+                        }, btn2: function (index, layero) {
+                            //location.reload(true)
+                        }
+                    });
+                    return;
+                }
+                if (ret.status == 201) {
+                    layer.alert(ret.msg, {btn: ['好的，我检查下'], title: '提示', closeBtn: 0}, function (index) {
+                        layer.close(index);
+                        //location.reload(true)
+                    });
+                }
+            }, "json");
+        }
+        , function () {
+            //layer.msg("取消转出!");
+        }
+        );
+    }
+    //批量转出域名
+    function alltransfer() {
+        var chk_value = [];
+        $('input[name="id[]"]:checked').each(function () {
+            chk_value.push($(this).val());
+        });
+        if (chk_value.length == 0) {
+            layer.msg('您还没有选择任何域名！');
+            return;
+        }
+        layer.confirm("确认将选中的" + chk_value.length + "个域名批量转出到注册商平台？", {btn: ['确认批量转出', '取消'], title: '提示', closeBtn: 0}
+        , function () {
+            $.post('<{url c="tradeList" a="transfer"}>', {"id": chk_value}, function (ret) {
+                if (ret.status == 200 || ret.status == 205) {
+                    layer.open({title: '转出提示', content: ret.msg, btn: ['前往转出列表', '一会再处理'], closeBtn: 0
+                        , yes: function (index, layero) {
+                            layer.close(index);
+                            location.reload(true)
+                            window.open("<{url c='tradeList' a='outplat'}>");
+                        }, btn2: function (index, layero) {
+                            //location.reload(true)
+                        }
+                    });
+                    return;
+                }
+                if (ret.status == 201) {
+                    layer.alert(ret.msg, {btn: ['好的，我检查下'], title: '提示', closeBtn: 0}, function (index) {
+                        layer.close(index);
+                        location.reload(true)
+                    });
+                }
+            }, "json");
+        }
+        , function () {
+            //layer.msg("取消转出!");
+        }
+        );
+    }
+    //单个续费域名
+    function renew(id) {
+        layer.confirm("确认将域名申请提交到续费列表", {btn: ['确认提交续费', '取消'], title: '提示', closeBtn: 0}
+        , function () {
+            $.post('<{url c="tradeList" a="renew"}>', 'id=' + id, function (ret) {
+                if (ret.status == 200 || ret.status == 205) {
+                    layer.open({title: '提示', content: ret.msg, btn: ['前往待续费列表', '一会再处理'], closeBtn: 0
+                        , yes: function (index, layero) {
+                            layer.close(index);
+                            location.reload(true)
+                            window.open("<{url c='tradeList' a='shopcart'}>");
+                        }, btn2: function (index, layero) {
+                            //location.reload(true)
+                        }
+                    });
+                    return;
+                }
+                if (ret.status == 201) {
+                    layer.alert(ret.msg, {btn: ['好的，我检查下'], title: '提示', closeBtn: 0}, function (index) {
+                        layer.close(index);
+                        //location.reload(true)
+                    });
+                }
+            }, "json");
+        }
+        , function () {
+            //layer.msg("取消续费!");
+        }
+        );
+    }
+    //批量续费域名
+    function allrenew() {
+        var chk_value = [];
+        $('input[name="id[]"]:checked').each(function () {
+            chk_value.push($(this).val());
+        });
+        if (chk_value.length == 0) {
+            layer.msg('您还没有选择任何域名！');
+            return;
+        }
+        layer.confirm("确认将选中的" + chk_value.length + "个域名批量申请提交到续费列表", {btn: ['确认批量续费', '取消'], title: '提示', closeBtn: 0}
+        , function () {
+            $.post('<{url c="tradeList" a="renew"}>', {"id": chk_value}, function (ret) {
+                if (ret.status == 200 || ret.status == 205) {
+                    layer.open({title: '提示', content: ret.msg, btn: ['前往待续费列表', '一会再处理'], closeBtn: 0
+                        , yes: function (index, layero) {
+                            layer.close(index);
+                            location.reload(true)
+                            window.open("<{url c='tradeList' a='shopcart'}>");
+                        }, btn2: function (index, layero) {
+                            //location.reload(true)
+                        }
+                    });
+                    return;
+                }
+                if (ret.status == 201) {
+                    layer.alert(ret.msg, {btn: ['好的，我检查下'], title: '提示', closeBtn: 0}, function (index) {
+                        layer.close(index);
+                        //location.reload(true)
+                    });
+                }
+            }, "json");
+        }
+        , function () {
+            //layer.msg("取消续费!");
+        }
+        );
+    }
+    function setteam(id)
+    {
+        var team_id;
+        team_id = $('[name="team-' + id + '"]').eq(0).val();
+        $.post('<{url c="ym_team" a="set_teamToDomain"}>', 'id=' + id + '&team_id=' + team_id, function (ret) {
+            if (ret.status == 200 || ret.status == 205) {
+                layer.alert(ret.msg);
+                return;
+            }
+        }, "json");
+    }
+
+    function plfz() {
+        layer.open({
+            title: '批量修改分组',
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['220px', '400px'], //宽高
+            content: $('#div_fz'),
+            btn: ['提交', '取消'],
+            success: function (layero, index) {
+
+                $("#team-plfz").val('0');
+            },
+            yes: function (index, layero) {
+                var chk_value = [];
+                $('input[name="id[]"]:checked').each(function () {
+                    chk_value.push($(this).val());
+                });
+                var fz = $("#team-plfz").val();
+                $.post('<{url c="ym_team" a="plfz"}>', {"ids": chk_value, "team_id": fz}, function (ret) {
+                    if (ret.status == 200 || ret.status == 205) {
+                        layer.alert(ret.msg);
+                        return;
+                    }
+                }, "json");
+                layer.close(index);
+                location.reload(true);
+            },
+            btn2: function (index, layero) {
+                layer.close(index);
+            },
+            cancel: function (index, layero) {
+                if (confirm('确定要关闭么')) { //只有当点击confirm框的确定时，该层才会关闭
+                    layer.close(index)
+                }
+                return false;
+            }
+        });
+    }
+
+    $("[rel='domainLtd']").on("click", function () {
+        //alert(1);
+
+        var v = $(this).attr("ren");
+        if ($(this).hasClass('action')) {
+            $(this).removeClass('action');
+        } else {
+            $(this).addClass('action');
+        }
+    });
+
+    $("#ym_hz_qx").on("click", function () {
+        $("[rel='domainLtd']").each(function () {
+            var v = $(this).attr("ren");
+            $(this).addClass('action');
+            //
+        });
+    });
+
+
+</script>

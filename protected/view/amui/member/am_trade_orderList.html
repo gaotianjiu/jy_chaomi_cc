@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>委托订单 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">委托订单</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $status==''}> class="active"<{/if}>><a href="<{url c='trading' a='orderList'}>">全部</a></li>
+							  <li<{if $status==1}> class="active"<{/if}>><a href="<{spUrl c=trading a=orderList status=1}>">买入</a></li>
+							  <li<{if $status==2}> class="active"<{/if}>><a href="<{spUrl c=trading a=orderList status=2}>">卖出</a></li>							  
+							</ul>						
+                        </div>						
+                    </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+							<div style="font-size:16px; padding-bottom:10px">搜索结果：<span style="color:#F37B1D; font-weight:bold;"><{$pager.total_count}></span></div>
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <th>时间</th>
+                                            <th>品种</th>
+                                            <th>类型</th>
+                                            <th>总数量</th>
+                                            <th>已成交</th>
+                                            <th>单价</th>
+                                            <th>总价</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if $pager.total_count==0}>
+										<tr style="height:60px;">
+											<td colspan="9" style="text-align:center;line-height: 50px;">暂无相关委单数据</td>
+										</tr>
+										<{/if}>										
+									 <{foreach item=v from=$ret key=k}> 
+                                        <tr>
+                                            <td><{$v.order_time}></td>
+                                            <td><{$v.name}><{if $v.typeid>800000}><br/><span style="color:#888;font-size:12px;">到期时间：<{$v.pt_zb}></span><{/if}></td>
+                                            <td><{if $v.status_2==0}><span class="font-blue">卖出</span><{elseif $v.status_2==1}><span class="font-red">买入</span><{/if}> </td>
+                                            <td><{$v.number}></td>
+                                            <td><{$v.deal_num}></td>
+                                            <td>￥<{$v.price}></td>
+                                            <td>￥<{$v.total_price}></td>
+											<td>			
+												<{if $v.status_1==0}><a onclick="order_cancel('<{$v.id}>')">撤单</a>
+												<{elseif $v.status_1==1}><span class="am-badge am-badge-danger am-radius">交易成功</span>
+												<{elseif $v.status_1==2}><span class="am-badge am-radius">交易取消</span>
+												<{elseif $v.status_1==3}><span class="am-badge am-radius">系统下架</span>
+												<{/if}>											
+                                            </td>
+                                        </tr>
+									<{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=trading a=orderList page=$pager.first_page status=$status}>">首页</a></li>
+													<li><a href="<{spUrl c=trading a=orderList page=$pager.prev_page status=$status}>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=trading a=orderList page=$thepage status=$status}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=trading a=orderList page=$thepage status=$status}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=trading a=orderList page=$pager.next_page status=$status}>">下一页</a></li>
+													<li><a href="<{spUrl c=trading a=orderList page=$pager.last_page status=$status}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<script type="text/javascript">
+	function order_cancel(id){ 
+		//撤销委托订单
+		$.get('/trading/cancel_order_buyer?id='+id,function(ret){
+		 if(ret.status>1){
+			layer.msg(ret.msg)
+			 if(ret.status==200){
+				location.reload(true)
+			 }
+			return; 
+		 } 
+		 layer.msg('撤销委托订单出错，请稍等重试')
+	   }, "json");
+	}
+</script>		
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

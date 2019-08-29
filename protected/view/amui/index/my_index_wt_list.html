@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title><{$type_name}> - 交易档位(前100档)</title>
+<meta name="keywords" content="炒米,炒米交易,炒米网,炒米域名">
+<meta name="Description" Content="炒米网交易中心是一个专业的域名批量交易平台，实时挂单委托成交、24小时开盘交易、方便快捷 - 聪明的米农都在这里！">
+<{include file="amui/am_i_header_css_js.html"}>
+</head>
+<style>
+*,html,body{background-color:#fff;}
+</style>
+<body>
+					<div class="tpl-page-container" style="padding:0px;height:650px;">
+						<div class="am-g tpl-content-wrapper-i">					
+							<span style="font-size:14px;margin-left:5px;margin-top:3px;"><{$type_name}>卖买盘(前100档)</span>
+							<div class="am-fl" style="background:#fff;width:100%;padding:0px 0px;margin-top:5px;padding-left:5px;padding-right:5px;">
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="wt-list-buy" style="float:left;width:50%;">
+                                    <thead style="background: #fff;">
+											<tr>
+												<th>买盘</th>
+												<th>单价</th>
+												<th>到期</th>
+												<th>数量</th>
+												<th>总价</th>
+											</tr>
+                                    </thead>
+                                    <tbody>								
+										<tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>									
+                                    </tbody>
+                                </table>
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="wt-list-sale" style="float:left;width:49%;margin-left:1%;">
+                                    <thead style="background: #fff;">
+											<tr>
+												<th>卖盘</th>
+												<th>单价</th>
+												<th>到期</th>
+												<th>数量</th>
+												<th>总价</th>
+											</tr>
+                                    </thead>
+                                    <tbody>
+										<tr><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+                                    </tbody>
+                                </table>								
+                        </div>
+				
+                    </div>
+                </div>
+		
+<script type="text/javascript">
+function running_price(){ 
+		$.get("/p/"+<{$typeid}>+'?type=all',function(ret){
+			if(ret.status==200){
+					$("#wt-list-sale tbody").empty();
+					$("#wt-list-buy tbody").empty();
+					var sale_list = ''
+					$.each(ret.sale_list,function(k,v){
+						if(v['number']>0){					
+							sale_list = 
+							'<tr onclick="onclick_price('+v['price']+')"><td class="font-green">卖'+k+'</td>'+
+							'<td>￥'+v['price']+'</td>'+
+							'<td style="color:#666;">'+v['zhibao']+'</td>'+
+							'<td style="color:#666;">'+v['number']+'个</td>'+
+							'<td style="color:#666;">￥'+v['price_c']+'</td></tr>'
+							'</tr>'
+						}else{
+							sale_list = '<tr><td class="font-green">'+k+'</td>'+'<td>-</td><td>-</td><td>-</td><td>-</td></tr>'					
+						}
+						$("#wt-list-sale tbody").append(sale_list);
+					});
+					var buy_list = ''
+					$.each(ret.buy_list,function(k,v){
+						if(v['number']>0){						
+							buy_list = 
+							'<tr onclick="onclick_price('+v['price']+')"><td class="font-red">买'+k+'</td>'+
+							'<td>￥'+v['price']+'</td>'+
+							'<td style="color:#666;">'+v['zhibao']+'</td>'+
+							'<td style="color:#666;">'+v['number']+'个</td>'+
+							'<td style="color:#666;">￥'+v['price_c']+'</td></tr>'
+							'</tr>'
+						}else{
+							buy_list = '<tr><td class="font-red">'+k+'</td>'+'<td>-</td><td>-</td><td>-</td><td>-</td></tr>'					
+						}
+						$("#wt-list-buy tbody").append(buy_list);
+					});	
+				}
+		}, "json");
+}
+
+$(function () {
+	running_price();
+	window.setInterval(running_price,2000);
+});
+
+</script>	
+</body>
+</html>

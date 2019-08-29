@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>炒米网 - 域名批量交易中心，一口价域名买卖、24小时开盘交易！</title>
+<meta name="keywords" content="炒米,炒米交易,炒米网,炒米域名">
+<meta name="Description" Content="炒米网交易中心是一个专业的域名批量交易平台，实时挂单委托成交、一口价域名买卖交易、24小时开盘交易、方便快捷 - 聪明的米农都在这里！">
+<{include file="amui/am_i_header_css_js.html"}>
+<script type="text/javascript" src="http://cdn.bootcss.com/echarts/3.2.3/echarts.min.js"></script>
+<script type="text/javascript" src="http://static.chaomi.cc/js/amui/assets/js/chart.js"></script>
+<script type="text/javascript" src="http://static.chaomi.cc/js/cms_n.js?t=2017021402"></script>
+</head>
+<body class="tpl-bg">
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_i_header.html"}>
+<!----------顶部通栏块 end--------->	
+<!----------最近成交记录 begin--------->
+	<div class="tpl-page-container">		
+        <div class="am-g tpl-content-wrapper-i">
+            <div class="tpl-portlet-components-i am-padding-bottom-0">
+                <div class="portlet-title">
+                    <div class="caption">列表</div>
+                    <div class="am-fr am-padding-right" style="padding-top:13px;padding-bottom:13px;font-size:14px;"><a href="http://my.chaomi.cc/trading/find_order" target="_blank"> <i class="am-icon-angle-double-right"></i></a></div>										
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="deal-data-list">
+                                    <thead>
+                                        <tr>
+                                            <th>日期</th>
+                                            <th>爱名成交额(元)</th>
+                                            <th>易名成交额(元)</th>
+                                            <th>爱名成交量(个)</th>
+                                            <th>易名成交量(个)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+									<{foreach item=v from=$ret key=k}><tr>
+									<td><{$v['date']}></td>
+									<td><{$v['am_price']}></td>
+									<td><{$v['em_price']}></td>
+									<td><{$v['am_count']}></td>
+									<td><{$v['em_count']}></td>
+									</tr>
+									<{/foreach}>									
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>		
+</script>	
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_i_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

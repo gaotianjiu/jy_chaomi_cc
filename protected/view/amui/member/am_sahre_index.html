@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>分享推广 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+<script src="//cdn.bootcss.com/clipboard.js/1.7.1/clipboard.min.js"></script>
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:300px;">
+                <div class="portlet-title">
+                    <div class="caption">分享推广</div>
+                </div>	
+                <div class="tpl-block">
+				
+                    <div class="am-g">
+						<div class="am-u-sm-12 am-u-md-12">
+							<div class="am-panel am-panel-default am-panel-bd" style="line-height:14px;background:#f7f7f7;">
+								<p>我的邀请码：<span class="am-text-warning"><{$mid}></span></p>
+								<p>我的邀请链接：<span id="link_str" style="background:none;padding:0px 3px;">http://my.chaomi.cc/sso/register?mid=<{$mid}></span> 
+								<span class="am-badge am-badge-primary am-radius" style="font-weight:normal;" id="copy_link">复制链接</span> 
+								<span class="am-badge am-badge-primary am-radius" style="font-weight:normal;" onclick="share_weixin()">分享到微信</span></p>
+								<p>您推荐的朋友注册并交易成功后，您将获得每笔成功交易的分成，分成直接打入您的账户余额</p>
+								<p>交易分成：30% </p>
+								邀请人数：<{$eco_count}>
+							</div>
+						</div>						
+                    </div>
+				
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase am-text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-type">推荐注册好友</th>
+                                            <th>注册时间</th>
+                                            <th>累积交易分成</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if $pager.total_count==0}>
+										<tr style="height:60px;">
+											<td colspan="8" style="text-align:center;line-height: 50px;">暂无数据</td>
+										</tr>
+										<{/if}>			
+									 <{foreach item=v from=$ret key=k}> 
+                                        <tr>
+                                            <td><{$v.reg_mid}></td>
+                                            <td><{$v.create_time}></td>
+                                            <td><{$v.revenue_sharing}></td>
+                                        </tr>
+      
+									<{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=share a=index page=$pager.first_page}>">首页</a></li>
+													<li><a href="<{spUrl c=share a=index page=$pager.prev_page}>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=share a=index page=$thepage}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=share a=index page=$thepage}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=share a=index page=$pager.next_page}>">下一页</a></li>
+													<li><a href="<{spUrl c=share a=index page=$pager.last_page}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+
+<script type="text/javascript">
+$(document).ready(function(){
+	var clipboard = new Clipboard('#copy_link', {
+		text: function() {
+			return 'http://my.chaomi.cc/sso/register?mid=<{$mid}>';
+		}
+	});
+	clipboard.on('success', function(e) {
+		 $('#link_str').css('background','#0E90D2');
+		 $('#link_str').css('color','#fff');
+		alert('复制成功');
+	});
+
+	clipboard.on('error', function(e) {
+		layer.msg('复制出错...')
+	});
+});	
+function share_weixin(){
+	var index = layer.open({
+	  content: "<div style='padding: 20px 50px;'><img src='https://pan.baidu.com/share/qrcode?w=200&h=200&url=http://my.chaomi.cc/sso/register?mid=<{$mid}>'></div>"
+        ,btn: ''
+		,title:'微信扫一扫，转发给好友'
+        ,btnAlign: 'c' //按钮居中
+        ,shade: 0 //不显示遮罩
+        ,yes: function(){
+          layer.closeAll();
+        }	  
+	});
+	
+}
+</script>		
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

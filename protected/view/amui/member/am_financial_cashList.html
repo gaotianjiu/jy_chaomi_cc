@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>提现记录 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">提现管理</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li><a href="<{url c='capital' a='bankInfo'}>">银行信息</a></li>
+							  <li><a href="<{url c='capital' a='bindBank'}>">添加账号</a></li>
+							  <li><a href="<{url c='capital' a='cashApply'}>">申请提现</a></li>
+                               <li class="active"><a href="<{url c='capital' a='cashList'}>">提现列表</a></li>
+							</ul>						
+                        </div>						
+                    </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <table class="am-table am-table-hover tpl-table-uppercase">
+                                <thead>
+                                    <tr>
+                                        <th class="table-type">编号ID</th>
+                                        <th>开户银行</th>
+                                        <th>银行账号</th>
+                                        <th>申请日期</th>
+                                        <th>提现金额</th>
+                                        <th>手续费</th>
+                                        <th>处理日期</th>
+                                        <th>状态</th>
+                                        <th>备注</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+									<{if $pager.total_count==0}>
+									<tr style="height:60px;">
+										<td colspan="10" style="text-align:center;line-height: 50px;">暂无相关记录</td>
+									</tr>
+									<{/if}>										
+                                <{if $res}>
+                                <{foreach from=$res item=v}>
+                                <tr>
+                                    <td><{$v.id}></td>
+                                    <td><{$v.bank}></td>
+                                    <td><{$v.bankno}></td>
+                                    <td><{$v.sqdate}></td>
+                                    <td><{$v.draw}></td>
+                                    <td><{$v.draw_s}></td>
+                                    <td><{$v.cldate}></td>
+                                    <td>
+                                        <{$v.statename}>
+                                    </td>
+                                    <td><{$v.remark}></td>
+                                    <td>
+										<{if $v.state==601}>
+										<a onclick="cancel('<{$v.id}>')">取消</a>
+										<{else}>
+										-
+										<{/if}>
+                                    </td>
+                                </tr>
+                                <{/foreach}>
+                                <{/if}>
+                                </tbody>
+                            </table>
+                            <div class="am-cf">
+                                <!--分页部分 begin-->
+                                <div class="am-fr">
+                                    <ul class="am-pagination tpl-pagination">
+                                        <{if $pager}>
+                                        <li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+                                        <{if $pager.current_page != $pager.first_page}>
+                                        <li><a href="<{spUrl c=capital a=cashList page=$pager.first_page  }>">首页</a></li>
+                                        <li><a href="<{spUrl c=capital a=cashList page=$pager.prev_page }>">上一页</a></li>
+                                        <{/if}>
+                                        <{foreach from=$pager.all_pages item=thepage}>
+                                        <{if $thepage != $pager.current_page}>
+                                        <li><a href="<{spUrl c=capital a=cashList page=$thepage}>"><{$thepage}></a></li>
+                                        <{else}>
+                                        <li class="am-active"><a href="<{spUrl c=capital a=cashList page=$thepage }>"><{$thepage}></a></li>
+                                        <{/if}>
+                                        <{/foreach}>
+                                        <{if $pager.current_page != $pager.last_page}>
+                                        <li><a href="<{spUrl c=capital a=cashList page=$pager.next_page }>">下一页</a></li>
+                                        <li><a href="<{spUrl c=capital a=cashList page=$pager.last_page }>">末页</a></li>
+                                        <{/if}>
+                                        <{/if}>
+                                    </ul>
+                                </div>
+                                <!--分页部分 end-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<script>
+    function cancel(id){
+        layer.confirm("确认取消提现吗？",{btn:['确认','取消'],title:'提示',closeBtn: 0}
+                ,function(){
+                    $.post('<{spUrl c=capital a=cashApply act=delete}>','id='+id,function(ret){
+						if(ret.status>1){
+							var btn_str = '好的，我检查下';
+							if(ret.status==200)btn_str = '好的，我知道了';
+							layer.alert(ret.msg, {btn:[btn_str],title:'提示',closeBtn: 0}, function(index){
+								layer.close(index);
+								location.reload(true)
+							}); 
+						}
+                    },"json");
+                }
+                ,function(){
+                }
+        );
+    }
+</script>
+		
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

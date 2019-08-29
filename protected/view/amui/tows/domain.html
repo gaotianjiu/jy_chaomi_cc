@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>公共兑换池 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:100px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+								 <{if $uid==19639}>
+									<li<{if $act=='tows_apply'}> class="active"<{/if}>><a href="<{url c='tows' a='apply'}>">解析域名</a></li> 
+									<li<{if $act=='tows_inList'}> class="active"<{/if}>><a href="<{url c='tows' a='inlist'}>">解析记录</a></li>
+								 <{/if}>	
+							  <li<{if $act=='tows_applyList'}> class="active"<{/if}>><a href="<{url c='tows' a='applyList'}>">明细列表</a></li>
+							  <li<{if $act=='tows_change'}> class="active"<{/if}>><a href="<{url c='tows' a='change'}>">兑换域名</a></li>
+							  <li<{if $act=='tows_domain'}> class="active"<{/if}>><a href="<{url c='tows' a='domain'}>">公共兑换池</a></li>
+							  <li<{if $act=='tows_outList'}> class="active"<{/if}>><a href="<{url c='tows' a='outlist'}>">兑换记录</a></li>
+							</ul>						
+                        </div>						
+                    </div>	
+                <div class="tpl-block">
+                    <div class="am-g">
+			<div class="am-alert am-alert-secondary am-margin-left am-margin-right" style="margin-bottom:10px;">
+                            <p>
+                            温馨提示：这里的域名，可用对应数量品种的二级域名兑换提米。
+                            </p>
+			</div>
+                    <form action="<{url c='tows' a='domain'}>" method="get" class="am-form am-form-horizontal am-margin-left am-margin-right">
+						<div class="am-g">
+							<div class="am-u-sm-12 am-u-md-4" style="float:left;">
+								<div class="am-form-group">域名类型：
+									<select name="typeid" data-am-selected="{btnSize: 'sm'}" style="width:200px;">
+										<option value="0">全部</option>
+										<{html_options options=$type_options}>
+									</select>
+								</div>
+							</div> 	 
+							<div class="am-u-sm-12 am-u-md-4" >
+								<div class="am-form-group">
+									<label for="doc-ipt-4-a" style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;margin-top:5px;">域名关键字：</label>
+									<input type="text" name="domain" value="<{urldecode($cond.domain)}>" class="am-form-field am-radius" style="width:200px;height:35px;" >
+								</div>
+							</div>
+							<div class="am-u-sm-12 am-u-md-4">
+								<div class="am-form-group">
+									<input type="submit" value="搜索" class="am-btn am-btn-sm am-btn-primary am-radius"/>
+									<a href="<{url c='parking' a='applyList'}>" class="am-btn am-btn-sm am-btn-primary am-radius">重置</a>
+								</div>
+							</div> 						
+						</div>
+                    </form>								
+                        <div class="am-u-sm-12">
+							<div style="font-size:16px; padding-bottom:10px">搜索结果：<span style="color:#F37B1D; font-weight:bold;"><{$pager.total_count}></span></div>
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-type">ID</th>
+                                            <th>域名</th>
+                                            <th>品种</th>
+                                            <th>兑换比例</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <{if $pager.total_count==0}>
+                                        <tr style="height:60px;">
+                                            <td colspan="4" style="text-align:center;line-height: 50px;">暂无数据</td>
+					</tr>
+                                    <{/if}>			
+                                    <{foreach item=v from=$ret key=k}> 
+                                        <tr>
+                                            <td><{$v.id}></td>
+                                            <td><{$v.domain}></td>
+                                            <td><{$type_options[$v.old_typeid]}></td> 
+                                            <td><b>1:<{$v.d_count}></b></td>
+                                            <td><a class="am-badge am-radius am-badge-primary am-btn-sm" href="<{spUrl c=tows a=change did=<{$v.id}>}>">指定兑换</a>
+                                                <a class="am-badge am-radius am-badge-primary am-btn-sm" href="<{url c='tows' a='change'}>">随机兑换</a>
+                                            </td>
+                                        </tr>
+      
+                                    <{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+                                    <!--分页部分 begin-->
+                                    <div class="am-fr">
+                                        <ul class="am-pagination tpl-pagination">					
+                                        <{if $pager}>
+                                            <li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+                                            <{if $pager.current_page != $pager.first_page}>
+                                            <li><a href="<{spUrl c=tows a=domain typeid=$cond.typeid}>">首页</a></li>
+                                            <li><a href="<{spUrl c=tows a=domain typeid=$cond.typeid}>">上一页</a></li>
+                                            <{/if}>
+                                            <{foreach from=$pager.all_pages item=thepage}>
+						<{if $thepage != $pager.current_page}>
+                                                    <li><a href="<{spUrl c=tows a=domain typeid=$cond.typeid page=$thepage}>"><{$thepage}></a></li>
+						<{else}>
+                                                    <li class="am-active"><a href="<{spUrl c=tows a=domain typeid=$cond.typeid page=$thepage}>"><{$thepage}></a></li>
+						<{/if}>
+                                            <{/foreach}>
+                                            <{if $pager.current_page != $pager.last_page}>
+                                                <li><a href="<{spUrl c=parking a=domain typeid=$cond.typeid page=$pager.next_page}>">下一页</a></li>
+						<li><a href="<{spUrl c=parking a=domain typeid=$cond.typeid page=$pager.last_page}>">末页</a></li>
+                                            <{/if}>
+					<{/if}>	
+					</ul>		
+                                    </div>
+                                    <!--分页部分 end-->	
+				</div>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+</script>		
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

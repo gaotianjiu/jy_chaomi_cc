@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>提现管理 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">提现管理</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li><a href="<{url c='capital' a='bankInfo'}>">银行信息</a></li>
+							  <li><a href="<{url c='capital' a='bindBank'}>">添加账号</a></li>
+							  <li class="active"><a href="<{url c='capital' a='cashApply'}>">申请提现</a></li>
+                              <li><a href="<{url c='capital' a='cashList'}>">提现列表</a></li>
+							</ul>						
+                        </div>						
+                    </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <div class="am-g am-padding">
+                                <div class="am-form am-form-horizontal">
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">请选择银行卡号</label>
+										<{if $bank}>
+                                        <div class="am-u-sm-9 am-u-end">
+                                           <select data-am-selected="" name="bankid" id="bankid">
+                                               <option value="0">请选择银行卡</option>
+                                               <{foreach from=$bank item=v}>
+                                               <option value="<{$v['id']}>"><{$v['bankname']}>[<{$v['username']}>][<{$v['bankno']}>][<{$v['bankadder']}>]</option>
+                                               <{/foreach}>
+                                           </select>
+                                        </div>
+										<{else}>
+											<div class="ipt" style="line-height:37px;font-size:16px;">请先添加银行卡，<a href="<{url c='capital' a='bindBank'}>">添加账号</a></div>
+										<{/if}>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">可用余额</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <div class="ipt" style="line-height:37px;font-size:16px;">￥<{$m_kyye}></div>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">可提现金额</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <div class="ipt" style="line-height:37px;font-size:16px;">￥<{$m_draw}></div>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">提现金额</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <input type="number" name="d_draw" id="d_draw" class="u-ipt" maxlength="20" style="width:100px;" step="10" max="<{$m_draw}>" value="" />
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">提现费率</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <div class="ipt" style="line-height:37px;font-size:16px;"><{$m_draw_sxf}>%</div>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">手续费</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <div class="ipt" id="sxf-c" style="line-height:37px;font-size:16px;">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">实际到账金额</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <div class="ipt" id="dz-c" style="line-height:37px;font-size:16px;">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">安全码</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <input type="password" name="d_pass" id="d_pass" class="u-ipt" style="width:180px;" maxlength="20"/>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">备注</label>
+                                        <div class="am-u-sm-3 am-u-end">
+                                            <input type="text" name="d_bz" id="d_bz" class="u-ipt" value="余额提现" style="width:230px;" maxlength="30"/>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <div class="am-u-sm-3 am-u-sm-push-2">
+                                            <button type="button" class="am-btn am-btn-primary am-radius" data-am-loading="{spinner: 'spinner', loadingText: '申请提现中...'}" id="sub_post">申请提现</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+                    <p>1、跨行转账，款项转移以后一般需要1-5个工作日到账，请耐心等待下</p>
+                    <p>2、提现成功以后，实际需要1-2个工作日内到账</p>
+                </div>				
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+		jssxf();
+        $("#d_draw").change(function () {
+            if (checktxje()) {
+                jssxf();
+            }
+        });
+        //检测提现金额是否正确
+        function checktxje() {
+            var j_draw = <{$m_draw}>;
+            var j_mindraw = <{$m_draw_sxf}>;
+            var j_txje = $("#d_draw").val();
+            
+            if (j_txje > j_draw) {
+                layer.msg("可提现金额不足，当前最大可提现金额"+j_draw+"元");
+				$("#d_draw").focus();
+                $("#sxf-c").text("-");
+                $("#dz-c").text("-");					
+                return false;
+            }
+            if (j_txje < 100) {
+                layer.msg("最小提现金额不能少于100元");
+				$("#d_draw").focus();
+                $("#sxf-c").text("-");
+                $("#dz-c").text("-");					
+                return false;
+            }
+            return true;
+        }
+        //计算手续费
+        function jssxf() {
+            var j_txje = parseInt($("#d_draw").val());
+            var j_sxfl = <{$m_draw_sxf}>;
+            var j_sxf = 0;
+            var j_sjdz = 0;
+
+            if ((!isNaN(j_txje)) && (!isNaN(j_sxfl))) {
+                j_sxf = j_txje * j_sxfl / 100;
+                j_sxf = j_sxf.toFixed(2);
+                j_sjdz = (j_txje - j_sxf).toFixed(2);
+                $("#sxf-c").text("￥"+j_sxf);
+                $("#dz-c").text("￥"+j_sjdz);
+            }
+        }
+    });
+
+    $('#sub_post').click(function(){
+        var bankid=$('#bankid option:selected').val();
+        var d_draw=$('#d_draw').val();
+        var d_pass=$('#d_pass').val();
+        var d_bz=$('#d_bz').val();
+
+        if(bankid =='' || bankid==0){
+            layer.msg('银行卡号不能为空');
+            return false;
+        }
+        if(d_draw ==''){
+            layer.msg('提现金额不能为空');
+            $('#d_draw').focus();
+            return false;
+        }
+        if(d_pass == ''){
+            layer.msg('请输入安全码');
+            $('#d_pass').focus();
+            return false;
+        }
+		$("#sub_post").button('loading');
+			$.ajax({
+			data: {
+				"bankid": bankid,
+				'd_draw':d_draw,
+				'd_pass':d_pass,
+				'd_bz':d_bz
+			},
+			type: "post",
+			url: "<{spUrl c=capital a=cashApply act=create}>", 
+			success: function (data) {
+				if(data.status>1){
+					if(data.status==200){
+						layer.open({title:'提示',content:data.msg,btn: ['好的，我知道了', '继续提现'],closeBtn: 0
+									  ,yes: function(index, layero){
+											layer.close(index);
+											location.reload(true)
+											window.open("/capital/cashList");
+									  },btn2: function(index, layero){
+											location.reload(true)
+									  }
+						});
+						return;
+					}
+					layer.msg(data.msg)
+					$("#sub_post").button('reset');
+					if(data.ids!=''){
+						$(data.ids).focus();
+					}					
+				}	
+				
+			},
+			error: function () {
+				layer.msg("申请提现出错，请稍候重试");
+				$("#sub_post").button('reset');
+			}
+		});		
+
+    });
+
+
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

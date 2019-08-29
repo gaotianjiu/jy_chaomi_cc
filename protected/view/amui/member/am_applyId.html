@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>转入域名包详情 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">域名包详情</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-12">
+							<h2 class="am-article-title"><{$domain_ret.domain_zip}></h2>
+							<p>编号ID：<{$domain_ret.id}>
+							<span class="am-margin-right"></span>当前状态：											
+											<{if $domain_ret.audit_status == -1}> 
+											<span class="am-badge am-radius">审核未通过</span>
+											<{elseif $domain_ret.audit_status ==1 }> 
+											<span class="am-badge am-badge-success am-radius">待审核中</span>
+											<{elseif $domain_ret.audit_status ==2}>
+											<span class="am-badge am-badge-danger am-radius">已审核入盘</span>
+											<{/if}>
+							<span class="am-margin-right"></span>
+							提交时间：<{$domain_ret.time}><span class="am-margin-right"></span>
+							审核时间：<{if $domain_ret.audit_time}><{$domain_ret.audit_time}><{else}>-<{/if}>
+							<{if !$domain_ret.description}><span class="am-margin-right"></span>备注：-<{/if}>
+							</p>
+							<p><b>域名注册商及帐号：</b><{$domain_ret.pingtai}></p>
+							<{if $domain_ret.description}><p><b>备注：</b><{$domain_ret.description}></p><{/if}>
+
+                        </div>        
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-6">
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <th>域名列表</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+									 <{foreach item=v from=$domain_ret_id key=k}> 
+                                        <tr>
+                                            <td><{$v.domain}></td>
+                                        </tr>
+      
+									<{/foreach}>
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

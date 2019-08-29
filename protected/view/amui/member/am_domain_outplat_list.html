@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>转出域名记录 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+<script type="text/javascript" src="//static.chaomi.cc/js/jquery.form.min.js"></script>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">转出域名</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li><a href="/tradeList/outplat">待确认转出</a></li>
+							  <li class="active"><a href="/tradeList/outplat?act=list">转出记录</a></li>
+							</ul>						
+                        </div>						
+                    </div>
+					
+                <div class="tpl-block">
+                    <div class="am-g">								
+                        <div class="am-u-sm-12 am-u-md-4">
+							<p>提示：状态显示审核中，用户中途可取消转出。</p>	
+                        </div>
+                        <div class="am-fr am-padding-right">
+                            <a class="am-btn am-btn-warning am-radius" href="<{url c='trading' a='domainList'}>">选择域名转出</a>
+                        </div>
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>转出域名</th>
+                                            <th>所在平台</th>
+                                            <th>转出平台(ID)</th>
+                                            <th>时间</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <{if $result}>
+                                    <{foreach from=$result item=v}>
+                                    <tr id="t_id_<{$v.id}>">
+                                        <input type="hidden" name="domain[]" value="<{str_replace('.','_',$v.domain)}>"/>
+                                        <td><{$v.id}></td>
+                                        <td><{$v.domain}></td>
+                                        <td><{$v.pingtai}></td>
+                                        <td><{if $v.domain_website}><{$v.domain_website}><{else}>-<{/if}></td>
+                                        <td><{$v.deal_time}></td>
+                                        <td>
+										<{if $v.status==1}><span class="font-green">审核中</span><{/if}>
+										<{if $v.status==2}><span class="font-red">已审核</span><{/if}>
+										<{if $v.status==3}><span class="font-blue">审核失败</span><{/if}>
+										<{if $v.status==4}>已取消<{/if}>
+										<{if $v.status==5}>已转出<{/if}>
+										</td>
+                                        <td><{if $v.status==1}><a onclick="del('<{$v.id}>','<{$v.domain}>');">取消</a><{else}>-<{/if}></td>
+                                    </tr>
+                                    <{/foreach}>
+                                    <{else}>
+                                    <tr style="height:60px;">
+                                        <td colspan="7"  style="text-align:center;line-height:50px;">暂无相关转出域名记录</td>
+                                    </tr>
+                                    <{/if}>
+                                    </tbody>
+                                </table>
+                            <div class="am-cf">
+                                <!--分页部分 begin-->
+                                <div class="am-fr">
+                                    <ul class="am-pagination tpl-pagination">
+                                        <{if $pager}>
+                                        <li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+                                        <{if $pager.current_page != $pager.first_page}>
+                                        <li><a href="<{spUrl c=tradeList a=outplat act=list page=$pager.first_page  }>">首页</a></li>
+                                        <li><a href="<{spUrl c=tradeList a=outplat act=list page=$pager.prev_page }>">上一页</a></li>
+                                        <{/if}>
+                                        <{foreach from=$pager.all_pages item=thepage}>
+                                        <{if $thepage != $pager.current_page}>
+                                        <li><a href="<{spUrl c=tradeList a=outplat act=list page=$thepage}>"><{$thepage}></a></li>
+                                        <{else}>
+                                        <li class="am-active"><a href="<{spUrl c=tradeList a=outplat act=list page=$thepage }>"><{$thepage}></a></li>
+                                        <{/if}>
+                                        <{/foreach}>
+                                        <{if $pager.current_page != $pager.last_page}>
+                                        <li><a href="<{spUrl c=tradeList a=outplat act=list page=$pager.next_page }>">下一页</a></li>
+                                        <li><a href="<{spUrl c=tradeList a=outplat act=list page=$pager.last_page }>">末页</a></li>
+                                        <{/if}>
+                                        <{/if}>
+                                    </ul>
+                                </div>
+                                <!--分页部分 end-->
+                            </div>							
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>
+<script type="text/javascript">
+    //删除域名转出，ID
+    function del(id,domain){
+        $.post('<{url c="tradeList" a="delOut"}>',{'id':id},function(ret){
+            if(ret.status==200){
+                layer.msg('域名：'+domain+' '+ret.msg);
+				location.reload(true)
+            }else {
+                layer.msg(ret.msg);
+            }
+        },"json");
+    }		
+</script>

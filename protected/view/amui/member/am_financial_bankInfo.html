@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>银行信息 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">提现管理</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li class="active"><a href="<{url c='capital' a='bankInfo'}>">银行信息</a></li>
+							  <li><a href="<{url c='capital' a='bindBank'}>">添加账号</a></li>
+							  <li><a href="<{url c='capital' a='cashApply'}>">申请提现</a></li>
+                               <li><a href="<{url c='capital' a='cashList'}>">提现列表</a></li>
+							</ul>						
+                        </div>						
+                    </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <table class="am-table am-table-hover tpl-table-uppercase">
+                                <thead>
+                                    <tr>
+                                        <th class="table-type">银行名称</th>
+                                        <th>户名</th>
+                                        <th>银行帐号</th>
+                                        <th>开户地址</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <{if $banks}>
+                                <{foreach item=v from=$banks}>
+                                <tr>
+                                    <td><{$v.bankname}></td>
+                                    <td>
+                                        <{$v.username}>
+                                    </td>
+                                    <td>
+                                        <{$v.bankno}>
+                                    </td>
+                                    <td><{$v.bankadder}></td>
+                                    <td><a onClick="bankdel('<{$v.id}>','<{$v.bankno}>')">删除</a></td>
+                                </tr>
+                                <{/foreach}>
+                                <{else}>
+                                <tr>
+                                    <td colspan='5' align="center">暂无银行卡信息</td>
+                                </tr>
+                                <{/if}>
+                                </tbody>
+                            </table>
+                            <div class="am-cf">
+                                <!--分页部分 begin-->
+                                <div class="am-fr">
+                                    <ul class="am-pagination tpl-pagination">
+                                        <{if $pager}>
+                                        <li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+                                        <{if $pager.current_page != $pager.first_page}>
+                                        <li><a href="<{spUrl c=capital a=bankInfo page=$pager.first_page  }>">首页</a></li>
+                                        <li><a href="<{spUrl c=capital a=bankInfo page=$pager.prev_page }>">上一页</a></li>
+                                        <{/if}>
+                                        <{foreach from=$pager.all_pages item=thepage}>
+                                        <{if $thepage != $pager.current_page}>
+                                        <li><a href="<{spUrl c=capital a=bankInfo page=$thepage}>"><{$thepage}></a></li>
+                                        <{else}>
+                                        <li class="am-active"><a href="<{spUrl c=capital a=bankInfo page=$thepage }>"><{$thepage}></a></li>
+                                        <{/if}>
+                                        <{/foreach}>
+                                        <{if $pager.current_page != $pager.last_page}>
+                                        <li><a href="<{spUrl c=capital a=bankInfo page=$pager.next_page }>">下一页</a></li>
+                                        <li><a href="<{spUrl c=capital a=bankInfo page=$pager.last_page }>">末页</a></li>
+                                        <{/if}>
+                                        <{/if}>
+                                    </ul>
+                                </div>
+                                <!--分页部分 end-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!----注意事项 begin---->
+                <div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+                    <p>1、银行帐号最多可以添加8个，请仔细填写，填写完后无法修改；</p>
+                    <p>2、您填写的银行帐号户名必须与你实名认证的身份证姓名一致，开户地址必须按要求填写，否则无法到帐，后果自负；</p>
+                    <p>3、跨行转账，款项转移以后一般需要1-5个工作日到账，请耐心等待下；</p>
+                    <p>4、提现成功以后，实际需要1-2个工作日内到账。</p>
+                </div>
+                <!----注意事项 end---->
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<script type="text/javascript">
+	//删除银行卡
+    function bankdel(id,bankno) {
+        layer.confirm("确认将银行卡："+bankno+" 删除吗？",{btn:['确认删除','取消'],title:'提示',closeBtn: 0}
+                ,function(){
+                    $.post('<{spUrl c=capital a=bankInfo act=delete}>','id='+id,function(ret){
+						if(ret.status>1){
+							var btn_str = '好的，我检查下';
+							if(ret.status==200)btn_str = '好的，我知道了';
+							layer.alert(ret.msg, {btn:[btn_str],title:'提示',closeBtn: 0}, function(index){
+								layer.close(index);
+								location.reload(true)
+							}); 
+						}
+                    },"json");
+                }
+                ,function(){
+                }
+        );
+    }
+</script>	
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

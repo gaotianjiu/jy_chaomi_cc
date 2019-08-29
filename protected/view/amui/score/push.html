@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>积分转移 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:300px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $act=='score_push'}> class="active"<{/if}>><a href="<{url c='score' a='push'}>">积分转移</a></li>
+							  <li<{if $act=='score_list'}> class="active"<{/if}>><a href="<{url c='score' a='dlist'}>">积分明细</a></li>
+							</ul>						
+                        </div>						
+                    </div>				
+                <div class="tpl-block">
+                    <div class="am-g">
+							<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+								<p>
+								温馨提示：积分转移后将直接到达对方帐号，并不可找回，请确认帐号ID信息是正确的。
+								</p>
+							</div>					
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-10">
+								<div class="am-form am-form-horizontal">
+									<!-- <div class="am-form-group"> -->
+										<!-- <label class="am-u-sm-3 am-form-label">转移积分品种：</label> -->
+										<!-- <div class="am-u-sm-9"> -->
+											<!-- <select data-am-selected="" id="typeid" style="width:250px"> -->
+												<!-- <option></option> -->
+												<!-- <{foreach item=tp from=$type_options}> -->
+												<!-- <option value="<{$tp.code}>"><{$tp.name}></option> -->
+												<!-- <{/foreach}> -->
+											<!-- </select>	 -->
+										<!-- </div> -->
+										<!-- <span id="mf_name" style="display:none;"></span> -->
+									<!-- </div>								 -->
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">可用数量</label>
+										<div class="am-u-sm-9">
+											<div style="margin-top:.7rem;color:#ff0000;"><b><span id="balance"><{$balance}></span></b></div>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">对方的会员ID</label>
+										<div class="am-u-sm-9">
+													<input type="text" style="width:350px" id="tomid" maxlength="9" placeholder="谨慎填写，并确认校验信息">
+										</div>
+									</div>
+									<div class="am-form-group" id="tomid_info_div" style="display:none;">
+										<label class="am-u-sm-3 am-form-label">对方校验手机/姓名</label>
+										<div class="am-u-sm-9">
+											<div style="margin-top:.7rem;color:#3374CA;"><span id="tomid_info"></span></div>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">校验对方的姓名</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="text" style="width:250px" id="to_username" maxlength="9" placeholder="校验对方的姓名">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;">选填</div>
+												</div>										
+										</div>
+									</div>									
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">转移积分数量</label>
+										<div class="am-u-sm-9">
+													<input type="text" style="width:250px" id="amount" maxlength="9" placeholder="转移给对方的积分数量">
+										</div>
+									</div>		
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">图形验证码</label>
+										<div class="am-u-sm-9">
+											<div class="am-fl am-margin-right">
+												<input id="validate" name="validate" style="width:200px" type="text" class="am-input-field" maxlength="4" placeholder="请输入右侧验证码"/>
+											</div>
+											<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;">
+												 <img title="点击刷新" alt="点击刷新" id="yzm_img" src="/sso/yzm" onclick="this.src='/sso/yzm?t='+Math.random();"></img>
+											</div>													
+										</div>
+									</div>				
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">交易密码</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="password" style="width:200px" id="safecode" placeholder="">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;"><a href="/user/safeCode" target="_blank">设置密码?</a></div>
+												</div>
+										</div>
+									</div>											
+									<div class="am-form-group">
+										<div class="am-u-sm-5 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交转移中...'}" id="sub_push">确认转移</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-cf" style="margin-top:100px;"></div>		
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+	$(function() {
+		$("#tomid").blur(function(){
+			var tomid  = $(this).val();
+			if(tomid){
+				$.ajax({
+					url:"<{spUrl c=score a=push from=tomid_info}>",
+					data:{'tomid':tomid},
+					type:"post",
+					success:function(ret){
+						if(ret.status>=200){
+							$('#tomid_info').html(ret.msg);
+							$('#tomid_info_div').show();
+						}
+					}
+				})
+			}else{
+				$('#tomid_info_div').hide();
+			}
+		});
+		$("#sub_push").click(function(){			
+			var tomid=$('#tomid').val();
+			var to_username=$('#to_username').val();
+			var amount=$('#amount').val();
+			var validate=$('#validate').val();
+			var safecode=$('#safecode').val();
+			var mf_name = '积分';
+			patrn = /^\w{4}$/; //四位验证码
+			if(!tomid){
+				layer.tips('请输入正确的对方会员ID', '#tomid');
+				$('#tomid').focus();
+				 return false;				
+			}					
+			if(!amount){
+				layer.tips('请输入转移给对方的数量', '#amount');
+				$('#amount').focus();
+				 return false;				
+			}		
+			if(!patrn.exec(validate)){
+				layer.tips('请输入图形里的操作验证码', '#yzm_img');
+				$('#validate').focus();
+				 return false;
+			}
+			if(!safecode){
+				layer.tips('请输入交易密码', '#safecode');
+				$('#safecode').focus();
+				 return false;				
+			}			
+			layer.confirm("您正在准备转移<span class='font-red'>"+amount+"</span>"+mf_name+"给会员ID："+tomid+"<br/>请了解确认转移"+mf_name+"将直接到达对方帐号",{btn:['确认转移','取消转移'],title:'操作提示',closeBtn: 0}
+			,function(){
+				$("#sub_push").button('loading');
+				$.ajax({
+					data: {
+						'tomid':tomid,
+						'to_username':to_username,
+						'amount':amount,
+						'validate':validate,
+						'safecode':safecode
+					},
+					type: "post",
+					url: "<{spUrl c=score a=push from=create}>", 
+					success: function (ret) {
+						if(ret.status==209){
+							layer.msg(ret.msg)
+							$("#validate").val(""); 
+							$('#validate').focus();
+							$("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  							
+						}
+						if(ret.status>1){
+							layer.msg(ret.msg)
+							$("#sub_push").button('reset');
+						}
+						if(ret.status==200){
+							layer.confirm("已成功转移<span class='font-red'>"+amount+"</span>"+mf_name+"给会员ID："+tomid,{btn:['好的','取消'],title:'提示',closeBtn: 0}
+							,function(){
+								window.location.href = "<{url c='score' a='dlist'}>";
+							});
+						
+						}
+					},
+					error: function () {
+						layer.msg("提交出错，请稍候重试");
+						$("#sub_push").button('reset');
+					}
+				});
+			}
+		   );
+		})
+	});
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

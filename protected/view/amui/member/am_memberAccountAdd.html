@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>添加绑定域名注册商平台帐号信息 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">添加域名注册商平台帐号信息</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+						<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+							<p><span class="label label-danger">温馨提示：</span> 请认真填写您的注册商和帐号信息，<span class="font-red">如果帐号信息有误，会影响到域名的转入和转出。</span></p>
+						</div>							
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-10">
+								<div class="am-form am-form-horizontal">
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">选择注册商平台</label>
+										<div class="am-u-sm-9">
+											<select data-am-selected="" id="website">
+											  <option></option>
+											  <option value="852">易名中国</option>
+											  <option value="851">爱名网</option>
+											  <option value="854">万网</option>
+											  <option value="853">190数交所</option>
+											   <!--<option value="855">西部数码</option> -->
+											  <!-- <option value="856">易域网</option> -->
+											  <!-- <option value="857">优名网</option> -->
+											</select>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label" id="webids">注册商平台帐号ID</label>
+										<div class="am-u-sm-9">
+											<input type="text" style="width:300px" onkeyup="this.value=this.value.replace(/[, ]/g,'')" id="webid" disabled class="am-form-field" placeholder="">
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label" id="webchecks">注册商平台邮箱/手机</label>
+										<div class="am-u-sm-9">
+											<input type="text" style="width:300px" onkeyup="this.value=this.value.replace(/[, ]/g,'')" id="webcheck" disabled class="am-form-field" placeholder="">
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">安全码 / 交易密码</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="password" style="width:200px" id="safecode" placeholder="">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;"><a href="/user/safeCode" target="_blank">设置密码?</a></div>
+												</div>
+										</div>
+									</div>									
+									<div class="am-form-group">
+										<div class="am-u-sm-5 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交中...'}" disabled id="sub_post">确认添加</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-cf"></div>
+						<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+							<p>域名转入或转出时，平台与用户之间PUSH域名过程中<span class="font-red">需要核对</span>！</p>
+						</div>							
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+	$(function() {
+		$('#website').change(function(){ //只有当选择了注册商平台后，取消禁止及其它操作
+			var website=$('#website option:selected').val();
+			var websitename = $("#website option:selected").text();
+			$("#webid").removeAttr("disabled"); //取消禁用
+			$("#webcheck").removeAttr("disabled"); //取消禁用
+			$("#sub_post").removeAttr("disabled"); //取消禁用
+			$('#webid').attr('placeholder','填写注册商平台帐号ID')
+			$('#webids').html(websitename+'<span class="font-red">帐号ID</span>')			
+			if(website==854){
+				$('#webchecks').html(websitename+'验证<span class="font-red">手机</span>')
+				$('#webcheck').attr('placeholder','填写注册商平台手机号码')
+			}else if((website==855)){
+				$('#webids').html(websitename+'<span class="font-red">用户名</span>')
+				$('#webid').attr('placeholder','填写注册商平台用户名')			
+				$('#webchecks').html(websitename+'验证<span class="font-red">邮箱</span>')
+				$('#webcheck').attr('placeholder','填写注册商平台邮箱')
+
+				layer.alert("请填写注册商平台(西部数码)的帐号用户名<br />切记是<span class='font-red'>用户名</span>（不是帐号数字ID）" ,{btn:'好的，我知道了',title:'提示',closeBtn: 0}, function(index){
+					layer.close(index);
+					$('#webid').focus(); 
+				}); 
+				
+			}else{
+				$('#webchecks').html(websitename+'验证<span class="font-red">邮箱</span>')
+				$('#webcheck').attr('placeholder','填写注册商平台邮箱')
+			} 
+		});  
+		$("#sub_post").click(function(){
+				var website=$('#website option:selected').val(); //注册商平台
+				var websitename = $("#website option:selected").text();
+				var webid=$('#webid').val(); //注册商帐号
+				var webcheck=$('#webcheck').val(); //注册商手机或邮箱
+				var safecode=$('#safecode').val();
+				//------检测表单各项值是否通过-----begin
+				if(website==''){
+					layer.msg('请选择注册商平台')
+					$('#website').focus(); 
+					return false;					
+				}
+				var webid_type = "ID";
+				if(website==855)webid_type = "用户名";
+				if(website==855 && webid==''){
+					layer.msg('请填写注册商平台('+websitename+')用户名')
+					$('#webid').focus(); 
+					return false;				
+				}
+				if(webid==''){
+					layer.msg('请填写注册商平台('+websitename+')帐号ID')
+					$('#webid').focus(); 
+					return false;					
+				}		
+				if((website!=854 && website!=855) &&(isNaN(webid))){
+					layer.msg("注册商帐号ID不符，为了PUSH域名时的安全，请认真填写！");
+					$('#webid').focus(); 
+					return false;	
+				}				
+				if(webcheck==''){
+					layer.msg('请填写注册商平台邮箱/手机')
+					$('#webcheck').focus(); 
+					return false;					
+				}
+				if(website==854){
+					var webcheck_type = "手机号";
+					if(!isCheck(webcheck,1)) {
+						layer.msg('请填写注册商('+websitename+')的帐号手机号码，这是PUSH域名时核对身份的重要信息！请认真填写！');
+						$('#webcheck').focus(); 
+						return false;
+					}	 
+				}else{
+					var webcheck_type = "邮箱";
+					if(!isCheck(webcheck,2)) {
+						layer.msg('请填写注册商('+websitename+')的帐号邮箱，这是PUSH域名时核对身份的重要信息！请认真填写！');
+						$('#webcheck').focus(); 
+						return false;
+					}
+				}
+				if(!safecode){
+					layer.tips('请输入安全码 / 交易密码', '#safecode');
+					$('#safecode').focus();
+					 return false;				
+				}				
+				//------检测表单各项值是否通过-----end
+				layer.confirm("域名转入或转出PUSH过程需要核对<br />确认添加域名注册商平台正确吗？<br />"+websitename+webid_type+"：<span class='font-red' style='font-size:16px;'>"+webid+"</span><br />验证"+webcheck_type+"：<span class='font-red' style='font-size:16px;'>"+webcheck+"</span><br />添加后不支持修改或删除，请一定填写正确！",{btn:['确认信息正确','不正确，我要修改'],title:'提示',closeBtn: 0}
+						,function(){
+								$("#sub_post").button('loading'); //显示loading
+								$.ajax({
+									data: {				
+										"act": 'post',
+										"webid": webid,
+										"website": website,
+										'webcheck':webcheck,
+										'safecode':safecode	
+									},
+									type: "post",
+									url: "<{spUrl c=user a=memberAccountAdd act=post}>", 
+									success: function (data) {
+										if(data.status>1){
+											layer.msg(data.msg)
+											$("#sub_post").button('reset'); //恢复重置
+										}
+										if(data.status==200){
+											window.location.href = "<{url c='user' a='memberAccount'}>";
+										}
+										
+									},
+									error: function () {
+										layer.msg("提交出错，请稍候重试");
+										$("#sub_post").button('reset'); //恢复重置
+									}
+								});	
+						}
+						,function(){
+							
+						}
+				);		
+		})
+	});
+    function isCheck(Str,type)
+    {
+		var partten = '';
+		var fl = false;
+		if(type==1){ var partten = /^1[3,4,5,6,7,8]\d{9}$/; }   // 手机
+        if(type==2){ var partten = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/; } //邮箱
+        if(partten.test(Str)){
+			return true;
+		} else{
+         	return false;
+		}
+    }	
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

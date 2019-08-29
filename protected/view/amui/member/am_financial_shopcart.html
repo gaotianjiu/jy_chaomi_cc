@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>续费购物车 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+<script type="text/javascript" src="http://static.chaomi.cc/js/jquery.form.min.js"></script>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">续费购物车</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li class="active"><a href="/tradeList/shopcart">待确认续费</a></li>
+							  <li><a href="/tradeList/shopcart?act=list">续费记录</a></li>
+							</ul>						
+                        </div>						
+                    </div>				
+                <div class="tpl-block">
+                    <div class="am-g">
+						<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+							<p>提示：域名未过期都可以挂牌交易，域名过期后不能挂牌交易，请提前续费。</p>						 
+						</div>						
+                        <div class="am-u-sm-12">
+							 <form name="form" method="post" id="ret_post" action="<{url c='tradeList' a='renew_post'}>">
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="shop_list">
+                                    <thead>
+                                        <tr>
+                                            <th>ID编号</th>
+                                            <th>续费域名</th>
+                                            <th>域名品种</th>
+                                            <th>到期时间</th>
+                                            <th>注册商平台</th>
+                                            <th>续费时间</th>
+                                            <th>价格(元)</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <{if $result}>
+                                    <{foreach from=$result item=v}>
+                                    <tr>
+										<input type="hidden" name="id[]" value="<{$v.id}>"/>
+                                        <td><{$v.id}></td>
+                                        <td><{$v.domain}></td>
+                                        <td><{$v.name}></td>
+                                        <td><{$v.old_exptime}></td>
+                                        <td><{$v.old_pingtai}></td>
+                                        <td>一年</td>
+                                        <td><{$v.amount}></td>
+                                        <td><a onclick="del('<{$v.id}>','<{$v.domain}>')">删除</a></td>
+                                    </tr>
+                                    <{/foreach}>
+                                    <{else}>
+                                    <tr style="height:60px;">
+                                        <td colspan="8" style="text-align:center;line-height: 50px;">您的购物车里有没有任何要续费的域名!<a href="<{url c='trading' a='domainList'}>">查看我的域名</a></td>
+                                    </tr>
+                                    <{/if}>
+                                    </tbody>
+                                     <tfoot>
+                                        <tr style="height:40px;line-height:40px;background-color:#f5f5f5;">
+                                            <td colspan="8">
+                                            <div class="am-g">
+                                                <div class="am-u-sm-12">
+													本次续费<{$totCount}>个域名需扣除金额共：<b class="font-red"><{$totPrice}></b>元 <span class="am-margin-right"></span> 安全码：<input type="password" name="safecode" id="safecode" maxlength="16" placeholder="请输入安全码" style="width:150px;_width:150px;line-height:24px;border:1px solid #ccc;padding:.2em;font-size:1.6rem;margin-right:5px;"> <button type="submit" class="am-btn am-btn-primary am-radius am-btn-sm" id="ret_post_sub" data-am-loading="{spinner: 'spinner', loadingText: '提交续费中...'}" >确认续费</button>
+                                                </div>
+                                            </div>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+							</form> 	
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>
+<script type="text/javascript">
+    //删除订单
+    function del(id,domain){
+        $.post('<{url c="tradeList" a="delOrder"}>',{'id':id},function(ret){
+            if(ret.status==200){
+                layer.msg('域名：'+domain+' '+ret.msg);
+				location.reload(true)
+            }else {
+                layer.msg(ret.msg);
+            }
+        },"json");
+    }
+	//提交续费
+	$(document).ready(function(){
+			//------------提交表单
+			var options = {
+				 type:"POST",//请求方式：get或post
+				 dataType:"json",//数据返回类型：xml、json、script
+				 beforeSerialize:function(){				 
+						 if($('#safecode').val()==''){
+							layer.tips('请输入安全码','#safecode')
+							$('#safecode').focus();
+							return false;
+						 }						 
+				 },
+				 beforeSubmit:function(){	
+						$("#ret_post_sub").button('loading'); //显示loading
+				 },
+				 success:function(ret){//表单提交成功回调函数
+					$("#ret_post_sub").button('reset');
+					if(ret.status==200){
+						layer.msg(ret.msg,{time: 10000})
+						$("#shop_list tbody").empty();
+						$("#shop_list tfoot").empty();
+						window.open("/tradeList/shopcart?act=list");
+						return;
+					}
+					if(ret.status==203){
+						$('#safecode').focus();
+					}
+					if(ret.status>1){
+						layer.msg(ret.msg)
+					}
+				 },
+				 error:function(err){
+					layer.msg('请求提交错误，请稍候重试')
+					$("#ret_post_sub").button('reset');
+				 }
+			};
+			$("#ret_post").ajaxForm(options);	
+	});				
+</script>

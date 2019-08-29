@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>发送的PUSH请求 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:100px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $act=='push_apply'}> class="active"<{/if}>><a href="<{url c='push' a='apply'}>">PUSH域名</a></li>
+							  <li<{if $act=='push_accept_list'}> class="active"<{/if}>><a href="<{url c='push' a='accept_list'}>">收到的请求</a></li>
+							  <li<{if $act=='push_send_list'}> class="active"<{/if}>><a href="<{url c='push' a='send_list'}>">发送的请求</a></li>
+							</ul>					
+                        </div>						
+                    </div>	
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-4">
+                            <div class="am-form-group">状态：
+                                <select data-am-selected="{btnSize: 'sm'}" id="status-select">
+								  <option value="0"<{if $status==0}> selected<{/if}> >全部</option>
+								  <option value="1"<{if $status==1}> selected<{/if}> >对方未接收</option>
+								  <option value="2"<{if $status==2}> selected<{/if}> >对方已接收</option>
+								  <option value="3"<{if $status==3}> selected<{/if}> >对方已拒绝</option>
+								  <option value="4"<{if $status==4}> selected<{/if}> >我已取消</option>
+								</select>
+                            </div>
+                        </div>
+						<script type="text/javascript">
+						$(function () { 
+							$("#status-select").change(function(){ //状态跳转
+								window.location.href="<{url c='push' a='send_list'}>?status="+$("#status-select").val();
+							})
+						});
+						</script> 
+                        <div class="am-fr am-padding-right">
+							<a class="am-btn am-btn-warning am-radius" href="<{url c='push' a='apply'}>">发起PUSH</a>
+                        </div>						
+                    </div>				
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>ID</th> -->
+                                            <th>域名</th>
+                                            <th>域名数量</th>
+                                            <th>接收ID</th>
+                                            <th>附言</th>
+                                            <th>索要金额</th>
+                                            <th>发起时间</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if $pager.total_count==0}>
+										<tr style="height:60px;">
+											<td colspan="9" style="text-align:center;line-height: 50px;">暂无数据</td>
+										</tr>
+										<{/if}>			
+									 <{foreach item=v from=$ret key=k}> 
+                                        <tr>
+                                            <!-- <td><{$v.id}></td> -->
+                                            <td style="max-width:250px;word-wrap:break-word; word-break:break-all;">
+											<{$v.domain_more}>
+											<{if $v.domain_count>3}>
+											<span class="font-red" style="font-size:14px;"><a href="/push/details?action=send&id=<{$v.id}>">更多...</a></span> 
+											<{/if}>
+											</td>
+                                            <td>
+												<span class="font-blue"><{$v.domain_count}>个</span>
+											</td>
+                                            <td><{$v.accept_mid}></td>
+                                            <td style="max-width:250px;word-wrap:break-word; word-break:break-all;"><{$v.note}></td>
+                                            <td><{$v.money}>元</td>
+                                            <td><{$v.create_time}></td>
+											<td>
+											<{if $v.status == 1}> 
+											<span style="color:#ff4800;">对方未接收</span>
+											<{elseif $v.status == 2}> 
+											<span class="font-green">对方已接收</span>
+											<{elseif $v.status == 3}> 
+											<span class="font-red">对方已拒绝</span>
+											<{elseif $v.status == 4}> 
+											我已取消											
+											<{/if}>
+											</td>
+											<td>
+											<span class="font-red" style="font-size:14px;"><a href="/push/details?action=send&id=<{$v.id}>">查看</a></span>
+											<{if $v.status == 1}><span class="font-blue" style="font-size:14px;"><a onclick="push_cancel(<{$v.id}>)">取消</a></span><{/if}>
+											</td>
+                                        </tr>
+      
+									<{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=push a=send_list page=$pager.first_page}>">首页</a></li>
+													<li><a href="<{spUrl c=push a=send_list page=$pager.prev_page}>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=push a=send_list page=$thepage}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=push a=send_list page=$thepage}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=push a=send_list page=$pager.next_page}>">下一页</a></li>
+													<li><a href="<{spUrl c=push a=send_list page=$pager.last_page}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+    function push_cancel(id){
+		layer.confirm("确定取消这条转移域名PUSH吗？",{btn:['确定'],title:'提示'}
+				,function(){
+				 
+				$.get('/push/cancel?action=send&id='+id,function(ret){
+					if(ret.status>1){
+						if(ret.status==200){
+							layer.confirm(ret.msg,{btn:['好的'],title:'提示'}
+									,function(){
+									  location.reload(true)
+							});
+							return;
+						}else{
+							layer.msg(ret.msg)
+						}
+					}
+					layer.msg('取消push出错，请稍等重试')
+				}, "json");
+		});	
+    }
+</script>		
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

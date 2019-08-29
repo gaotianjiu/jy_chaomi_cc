@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>网站公告 - 炒米网交易</title>
+<meta name="keywords" content="炒米网">
+<meta name="Description" Content="炒米网交易中心是一个专业的域名批量交易平台，实时挂单委托成交、24小时开盘交易、方便快捷 - 聪明的米农都在这里！">
+<{include file="amui/am_i_header_css_js.html"}>
+</head>
+<body class="tpl-bg">
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_i_ot_header.html"}>
+<!----------顶部通栏块 end--------->
+<div class="tpl-page-container">		
+        <div class="am-g tpl-content-wrapper-i">
+            <div class="tpl-portlet-components-i am-padding-bottom-0">
+             <div class="portlet-title">
+                    <div class="caption">网站公告</div>
+                </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+					
+                                    <{foreach $ret as $r}>
+                                   <div style="padding-bottom:6px;margin-bottom:10px;border-bottom:1px solid #e6e6e6;">    
+                                        <div style="font-size:20px;"><a href="/announce/view?id=<{$r.id}>" target="_blank" style="font-size:20px;"><{$r.title}></a></div>
+                                        <div style="color:#666;font-size:14px;padding-top:10px;padding-bottom:10px;"><{$r.introduction}>...</div>
+                                        <div style="color:#999;font-size:14px;"><{$r.create_time}></div>
+    								</div>
+                                    <{/foreach}>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=announce page=$pager.first_page}>">首页</a></li>
+													<li><a href="<{spUrl c=announce page=$pager.prev_page}>">上一页</a></li>
+												<{/if}>
+												<{foreach $pager.all_pages as $thepage }>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=announce page=$thepage}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=announce page=$thepage}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=announce page=$pager.next_page}>">下一页</a></li>
+													<li><a href="<{spUrl c=announce page=$pager.last_page}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>  
+                        </div>
+                    </div>								
+            </div>
+        </div>
+</div>				
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_i_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

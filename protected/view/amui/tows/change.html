@@ -1,0 +1,251 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>兑换域名 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:100px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+								 <{if $uid==19639}>
+									<li<{if $act=='tows_apply'}> class="active"<{/if}>><a href="<{url c='tows' a='apply'}>">解析域名</a></li> 
+									<li<{if $act=='tows_inList'}> class="active"<{/if}>><a href="<{url c='tows' a='inlist'}>">解析记录</a></li>
+								 <{/if}>	
+							  <li<{if $act=='tows_applyList'}> class="active"<{/if}>><a href="<{url c='tows' a='applyList'}>">明细列表</a></li>
+							  <li<{if $act=='tows_change'}> class="active"<{/if}>><a href="<{url c='tows' a='change'}>">兑换域名</a></li>
+							  <li<{if $act=='tows_domain'}> class="active"<{/if}>><a href="<{url c='tows' a='domain'}>">公共兑换池</a></li>
+							  <li<{if $act=='tows_outList'}> class="active"<{/if}>><a href="<{url c='tows' a='outlist'}>">兑换记录</a></li>
+							</ul>						
+                        </div>						
+                    </div>	
+                <div class="tpl-block">
+                    <div class="am-g">
+			<div class="am-alert am-alert-secondary am-margin-left am-margin-right" style="margin-bottom:10px;">
+                            <p>
+                            温馨提示：二级域名可按品种的对应解析数量，兑换一级域名。
+                            </p>
+			</div>
+ 							
+                        <div class="am-u-sm-12">
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-9">
+								<div class="am-form am-form-horizontal">
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">兑换类型</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><b>随机兑换</b></div>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">兑换一级域名品种</label>
+										<div class="am-u-sm-9">
+											<select data-am-selected="" id="typeid">
+												<option></option>
+                                                                                                <{html_options options=$type_options}>
+											</select>
+										</div>
+									</div>
+                                                                        <div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">拥有二级域名数量</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;">
+                                                                                                            拥有 <span id="checked_sum" style="color:#ff0000;">0</span> 个
+                                                                                                        </div>
+										</div>
+									</div>
+                                                                        <div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">兑换比例</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;">
+                                                                                                            <span id="checked_bl" style="color:#ff0000;">0:0</span> (一级域名数量：二级域名数量)
+                                                                                                        </div>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">兑换数量</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+                                                                                                    <input type="number" style="width:200px" id="domain_numb" value="0" min="0" max="100" onkeyup="value=value.replace(/[^0-9_]/g,'')" >
+										</div>
+									</div>
+                                                                        <div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">扣除二级域名</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;">
+                                                                                                            <span id="checked_count" style="color:#ff0000;">0</span> 个
+                                                                                                        </div>
+										</div>
+									</div>	
+                                                                        <div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">随机兑换费用</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;">
+                                                                                                            <span id="dhcost" style="color:#ff0000;">0</span> 元 
+                                                                                                        </div>
+										</div>
+									</div>   
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">图形验证码</label>
+										<div class="am-u-sm-9">
+											<div class="am-fl am-margin-right">
+												<input id="validate" name="validate" style="width:200px" type="text" class="am-input-field" maxlength="4" placeholder="请输入右侧验证码"/>
+											</div>
+											<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;">
+												 <img title="点击刷新" alt="点击刷新" id="yzm_img" src="/sso/yzm" onclick="this.src='/sso/yzm?t='+Math.random();"></img>
+											</div>													
+										</div>
+									</div>				
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">交易密码</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="password" style="width:200px" id="safecode" placeholder="">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;"><a href="/user/safeCode" target="_blank">设置密码?</a></div>
+												</div>
+										</div>
+									</div>       
+									<div class="am-form-group">
+										<div class="am-u-sm-2 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交中...'}" id="but_sub">确认兑换</button>
+                                                                                        <span id="dhcost1" style="display:none;"></span>
+                                                                                        <span id="dhcost2" style="display:none;"></span>
+                                                                                        <span id="dhnumber" style="display:none;"></span> 
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+</script>		
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>
+<script type="text/javascript">
+function getnumb(){
+	   var typeid = $("#typeid").val(); 
+	   if(!typeid)return;
+	   $.post("/tows/change?from=getnumb", { "typeid": typeid},
+	   function(ret){
+		 if(ret.status==200){	
+			$("#checked_sum").text(ret.sum);
+                        $("#dhcost1").text(ret.dh1); 
+                        $("#dhcost2").text(ret.dh2); 
+                        $("#dhnumber").text(ret.number);
+                        $("#checked_bl").text("1:"+ret.number);
+		 }
+	   }, "json");	
+}
+
+$(function() {
+    $("#typeid").change(function(){  		   
+	getnumb();
+    }) 
+    $("#domain_numb").change(function(){
+        
+        var numb = $("#domain_numb").val();
+        var count = $("#dhnumber").text();
+        var cost = $("#dhcost1").text();        
+        $("#checked_count").text(numb*count);  
+        $("#dhcost").text(numb*cost);  
+    })
+    $("#but_sub").click(function(){
+        var two_type = $("#typeid").val(); 
+        var checked_sum = $("#checked_sum").text(); 
+        var checked_number = $("#domain_numb").val();
+        var checked_count = $("#checked_count").text();
+        var dhcost = $("#dhcost").text(); 
+        if(checked_count==0){
+            layer.msg("兑换品种或兑换数量无效！");
+            return;
+        } 
+        if(parseInt(checked_sum) < parseInt(checked_count)){
+            layer.msg("拥有的二级域名数量不足，无法兑换！");
+            $("#but_sub").attr("disabled", true); 
+            return;
+        }
+        var validate=$('#validate').val();
+	var safecode=$('#safecode').val();
+	patrn = /^\w{4}$/; //四位验证码
+	if(!patrn.exec(validate)){
+            layer.tips('请输入图形里的操作验证码', '#yzm_img');
+            $('#validate').focus();
+            return false;
+	}
+	if(!safecode){
+            layer.tips('请输入交易密码', '#safecode');
+            $('#safecode').focus();
+            return false;				
+	}
+        layer.confirm("<b>您正在准备兑换<span class='font-red'>"+checked_number+"</span>个一级域名</b><br/>需要扣除您"+checked_count+"个二级域名<br/>兑换费用为："+dhcost+"元",{btn:['确认','取消'],title:'操作提示',closeBtn: 0}
+	,function(){
+		$("#but_sub").button('loading');
+		$.ajax({
+                    data: {
+			'did':0,                  //指定域名
+			'two_type':two_type,        //兑换品种
+                        'dh_number':checked_number, //兑换数量
+                        'dd_counts':checked_count,  //扣除数量
+                        'dh_cost':dhcost,           //兑换费用
+			'validate':validate,
+			'safecode':safecode					
+                    },
+                    type: "post",
+                    url: "<{url c='tows' a='changesub'}>",
+                    success: function (ret) {
+                        if(ret.status==209){
+                            layer.msg(ret.msg)
+                            $("#validate").val(""); 
+                            $('#validate').focus();
+                            $("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  							
+			}				
+			if(ret.status>1){
+                            layer.msg(ret.msg)
+                            $("#but_sub").button('reset');
+			}
+			if(ret.status==200){
+                            layer.open({title:'提示',content:"已成功兑换<span class='font-red'>"+checked_number+"</span>个一级域名，可到您域名管理中心查看，兑换扣掉了您"+checked_count+"个二级域名，扣除费用 "+dhcost+"元",btn: ['继续兑换域名', '进入域名管理'],closeBtn: 0
+				,yes: function(index, layero){
+                                    layer.close(index);
+                                    location.reload(true)
+				},btn2: function(index, layero){
+                                    layer.close(index);
+                                    window.location.href = "<{url c='trading' a='domainList'}>";
+				 }
+                            });						
+                        }
+                    },
+                    error: function () {
+			layer.msg("提交出错，请稍候重试");
+			$("#but_sub").button('reset');
+                    } 
+                }) 
+                
+        })
+    })
+})
+
+</script>

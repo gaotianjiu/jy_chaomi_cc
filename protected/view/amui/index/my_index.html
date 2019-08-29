@@ -1,0 +1,264 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>炒米网 - 域名批量交易中心，一口价域名买卖、24小时开盘交易！</title>
+<meta name="keywords" content="炒米,炒米交易,炒米网,炒米域名">
+<meta name="Description" Content="炒米网交易中心是一个专业的域名批量交易平台，实时挂单委托成交、一口价域名买卖交易、24小时开盘交易、方便快捷 - 聪明的米农都在这里！">
+<{include file="amui/am_i_header_css_js.html"}>
+<script type="text/javascript" src="http://cdn.bootcss.com/echarts/3.2.3/echarts.min.js"></script>
+<script type="text/javascript" src="http://static.chaomi.cc/js/amui/assets/js/chart.js"></script>
+<script type="text/javascript" src="http://static.chaomi.cc/js/cms_n.js?t=2017021402"></script>
+</head>
+<body class="tpl-bg">
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_i_header.html"}>
+<!----------顶部通栏块 end--------->	
+
+<!----------平台成交数据一览 begin--------->
+	<div class="tpl-page-container">	
+        <div class="am-g tpl-content-wrapper-i" style="margin-bottom:-5px;">
+            <div class="tpl-portlet-components-i" style="padding-top:10px;padding-bottom:10px;font-size:18px;">
+                   今日总成交额 <span class="font-red" id="now-trans-p">-</span> 元，总成交量 <span class="font-red" id="now-trans-c">-</span> 个 <span class="am-margin-left"></span> 昨日总成交额 <span class="font-red" id="yet-trans-p">-</span> 元，总成交量 <span class="font-red" id="yet-trans-c">-</span> 个 
+				   <span style="font-size:12px;margin-left:2.5rem;"><span id="now-uptime"></span></span>
+            </div>
+        </div>
+	</div>		
+<!----------平台成交数据一览 end--------->
+
+<!----------我的委托订单列表 begin--------->
+	<div class="tpl-page-container">	
+        <div class="am-g tpl-content-wrapper-i" id="order-data-list-content"<{if !$uid}> style="display:none;"<{/if}>>
+            <div class="tpl-portlet-components-i am-padding-bottom-0">
+                <div class="portlet-title">
+                    <div class="caption">我的委托订单</div>
+                    <div class="am-fr am-padding-right" style="padding-top:13px;padding-bottom:13px;font-size:14px;"><a href="http://my.chaomi.cc/trading/orderList" target="_blank">全部委托订单 <i class="am-icon-angle-double-right"></i></a></div>					
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="order-data-list">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-type">委单编号</th>
+                                            <th>域名品种</th>
+                                            <th>委单类型</th>
+                                            <th>委单总数/已成交数</th>
+                                            <th>委托单价</th>
+                                            <th>委托总价</th>
+                                            <th>委单时间</th>
+                                            <th>最近交易</th>
+                                            <th>委单操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>							
+                                    </tbody>									
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>		
+<!----------我的委托订单列表 end--------->	
+<!----------最近成交记录 begin--------->
+	<div class="tpl-page-container">		
+        <div class="am-g tpl-content-wrapper-i">
+            <div class="tpl-portlet-components-i am-padding-bottom-0">
+                <div class="portlet-title">
+                    <div class="caption">最近成交记录</div>
+                    <div class="am-fr am-padding-right" style="padding-top:13px;padding-bottom:13px;font-size:14px;"><a href="http://my.chaomi.cc/trading/find_order" target="_blank">我的成交记录 <i class="am-icon-angle-double-right"></i></a></div>										
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="deal-data-list">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-type">序号</th>
+                                            <th>成交域名</th>
+                                            <th>成交价格</th>
+                                            <th>域名品种</th>
+                                            <th>成交时间</th>
+                                            <th>买卖</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+									<{foreach item=v from=$deal_data key=k}><tr>
+									<td><{$k+1}></td><td><{$v.domain}></td><td><{$v.deal_price}>元</td><td><{$v.name}></td><td><{$v.deal_time}></td>
+									<td>
+										<{if $v.deal_status==1}><span class="font-blue">卖出</span><{/if}>
+										<{if $v.deal_status==2}><span class="font-red">买入</span><{/if}>
+										<{if $v.deal_status==0}>-<{/if}>
+									</td>
+									</tr>
+									<{/foreach}>									
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>		
+<!----------最近成交记录 end--------->
+<script type="text/javascript">
+	var typeid = 411104;
+    function running_price(){ 
+		//平台前五委托单列表
+		$.get("/p/"+typeid,function(ret){
+			if(ret.status==200){
+				$("#wt-list tbody").empty();
+				var sale_list = ''
+				$.each(ret.sale_list,function(k,v){
+					if(v['number']>0){
+						sale_list = 
+						'<tr><td class="font-green">'+k+'</td>'+
+						'<td>￥'+v['price']+'</td>'+
+						'<td>'+v['number']+'个</td>'+
+						'<td>￥'+v['price_c']+'</td></tr>'
+					}else{
+						sale_list = '<tr><td>'+k+'</td>'+'<td>-</td><td>-</td><td>-</td></tr>'					
+					}
+					$("#wt-list tbody").append(sale_list);
+				});
+				var buy_list = ''
+				$.each(ret.buy_list,function(k,v){
+					if(v['number']>0){
+						buy_list = 
+						'<tr><td class="font-red">'+k+'</td>'+
+						'<td>￥'+v['price']+'</td>'+
+						'<td>'+v['number']+'个</td>'+
+						'<td>￥'+v['price_c']+'</td></tr>'
+					}else{
+						buy_list = '<tr><td>'+k+'</td>'+'<td>-</td><td>-</td><td>-</td></tr>'					
+					}
+					$("#wt-list tbody").append(buy_list);
+				});	
+				//---顶部行情参数---begin
+				hq_list = ret.hq_list;
+				try {
+					$.each(hq_list,function(k,v){
+						if(v){
+							var zdf = parseFloat(hq_list['zdf']);
+							if(k=='new_price'){
+								if(zdf>0)v = '<span class="font-red">￥'+v+'</span>';
+								if(zdf<0)v = '<span class="font-green">￥'+v+'</span>';
+								if(zdf==0)v = '<span>￥'+v+'</span>';
+							}
+							if(k=='zdf'){
+								if(zdf>0)v = '<span class="font-red">+'+v+'%</span>';
+								if(zdf<0)v = '<span class="font-green">'+v+'%</span>';
+								if(zdf==0)v = '<span>-</span>';
+							}	
+							if(k=='high_price' || k=='low_price' || k=='c_high_price')v = v>0?'￥'+v:'-';
+							if(k=='count' || k=='c_count')v = v>0?v +'个':'-';
+							if(k=='price' || k=='c_price')v = v>0?v +'元':'-';
+							$("#hq_"+k).html(v);
+						}
+					});
+				} catch (e) {
+				}
+				//---顶部行情参数---end
+			}	
+		}, "json");
+    }
+	function deal_data(){ 
+		//取出最近成交记录数据
+		$.get('/deal_data/api',function(ret){
+		 if(ret.status==200){
+				var domainlist = ret.domainlist;
+				$("#deal-data-list tbody").empty();
+				if(!domainlist){
+					$("#deal-data-list tbody").append('<tr style="height:20px;"><td colspan="10" style="text-align:center;line-height: 20px;">暂无相关成交记录</td></tr>'	);
+				}				
+				$.each(domainlist,function(k,v) {
+					var deal_status = '-';
+					if(v['deal_status']==1) deal_status = '<span class="font-blue">卖出</span>';
+					if(v['deal_status']==2) deal_status = '<span class="font-red">买入</span>';
+					str = '<tr><td>'+(k+1)+'</td><td>'+v['domain']+'</td><td>'+v['deal_price']+'元</td><td>'+v['name']+'</td><td>'+v['deal_time']+'</td><td>'+deal_status+'</td></tr>'
+					$("#deal-data-list tbody").append(str);
+				});		
+		 }	          
+	   }, "json");
+	}
+	function order_cancel(id){ 
+		//撤销委托订单
+		$.get('/trading/cancel_order_buyer?id='+id,function(ret){
+		 if(ret.status>1){
+			layer.msg(ret.msg)
+			 if(ret.status==200){
+				order_data();//取出我的委托订单列表
+				running_price();//平台前五委托单列表
+			 }
+			return; 
+		 } 
+		 layer.msg('撤销委托订单出错，请稍等重试')
+	   }, "json");
+	}	
+	function order_data(){ 
+		//取出我的委托订单列表
+		$.get('/trading/wt_data',function(ret){
+		 if(ret.status==200){
+				if(ret.is_user==1){
+					$("#order-data-list-content").show()
+				}	 
+				var orderlist = ret.orderlist;
+				var type_str = '-'
+				var bargain_time = '-'
+				$("#order-data-list tbody").empty();
+				if(!orderlist){
+					$("#order-data-list tbody").append('<tr style="height:20px;"><td colspan="10" style="text-align:center;line-height: 20px;">当前你暂无相关有效的委单</td></tr>'	);
+				}				
+				$.each(orderlist,function(k,v) {
+						if(v['status_2']=='1')type_str='<span class="font-red">买入</span>';
+						if(v['status_2']=='0')type_str='<span class="font-blue">卖出</span>';
+						if(v['bargain_time'])bargain_time=v['bargain_time'];
+						str= '<tr><td>'+v['id']+'</td>'+
+							'<td>'+v['name']+'</td>'+
+							'<td>'+type_str+'</td>'+
+							'<td><div style="margin-top:-5px;">'+v['number']+'/'+v['deal_num']+'</div><div class="am-progress am-progress-xs am-margin-bottom-0 am-progress-striped am-active"><span class="am-progress-bar am-progress-bar-warning" style="width:'+(v['deal_num'] / v['number'] *100)+'%"></span></div></td>'+
+							'<td>￥'+v['price']+'</td>'+
+							'<td>￥'+v['total_price']+'</td>'+
+							'<td>'+v['order_time']+'</td>'+
+							'<td>'+bargain_time+'</td>'+
+							'<td><a onclick="order_cancel('+v['id']+')">撤单</a></td></tr>'
+						
+					$("#order-data-list tbody").append(str);
+				});		
+		 }	          
+	   }, "json");
+	}
+	function nowApi(){ 
+		//平台成交数据一览
+		$.get('/deal_data/nowApi',function(ret){
+		 if(ret.status==200){
+			$('#now-trans-p').text(ret.nowp);
+			$('#now-trans-c').text(ret.nowc);
+			$('#yet-trans-p').text(ret.yetp);
+			$('#yet-trans-c').text(ret.yetc);
+			$('#now-uptime').text('更新时间：'+ret.update_time);
+		 }	          
+	   }, "json");
+	}	
+	function domain_go(name){
+		layer.msg(name+'域名品种目前还未上线，请期待！')
+	}
+$(function () {
+	running_price();
+	order_data();
+	nowApi();
+	chart_k(10000)
+	window.setInterval(running_price,3000); //平台委托前五
+	window.setInterval(order_data,4000); //我的委托订单列表
+	window.setInterval(deal_data,10000); //最近成交记录	
+	window.setInterval(nowApi,10000); //平台成交数据一览	
+});
+
+</script>	
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_i_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

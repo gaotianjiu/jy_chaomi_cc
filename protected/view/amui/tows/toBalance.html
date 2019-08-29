@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>提交转余额 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">分红收益转余额</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+				<ul class="am-fl">
+					<li class="active"><a href="<{url c='tows' a='toBalance'}>">分红收益转余额</a></li>
+				</ul>						
+                        </div>						
+                    </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <div class="am-g am-padding">
+                                <div class="am-form am-form-horizontal">
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">分红收益总额</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <div class="ipt" style="line-height:37px;font-size:16px;">￥<{$balance}></div>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">转至余额金额</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <input type="number" name="d_draw" id="d_draw" class="u-ipt" style="width:100px;" step="0.01" max="<{$maxDraw}>" min="0.01" value="<{$maxDraw}>" />
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">安全码</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                            <input type="password" name="d_pass" id="d_pass" class="u-ipt" style="width:180px;" maxlength="20"/>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">备注</label>
+                                        <div class="am-u-sm-3 am-u-end">
+                                            <input type="text" name="d_bz" id="d_bz" class="u-ipt" value="分红收益转余额" style="width:230px;" maxlength="30"/>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <div class="am-u-sm-3 am-u-sm-push-2">
+                                            <button type="button" class="am-btn am-btn-primary am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交中...'}" id="sub_post">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> 			
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#d_draw").change(function () {
+            var a = $("#d_draw").val();
+            var re = /([0-9]+\.[0-9]{2})[0-9]*/;
+            var input = a.replace(re,"$1");
+            $("#d_draw").val(input)
+            
+            var maxDraw = <{$maxDraw}>; 
+            if (input > maxDraw) {
+                layer.msg("当前分红收益最多可转至余额"+maxDraw+"元");
+                $("#d_draw").val(maxDraw);
+		$("#d_draw").focus();
+                return false;
+            }
+            if (input < 0.01) {
+                layer.msg("转至余额金额不能小于0.01元");
+		$("#d_draw").focus();
+                return false;    
+            }
+            
+        });
+    });
+
+    $('#sub_post').click(function(){
+        var d_draw=$('#d_draw').val();
+        var d_pass=$('#d_pass').val();
+        var d_bz=$('#d_bz').val();
+        if(d_draw ==''){
+            layer.msg('提现金额不能为空');
+            $('#d_draw').focus();
+            return false;
+        }
+        if(d_pass == ''){
+            layer.msg('请输入安全码');
+            $('#d_pass').focus();
+            return false;
+        }
+	$("#sub_post").button('loading');
+        $.ajax({
+		data: {
+			'd_draw':d_draw,
+			'd_pass':d_pass,
+			'd_bz':d_bz
+		},
+		type: "post",
+		url: "<{spUrl c=tows a=toBalance act=sub}>", 
+		success: function (data) {
+                    if(data.status>1){
+			if(data.status==200){
+				layer.open({title:'提示',content:data.msg,btn: ['好的，我知道了', '继续提现'],closeBtn: 0
+					 ,yes: function(index, layero){
+						layer.close(index);
+						location.reload(true);
+					},btn2: function(index, layero){
+						location.reload(true)
+					}
+				});
+				return;
+			}
+			layer.msg(data.msg)
+			$("#sub_post").button('reset');
+			if(data.ids!=''){
+				$(data.ids).focus();
+			}					
+                    }		
+		},
+		error: function () {
+			layer.msg("出错，请稍候重试");
+			$("#sub_post").button('reset');
+		}
+        });		
+
+    });
+
+
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

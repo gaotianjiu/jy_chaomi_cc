@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>盈亏统计 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">盈亏统计</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li><a href="<{spUrl c=yk}>">盈亏统计</a></li>
+							  <li class="active"><a href="<{spUrl c=yk a=d cid=<{$cid}> hid=<{$hid}>}>"><{$catname}>盈亏统计</a></li>
+
+							</ul>
+                        </div>
+                    </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-12" style="margin:5px 0;">
+                            <p>当日盈亏<b><{$yk_data.dr_yk}></b>元 &nbsp;&nbsp; 累计盈亏<b><{$yk_data.lj_yk}></b>元&nbsp;&nbsp;
+                            持仓盈亏率<b><{$yk_data.yk_bl}></b> &nbsp;&nbsp; 持米市值<b><{$yk_data.dq_sz}></b>元</p>
+
+                            <p>总成本<b><{$yk_data.z_cb}></b>元 &nbsp;&nbsp;单个成本<b><{$yk_data.dg_cb}></b>元 &nbsp;&nbsp;持米数量<b><{$yk_data.ym_count}></b>个</p>
+                        </div>
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <th>类型</th>
+                                            <th>数量</th>
+                                            <th>单价</th>
+                                            <th>时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <{foreach from=$yk_list item=i}>
+                                    <tr>
+                                        <td><{$i.type}></td>
+                                        <td><{if $i.type=='卖出'}><span class='font-black'>- </span><{else}><span class='font-red'>+</span><{/if}><{$i.count}>个</td>
+                                        <td><{$i.price}>元</td>
+                                        <td><{$i.ctime}></td>
+                                    </tr>
+                                    <{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf" style="display:none;">
+
+								</div>
+                        </div>
+                    </div>
+                    <!--添加  begin--->
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <form class="am-form-inline"  onSubmit="return get_yk();">
+                                <div class="am-form-group">
+                                    <label>类型</label>
+
+                                    <select id="type" class="t" style="width:75px;">
+
+                                        <option selected value="add">买入</option>
+
+                                        <option value="del">卖出</option>
+
+                                    </select>
+                                </div>
+                                <div class="am-form-group">
+                                    <label  class="am-margin-left">数量</label>
+                                    <input id="count" type="text"  maxlength="20" style="width:50px;border:1px solid rgb(169, 169, 169);" /> 个
+
+                                </div>
+                                <div class="am-form-group">
+                                    <label  class="am-margin-left">单价</label>
+
+                                    <input id="price" type="text"  maxlength="20" style="width:60px;border:1px solid rgb(169, 169, 169);" /> 元
+                                </div>
+                                <div class="am-form-group">
+                                    <input class="am-btn am-btn-warning am-margin-left" type="button" value="添加交易" onClick="get_yk();" id="sub">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--添加  end-->
+                </div>
+            </div>
+        </div>
+<script type="text/javascript">
+    //盈亏post
+    function get_yk() {
+        var type = $("#type").val();
+        var count = $("#count").val();
+        var price = $("#price").val();
+        if (count == '' || count == 0){
+            layer.msg("请填写域名数量");
+            $("#count").focus(); //获取焦点
+            return false;
+        }
+        if (price == '' || price == 0){
+            layer.msg("请填写域名单价");
+            $("#price").focus(); //获取焦点
+            return false;
+        }
+        $.ajax({
+            type:"post",
+            url:"/yk/type",
+            async : true, //同步执行
+            timeout:5000, //超时
+            datatype: "json",
+            data:{act:type, cid: <{$cid}> , hid: <{$hid}> , count:count, price:price},
+    success:
+            function(data){
+                var datas = eval("(" + data + ")"); //解析json
+                if (datas.status == 200){
+                    layer.alert(datas.msg);
+                    $("#count").val("");
+                    $("#price").val("");
+                    location.href = '/yk/d?cid=<{$cid}>&hid=<{$hid}>';
+                } else if (datas.status == 201){
+                    layer.alert(datas.msg);
+                } else{
+                    layer.alert('请求出错，请稍候重试。');
+                }
+            },
+    error:
+            function(data){
+                layer.alert('请求出错，请稍候重试。');
+            }
+    });
+    }
+</script>		
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

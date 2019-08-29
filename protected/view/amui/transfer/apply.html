@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>提交域名转出 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:300px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $act=='transfer_apply'}> class="active"<{/if}>><a href="<{url c='transfer' a='apply'}>">提交域名转出</a></li>
+							  <li<{if $act=='transfer_applyList'}> class="active"<{/if}>><a href="<{url c='transfer' a='applyList'}>">域名转出管理</a></li>
+							</ul>						
+                        </div>						
+                    </div>				
+                <div class="tpl-block">
+                    <div class="am-g">
+							<!-- <div class="am-alert am-alert-secondary am-margin-left am-margin-right"> -->
+								<!-- <p></p> -->
+							<!-- </div>	 -->
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-12">
+								<div class="am-form am-form-horizontal">
+									<div class="am-form-group">
+										<label class="am-u-sm-2 am-form-label">转出域名品种：</label>
+										<div class="am-u-sm-10">
+											<select data-am-selected="" id="typeid">
+												<option></option>
+												<{foreach item=tp from=$type_options}>
+												<option value="<{$tp.code}>"><{$tp.name}></option>
+												<{/foreach}>
+											</select>	
+										</div>
+									</div>								
+									<div class="am-form-group">
+										<label class="am-u-sm-2 am-form-label">可转出域名：</label>
+										<div class="am-u-sm-10">
+													<div style="margin-top:.7rem;color:#ff0000;"><b><span id="domain_count">-</span></span></b></div>
+										</div>
+									</div>		
+									<div class="am-form-group">
+										<label class="am-u-sm-2 am-form-label">转出个数：</label>
+										<div class="am-u-sm-10">
+													<input type="text" value="" id="transfer_count" style="width:100px;_width:100px;" >
+										</div> 
+									</div>										        
+									<div class="am-form-group">
+										<label class="am-u-sm-2 am-form-label">转出平台(ID)：</label>
+										<div class="am-u-sm-10">
+											<select data-am-selected="" id="registrar_852">
+											  <option>选择易名平台帐号ID</option>
+											  <{foreach item=v from=$registrar_852}> 
+											  <option value="<{$v.id}>">易名(ID：<{$v.webid}>)</option>
+											  <{/foreach}>
+											  <{if !$registrar_852}>
+												<option>请先添加绑定易名帐号ID</option>
+											  <{/if}>											  
+											</select>
+											<select data-am-selected="" id="registrar_851">
+											  <option>选择爱名平台帐号ID</option>
+											  <{foreach item=v from=$registrar_851}> 
+											  <option value="<{$v.id}>">爱名(ID：<{$v.webid}>)</option>
+											  <{/foreach}>
+											  <{if !$registrar_851}>
+												<option>请先添加绑定爱名帐号ID</option>
+											  <{/if}>											  
+											</select>
+											<select data-am-selected="" id="registrar_854">
+											  <option>选择万网平台帐号ID</option>
+											  <{foreach item=v from=$registrar_854}> 
+											  <option value="<{$v.id}>">万网(ID：<{$v.webid}>)</option>
+											  <{/foreach}>
+											  <{if !$registrar_854}>
+												<option>请先添加绑定万网帐号ID</option>
+											  <{/if}>											  
+											</select>
+											
+										</div> 
+									</div>	
+									<div class="am-form-group">
+										<style>
+										.pan-tip p{line-height:24px;}
+										</style>
+										
+										<div class="am-u-sm-7 am-u-sm-push-2">
+											<div class="am-cf am-margin-top am-alert am-alert-secondary pan-tip">
+												<p>（易名、爱名、万网）三个平台都需要选择各自的帐号ID，<a href="/user/memberAccountAdd">添加注册商平台ID绑定</a></p>
+											</div>	
+										</div>
+											
+									</div>									
+									<div class="am-form-group">
+										<style>
+										.pan-tip p{line-height:24px;}
+										</style>
+										
+										<div class="am-u-sm-7 am-u-sm-push-2">
+											<div class="am-cf am-margin-top am-alert am-alert-secondary pan-tip">
+												<p>说明：炒米交易盘内域名提出，随机就近保质期提米（易名，爱名，万网）</p>
+												<p>申请前请务必了解相关规则，如需帮助可联系客服</p>
+												<span id="apply_name" style="display:none;"></span>
+											</div>	
+										</div>
+											
+									</div>
+									<div class="am-form-group">
+										<div class="am-u-sm-5 am-u-sm-push-2">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交中...'}" disabled id="sub_apply">确认提交转出</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-cf" style="margin-top:100px;"></div>		
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+function transfer_get(){
+	   var typeid = $("#typeid").val();
+	   var transfer_count = $("#transfer_count").val();
+	   var registrar_852 = parseInt($("#registrar_852").val());
+	   var registrar_851 = parseInt($("#registrar_851").val());
+	   var registrar_854 = parseInt($("#registrar_854").val());
+	   if(!typeid)return;
+	   $.post("/transfer/apply?from=config", { "typeid": typeid},
+	   function(ret){
+		 if(ret.status==200){
+			 $("#apply_name").text(ret.name);
+			 $("#domain_count").text(ret.domain_count+'个');
+			if(typeid && transfer_count && registrar_852 && registrar_851 && registrar_854){
+				$("#sub_apply").removeAttr("disabled"); 
+			}
+			 if(transfer_count>ret.domain_count){
+				layer.msg('转出个数不能大于当前可用域名数量'+ret.domain_count+'个')			
+				$("#sub_apply").attr("disabled",true);  
+				return;
+			 }
+		 }
+		 if(ret.status==201){
+			 $("#domain_count").text('-');
+			layer.msg(ret.msg)
+		 }
+	   }, "json");	
+}
+	$(function() {
+		$("#typeid").change(function(){  		   
+				transfer_get()
+		}) 
+		$("#transfer_count").change(function(){
+				transfer_get()
+		});		
+		$("#registrar_852").change(function(){  
+				transfer_get()
+		}) 
+		$("#registrar_851").change(function(){  
+				transfer_get()
+		}) 
+		$("#registrar_854").change(function(){  
+				transfer_get()
+		}) 		
+		$("#sub_apply").click(function(){			
+		   var typeid = $("#typeid").val();
+		   var transfer_count = parseInt($("#transfer_count").val());
+		   var registrar_852 = parseInt($("#registrar_852").val());
+		   var registrar_851 = parseInt($("#registrar_851").val());
+		   var registrar_854 = parseInt($("#registrar_854").val());
+		   var registrar_852_text = $("#registrar_852").find("option:selected").text();
+		   var registrar_851_text = $("#registrar_851").find("option:selected").text();
+		   var registrar_854_text = $("#registrar_854").find("option:selected").text();
+			if (typeid == '') {  
+				layer.msg("请选择域名品种"); 
+				return false;
+			} 
+			var apply_name =  $("#apply_name").text();
+			layer.confirm("<b>您正在准备提交<span class='font-red'>"+transfer_count+"</span>个"+apply_name+"转出</b><br/>域名将随机转出PUSH到以下注册商平台ID：<br/>"+registrar_852_text+"<br/>"+registrar_851_text+"<br/>"+registrar_854_text+"<br/><span class='font-red'>请您再次确认注册商帐号ID是否正确？</span>",{btn:['确认正确，同意转出','取消'],title:'操作提示',closeBtn: 0}
+			,function(){
+				$("#sub_apply").button('loading');
+				$.ajax({
+				data: {
+					'typeid':typeid,
+					'transfer_count':transfer_count,
+					'registrar_852':registrar_852,
+					'registrar_851':registrar_851,
+					'registrar_854':registrar_854
+				},
+				type: "post",
+				url: "<{spUrl c=transfer a=apply from=create}>", 
+				success: function (data) {
+					if(data.status>1){
+						layer.msg(data.msg)
+						$("#sub_apply").button('reset');
+					}
+					if(data.status==200){
+						layer.confirm("恭喜，您已成功申请转出<span class='font-red'>"+transfer_count+"</span>个"+apply_name+"域名<br/>后台审核通过后，工作人员会PUSH域名到您指定的帐号，请留意查收域名。",{btn:['好的'],title:'提示',closeBtn: 0}
+						,function(){
+							window.location.href = "<{url c='transfer' a='applyList'}>";
+						});
+					
+					}
+				},
+				error: function () {
+					layer.msg("提交出错，请稍候重试");
+					$("#sub_apply").button('reset');
+				}
+			});
+			}
+		   );
+		})
+	});
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

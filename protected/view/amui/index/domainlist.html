@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>域名库 - 炒米网交易</title>
+<meta name="keywords" content="炒米网">
+<meta name="Description" Content="炒米网交易中心是一个专业的域名批量交易平台，实时挂单委托成交、24小时开盘交易、方便快捷 - 聪明的米农都在这里！">
+<{include file="amui/am_i_header_css_js.html"}>
+</head>
+<body class="tpl-bg">
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_i_header.html"}>
+<!----------顶部通栏块 end--------->
+<div class="tpl-page-container">		
+		<style>
+		.am-selected {width:180px;_width:200px;}
+		.font_d{font-size: 24px;font-weight: 400;font-weight: bold;color: #F60;}	
+		.box_d{text-align: center}
+		</style>
+        <div class="am-g tpl-content-wrapper-i">
+            <div class="tpl-portlet-components-i am-padding-bottom-0">
+             <div class="portlet-title">
+                    <div class="caption">域名库</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g am-form am-form-horizontal">
+					<form action="/domainlist" method="get">
+                        <!---------右侧 头部 搜索框  begin----------------->
+                        <div class="am-u-sm-12 am-u-md-3">
+                            <div class="am-form-group am-form-group-sm">
+                                <label style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;line-height:30px;">域名：</label>
+                                <input type="text" name="domain" value="<{urldecode($cond.domain)}>" id="doc-ipt-3-a" class="am-form-field am-radius" style="width:140px;_width:140px;height:30px;font-size: 14px" >
+                            </div>
+                        </div>						
+                        <div class="am-u-sm-12 am-u-md-3">
+                            <div class="am-form-group">
+								<label style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;line-height:30px;">品种： </label>
+                                <select name="typeid" data-am-selected="{btnSize: 'sm'}" style="width:150px;_width:150px;height:33px;font-size: 14px">
+                                    <option value="0">全部品种</option>
+                                    <{foreach item=tp from=$types}>
+                                    <option value="<{$tp.id}>" <{if $cond.typeid eq $tp.id}>selected<{/if}> ><{$tp.name}></option>
+                                    <{/foreach}>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="am-u-sm-12 am-u-md-6">
+                            <div class="am-form-group">
+                                <input type="submit" value="搜索" class="am-btn am-btn-sm am-btn-primary am-radius"/>
+                                <a href="/domainlist" class="am-btn am-btn-sm am-btn-primary am-radius">重置</a>
+                            </div>
+                        </div>
+                    </div>
+					
+                    <div class="am-g">
+						<div class="am-u-sm-12 am-u-md-3">
+							<div class="box_d">
+							 待审核入库
+							 <p><span class="font_d"><{$apply_count['status_1_count']|default:'0'}></span>个</p>
+							</div>
+						</div>
+						<div class="am-u-sm-12 am-u-md-3">
+							<div class="box_d">
+							 今日入库
+							 <p><span class="font_d"><{$apply_count['status_2_count']|default:'0'}></span>个</p>
+							</div>
+						</div>		
+						<div class="am-u-sm-12 am-u-md-3">
+							<div class="box_d">
+							 昨日入库
+							 <p><span class="font_d"><{$apply_count['zt_status_2_count']|default:'0'}></span>个</p>
+							</div>
+						</div>	
+						<div class="am-u-sm-12 am-u-md-3">
+							<div class="box_d">
+							 近三日出库
+							 <p><span class="font_d"><{$apply_count['out_status_5_count']|default:'0'}></span>个</p>
+							</div>
+						</div>						
+					</div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+								<div style="font-size:16px; padding-bottom:10px">搜索结果：<span style="color:#F37B1D; font-weight:bold;"><{$pager.total_count}></span></div>
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="filter">
+                                    <thead>
+                                        <tr>
+                                            <th>编号</th>
+                                            <th>域名</th>
+                                            <th>品种</th>
+                                            <th>注册商平台</th>
+                                            <th>入库时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if $pager.total_count==0}>
+										<tr style="height:60px;">
+											<td colspan="8" style="text-align:center;line-height: 50px;">暂无相关域名</td>
+										</tr>
+										<{/if}>
+                                    <{foreach from=$ret item=r}>
+                                    <tr>
+                                        <td><{$r.id}></td>
+                                        <td><{$r.domain}></td>
+                                        <td><{$r.name}></td>
+                                        <td><{$r.pingtai}></td>
+                                        <td><{if $r.apply_time}><{$r.apply_time}><{else}>2017-07-04<{/if}></td>
+    								
+                                    <{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=domainlist page=$pager.first_page typeid=$cond.typeid domain=$cond.domain}>">首页</a></li>
+													<li><a href="<{spUrl c=domainlist page=$pager.prev_page typeid=$cond.typeid domain=$cond.domain}>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=domainlist page=$thepage typeid=$cond.typeid domain=$cond.domain}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=domainlist page=$thepage typeid=$cond.typeid domain=$cond.domain}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=domainlist page=$pager.next_page typeid=$cond.typeid domain=$cond.domain}>">下一页</a></li>
+													<li><a href="<{spUrl c=domainlist page=$pager.last_page typeid=$cond.typeid domain=$cond.domain}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>  
+                        </div>
+                    </div>								
+                </div>
+            </div>
+        </div>
+</div>				
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_i_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>解析二级域名 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:300px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+								 <{if $uid==19639}>
+									<li<{if $act=='tows_apply'}> class="active"<{/if}>><a href="<{url c='tows' a='apply'}>">解析域名</a></li> 
+									<li<{if $act=='tows_inList'}> class="active"<{/if}>><a href="<{url c='tows' a='inlist'}>">解析记录</a></li>
+								 <{/if}>	
+							  <li<{if $act=='tows_applyList'}> class="active"<{/if}>><a href="<{url c='tows' a='applyList'}>">明细列表</a></li>
+							  <li<{if $act=='tows_change'}> class="active"<{/if}>><a href="<{url c='tows' a='change'}>">兑换域名</a></li>
+							  <li<{if $act=='tows_domain'}> class="active"<{/if}>><a href="<{url c='tows' a='domain'}>">公共兑换池</a></li>
+							  <li<{if $act=='tows_outList'}> class="active"<{/if}>><a href="<{url c='tows' a='outlist'}>">兑换记录</a></li>
+							</ul>						
+                        </div>						
+                    </div>				
+                <div class="tpl-block">
+                    <div class="am-g">
+							<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+								<p>
+								温馨提示：状态正常的域名可以申请解析二级域名。申请成功后，原域名由平台回收保管，并将解析成指定数量的对应二级域名到当前帐号。
+								</p>
+							</div>	
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-10">
+								<div class="am-form am-form-horizontal">
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">选择品种</label>
+										<div class="am-u-sm-9">
+											<select data-am-selected="" id="typeid">
+												<option></option>
+												<{foreach item=tp from=$type_options}>
+												<option value="<{$tp.code}>"><{$tp.name}></option>
+												<{/foreach}>  
+											</select>	
+										</div>
+									</div>
+								<div class="am-form am-form-horizontal">
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">解析品类</label>
+										<div class="am-u-sm-9">
+											<select data-am-selected="" id="two_typeid">
+											</select>	
+										</div>
+									</div>
+								<div class="am-form-group">
+									<div class="am-u-sm-9 am-u-sm-push-3" style="">								
+										<table class="am-table am-table-hover tpl-table-uppercase" style="border-bottom:none;">						
+											<thead>
+												<tr>
+													<th><input type="checkbox" name="selectall" id="selectall" action="all"/> 全选</th>                                            
+													<th style="width:28%;">可解析域名列表</th>
+													<th style="width:60%;">(注：当前开放每次可申请解析3个域名)</th>
+												</tr>
+											</thead>
+										</table>					
+										<div style="max-height: 480px;overflow-y: auto;overflow-x: hidden;margin-top:-21px;border:1px #eee solid;">
+												<table class="am-table am-table-hover" id="domain_list" style="margin-top: 0;margin-bottom:0;">             
+													<tbody>
+														<tr style="height:40px;"><td colspan="5" style="text-align:center;line-height: 40px;">请选择解析域名品种</td></tr>
+													</tbody>
+												</table>
+											</div>															
+										</div>															
+									</div>															
+
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">选中的域名数量</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><span id="checked_count" style="color:#ff0000;">0</span>个</div>
+										</div>
+									</div>	
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">解析二级域名</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><span id="checked_number" style="color:#ff0000;">0</span>个<span id="tows_dn"></span></div>
+										</div>
+									</div>									
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">解析所需费用</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><span id="checked_cost" style="color:#ff0000;">0</span>元</div>
+										</div>
+									</div>										           
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">图形验证码</label>
+										<div class="am-u-sm-9">
+											<div class="am-fl am-margin-right">
+												<input id="validate" name="validate" style="width:200px" type="text" class="am-input-field" maxlength="4" placeholder="请输入右侧验证码"/>
+											</div>
+											<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;">
+												 <img title="点击刷新" alt="点击刷新" id="yzm_img" src="/sso/yzm" onclick="this.src='/sso/yzm?t='+Math.random();"></img>
+											</div>													
+										</div>
+									</div>				
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">交易密码</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="password" style="width:200px" id="safecode" placeholder="">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;"><a href="/user/safeCode" target="_blank">设置密码?</a></div>
+												</div>
+										</div>
+									</div>
+									<span id="apply_name" style="display:none;"></span>
+									<span id="cost" style="display:none;"></span>
+									<span id="number" style="display:none;"></span>
+
+									<div class="am-form-group">
+										<div class="am-u-sm-5 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交解析中...'}" id="sub_apply">确认提交解析</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-cf" style="margin-top:100px;"></div>		
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+	$('#selectall').on('change',function(){
+		//全选
+		if(this.checked){
+			$('[name="id[]"]').prop({'checked': true});
+		}else{
+			$('[name="id[]"]').prop({'checked': false});
+		}
+		var _checked = $('[name="id[]"]').filter(':checked');
+		var count = $(_checked).size();
+		if(count<=0){
+			$("#checked_count").text(0);
+			$("#checked_cost").text(0);
+			$("#checked_number").text(0);
+			return;
+		}
+		$("#checked_count").text(count);
+		var cost = parseInt($("#cost").text());
+		var number = parseInt($("#number").text());
+		$("#checked_cost").text(count*cost);
+		$("#checked_number").text(count*number);
+	});
+	function clickCheckbox(){
+		//单个
+		var _checked = $('[name="id[]"]').filter(':checked');
+		var count = $(_checked).size();
+		if(count<=0){
+			$("#checked_count").text(0);
+			$("#checked_cost").text(0);
+			$("#checked_number").text(0);
+			return;
+		}
+		$("#checked_count").text(count);
+		var cost = parseInt($("#cost").text());
+		var number = parseInt($("#number").text());
+		$("#checked_cost").text(count*cost);
+		$("#checked_number").text(count*number);
+	}
+function two_type_get(){
+	   var typeid = $("#typeid").val();
+	   if(!typeid)return;
+	   $.post("/tows/apply?from=gettype", { "typeid": typeid},
+	   function(ret){
+		 if(ret.status==200){
+			var two_type = ret.two_type;
+			$("#two_typeid").empty();	
+			$.each(two_type,function(index) {
+				str = '<option value='+two_type[index]['two_code']+'>'+two_type[index]['name']+'</option>';
+                                $("#two_typeid").append(str);
+			});			
+			
+		 }
+	   }, "json");	
+}
+function domains_get(){
+            var two_typeid = $("#two_typeid").val();
+            if(!two_typeid)return;
+	    $("#apply_name").text('');
+            $("#checked_count").text(0);
+            $("#checked_cost").text(0);
+            $("#checked_number").text(0);
+            $('[name="selectall"]').prop({'checked': false});
+            $.post("/tows/apply?from=config", {"two_typeid": two_typeid},
+            function(ret){
+		 if(ret.status==200){
+			 $("#apply_name").text(ret.name);
+			 $("#number").text(ret.number);
+			 $("#cost").text(ret.cost);
+			 $("#tows_dn").text(ret.tows_dn);
+			var domain_list = ret.domain_list;
+			$("#domain_list tbody").empty();
+			if(!domain_list || domain_list.length==0){
+				$("#domain_list tbody").append('<tr style="height:40px;"><td colspan="4" style="text-align:center;line-height: 40px;">暂无可用域名</td></tr>'	);
+			}				
+			$.each(domain_list,function(k,v) {
+				str = '<tr><td><input type="checkbox" name="id[]" onclick="clickCheckbox()" value="'+v['id']+'"/></td><td>'+v['domain']+'</td><td>'+v['expire_time']+'</td><td>正常</td></tr>'
+				$("#domain_list tbody").append(str);
+			});			
+			
+		 }
+		 if(ret.status==201){
+			layer.msg(ret.msg)
+		 }
+	   }, "json");	
+}
+	$(function() {
+		$("#typeid").change(function(){  		   
+				two_type_get();
+		}) 
+		$("#two_typeid").change(function(){  		   
+				domains_get();
+		}) 
+		$("#sub_apply").click(function(){			
+			var chk_value =[];
+			$('input[name="id[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			});
+			if(chk_value.length==0){
+				layer.msg('您还没有选择任何域名');
+				return;
+			}
+		   var validate=$('#validate').val();
+		   var safecode=$('#safecode').val();	
+                   var two_typeid = $("#two_typeid").val();
+		   var tows_count = chk_value.length;
+			if (typeid == '') {  
+				layer.msg("请选择域名品种"); 
+				return false;
+			} 			
+			var apply_name =  $("#apply_name").text();
+			
+			patrn = /^\w{4}$/; //四位验证码
+			if(!patrn.exec(validate)){
+				layer.tips('请输入图形里的操作验证码', '#yzm_img');
+				$('#validate').focus();
+				 return false;
+			}
+			if(!safecode){
+				layer.tips('请输入交易密码', '#safecode');
+				$('#safecode').focus();
+				 return false;				
+			}
+			var number = $("#number").text()*tows_count;
+			var tows_dn = $("#tows_dn").text()
+			layer.confirm("<b>您正在准备提交<span class='font-red'>"+tows_count+"</span>个"+apply_name+"域名解析</b><br/>1：原域名由平台回收保管<br/>2：解析"+number+"个"+tows_dn+"二级域名到当前帐号",{btn:['确认','取消'],title:'操作提示',closeBtn: 0}
+			,function(){
+				$("#sub_apply").button('loading');
+				$.ajax({
+				data: {
+					'two_typeid':two_typeid,
+					'id':chk_value,
+					'validate':validate,
+					'safecode':safecode					
+				},
+				type: "post",
+				url: "<{spUrl c=tows a=apply from=create}>", 
+				success: function (ret) {
+					if(ret.status==209){
+						layer.msg(ret.msg)
+						$("#validate").val(""); 
+						$('#validate').focus();
+						$("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  							
+					}				
+					if(ret.status>1){
+						layer.msg(ret.msg)
+						$("#sub_apply").button('reset');
+					}
+					if(ret.status==200){
+						layer.open({title:'提示',content:"已成功解析<span class='font-red'>"+tows_count+"</span>个"+apply_name+"域名",btn: ['继续解析域名', '查看明细列表'],closeBtn: 0
+						  ,yes: function(index, layero){
+								layer.close(index);
+								location.reload(true)
+						  },btn2: function(index, layero){
+								layer.close(index);
+								window.location.href = "<{url c='tows' a='applyList'}>";
+						  }
+						});						
+					}
+				},
+				error: function () {
+					layer.msg("提交出错，请稍候重试");
+					$("#sub_apply").button('reset');
+				}
+			});
+			}
+		   );
+		})
+	});
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

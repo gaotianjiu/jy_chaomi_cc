@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>提交域名入盘 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">提交域名入盘</div>
+                </div>
+				<style>
+				.padding-a{margin-right:5px;}
+				</style>
+                <div class="tpl-block">
+                    <div class="am-g">
+							<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+								<p><span class="label label-danger">温馨提示：</span> 请先将您的域名PUSH到我们对应的注册商帐号后再提交申请，请确保您PUSH的域名与您提交的域名一致！</p>
+								<p><b>域名在不同注册商平台下</b>请分批提交，炒米网交易中心的注册商平台帐号如下：</p>
+								<p>
+								易名中国：<span class="am-badge am-radius am-badge-danger am-text-default">911811</span>
+								<span class="padding-a"></span>爱名网：<span class="am-badge am-radius am-badge-danger am-text-default">911811</span>
+								<!--span class="padding-a"></span>190数交所：<span class="am-badge am-radius am-badge-danger am-text-default">911811</span-->
+								<span class="padding-a"></span>万网：<span class="am-badge am-radius am-badge-danger am-text-default">chaomicc</span>
+								<!-- <span class="padding-a"></span>西部数码：<span class="am-badge am-radius am-badge-danger am-text-default">911811</span> -->
+								<!-- <span class="padding-a"></span>易域网：<span class="am-badge am-radius am-badge-danger am-text-default">911811</span> -->
+								<!-- <span class="padding-a"></span>优名网：<span class="am-badge am-radius am-badge-danger am-text-default">911811</span> -->
+								</p>
+							</div>	
+
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-9">
+								<div class="am-form am-form-horizontal">
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">域名注册商帐号</label>
+										<div class="am-u-sm-9">
+											<select data-am-selected="" id="website">
+												<option></option>
+												<{html_options options=$domain_web_options}>
+											</select>
+											<span> <a href="<{url c='user' a='memberAccountAdd'}>">添加注册商平台帐号</a></span>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<style>
+										.pan-tip p{line-height:24px;}
+										</style>
+										<label class="am-u-sm-3 am-form-label">提交已PUSH域名</label>
+										<div class="am-u-sm-9">
+											<textarea class="am-share" rows="16" onkeyup="this.value=this.value.replace(/[, ]/g,'')" id="domains" placeholder="一行一个域名,一次最多可转入200个同平台同类型的域名"></textarea>
+											<div class="am-cf am-margin-top" id="check_ret"></div>
+											<div class="am-cf am-margin-top am-alert am-alert-secondary pan-tip">
+												<p>最新域名入盘规则：</p>
+												<p>【四声母COM.CN】保质期1个月以上</p>
+												<!-- <p>【四声母NET】保质期一个月以上</p> -->
+												<!-- <p>【六数字不带04COM】保质期1天以上</p> -->
+												<!--<p>【四声母NET】保质期1天以上</p>-->
+												<!-- <p>【四声母WANG】保质期3年以上</p> -->
+												<!-- <p>【四字母CN】保质期一个月以上</p> -->
+											</div>	
+										</div>
+											
+									</div>
+									<div class="am-form-group">
+										<div class="am-u-sm-9 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交中...'}" id="sub_apply">域名已PUSH并确认提交转入</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-cf" style="margin-top:100px;"></div>		
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+	$(function() {
+		//取出当日当前用户入盘详情
+		//$("#typeid").change(function(){  
+			//   var typeid = $("#typeid").val();
+			//   $.post("/check/apply_bl", { "typeid": typeid},
+			//   function(ret){
+			//	 if(ret.status==200){
+			//		 $("#apply-tip").show();
+			//		 $("#apply_name").text(ret.name);
+			//		 $("#today_count").text(ret.today_count);
+			//		 $("#today_ky_count").text(ret.today_ky_count);
+			//		 $("#today_ky_count_").text(ret.today_ky_count);
+			//	 }
+			//	 if(ret.status==201){
+			//		layer.msg(ret.msg)
+			//	 }
+			 //  }, "json");	
+		//}) 
+		$("#typeid").change(function(){  		   
+                    var typeid = $("#typeid").val();
+                    if(!typeid)return;
+                    $.post("/check/index?from=twotype", { "typeid": typeid},
+                    function(ret){
+                          if(ret.status==200){
+                                 var two_type = ret.two_type;
+                                 $("#two_typeid").empty();
+                                str = '<option></option>';
+                                $("#two_typeid").append(str);
+                                 $.each(two_type,function(index) {
+                                         str = '<option value='+two_type[index]['two_code']+'>'+two_type[index]['name']+'</option>';
+                                         $("#two_typeid").append(str);
+                                 });			
+
+                          }
+                    }, "json");
+		}) 
+
+		$("#sub_apply").click(function(){			
+			var type=$('#typeid option:selected').val();
+			if (type == '') {  
+				layer.msg("请选择域名品种"); 
+				return false;
+			}  
+ 			var two_type=$('#two_typeid option:selected').val();
+			if (two_type == '') {  
+				layer.msg("请选择入盘品类"); 
+				return false;
+			} 
+			var website=$('#website option:selected').val();
+			if (website == '') {  
+				layer.msg("请选择域名注册商帐号"); 
+				return false;
+			}  
+			var domainsval = $('#domains').val(); 
+			if (domainsval == '') {
+				layer.msg("域名输入框不能为空");
+				$('#domains').focus();
+				return false;
+			} 
+			$("#sub_apply").button('loading');
+				$.ajax({
+				data: {
+					"domains": domainsval,
+                                        'two_typeid':two_type,
+					'website_nid':website
+				},
+				type: "post",
+				url: "<{url c='check' a='check_apply'}>", 
+				success: function (data) {
+					if(data.status>1){
+						layer.msg(data.msg)
+						$("#check_ret").empty();
+						$("#sub_apply").button('reset');
+					}
+					if(data.status==200){
+						$("#domains").val("");
+						$("#check_ret").html('<b>结果提示：</b><br/>'+data.msg+'<br/>可前往 <a href="<{url c='check' a='applyList'}>">转入列表了解到审核情况</a>');
+					}					
+					if(data.status>201){
+						$("#check_ret").html('<b>结果提示：</b><br/>'+data.error_tit);
+					}					
+				},
+				error: function () {
+					layer.msg("查询出错，请稍候重试");
+					$("#sub_apply").button('reset');
+				}
+			});
+		})
+	});
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

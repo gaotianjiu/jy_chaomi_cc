@@ -1,0 +1,148 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>域名分期购买计算器 - 炒米网交易</title>
+<meta name="keywords" content="炒米网">
+<meta name="Description" Content="域名付款购买计算器，炒米网交易中心是一个专业的域名批量交易平台，实时挂单委托成交、24小时开盘交易、方便快捷 - 聪明的米农都在这里！">
+<{include file="amui/am_i_header_css_js.html"}>
+</head>
+<body class="tpl-bg">
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_i_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------右侧内容框 begin--------->
+<div class="am-g tpl-content-wrapper-i">
+	<div class="tpl-portlet-components-i am-padding-bottom-0">
+	 <div class="portlet-title">
+			<div class="caption">域名分期购买计算器</div>
+		</div>
+        <div class="tpl-block">
+            <div class="am-g" style="margin:20px 0 150px 0;">
+                <div class="am-u-sm-12 am-u-md-10 am-u-md-push-1">
+					<form class="am-form am-form-horizontal" action="/fqtool" method="get">
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">域名品种：</label>
+                                    <div class="am-u-sm-4 am-u-end">
+                                        <input type="text" name="name" value="四声母COM.CN">
+                                        <input type="hidden" name="from" value="y">
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">购买单价：</label>
+                                    <div class="am-u-sm-6 am-u-end">
+                                        <input type="number" name="price" value="<{$price}>" required="required" maxlength="8" placeholder="" style="float:left; width:100px;"> <span style="float:left;margin-left:10px;margin-top:10px;">元</span>
+                                    </div>									
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">购买个数：</label>
+                                    <div class="am-u-sm-6 am-u-end">
+                                        <input type="number" name="num" value="<{$num}>" required="required" maxlength="5" placeholder="" style="float:left; width:100px;"> <span style="float:left;margin-left:10px;margin-top:10px;">个</span>
+                                    </div>									
+                                </div>								
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">首付额度： </label>
+                                    <div class="am-u-sm-6 am-u-end">
+                                       <div style="float:left; margin-top:7px;">30%</div>
+                                    </div>
+                                </div>
+								
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">还款期限： </label>
+                                    <div class="am-u-sm-6 am-u-end">
+										<select data-am-selected="" name="month" style="width:150px;_width:150px">
+											<{foreach item=r key=id from=$month_list}>
+												<option value="<{$id}>" <{if $month == $id}>selected<{/if}> ><{$r}></option>
+											<{/foreach}>
+										</select>
+                                    </div>
+                                </div>	
+								
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">月利率： </label>
+                                    <div class="am-u-sm-6 am-u-end">
+                                       <div style="float:left; margin-top:7px;">1.5%</div>
+                                    </div>
+                                </div>	
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">购买日期： </label>
+                                    <div class="am-u-sm-6 am-u-end">
+										 <input type="text" value="<{$time}>" name="time" data-am-datepicker style="width:150px;" required="required"/>
+                                    </div>
+                                </div>									
+                                <div class="am-form-group">
+										<div class="am-u-sm-6 am-u-sm-push-2">									
+											<input type="submit" value="开始计算" class="am-btn am-btn-primary am-radius"/>
+											<a href="/fqtool" class="am-btn am-btn-default am-radius">重置</a>
+										</div>									
+                                </div>
+                    </form>
+                
+								<{if $ret.list}>
+								   <table class="am-table am-table-hover tpl-table-uppercase am-margin-top" id="filter">
+                                    <thead>
+                                        <tr>
+                                            <th>分期计划详情</th>
+                                            <th></th>											
+                                        </tr>
+                                    </thead>								   
+                                    <tbody>
+                                    <tr>
+                                        <td>购买总额</td>
+                                        <td><{$total}>元</td>								
+									</tr>									
+                                    <tr>
+                                        <td>首付金额(30%)</td>
+                                        <td><{$sftotal}>元</td>								
+									</tr>
+                                    <tr>
+                                        <td>分期金额(70%)</td>
+                                        <td><{$fqtotal}>元</td>								
+									</tr>
+                                    <tr>
+                                        <td>利息总额</td>
+                                        <td><{$ret.lxtotal}>元</td>								
+									</tr>									
+                                    </tbody>
+                                </table>
+								
+								   <table class="am-table am-table-hover tpl-table-uppercase am-margin-top" id="filter">
+                                    <thead>
+                                        <tr>
+                                            <th>期数</th>
+                                            <th>还款日期</th>
+                                            <th>还款额(元)</th>
+                                            <th>本金(元)</th>											
+                                            <th>利息(元)</th>											
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <{foreach from=$ret.list item=r}>
+                                    <tr>
+                                        <td><{$r.i}></td>
+                                        <td><{$r.date}></td>
+                                        <td><{$r.emtotal}></td>
+                                        <td><{$r.em}></td>									
+                                        <td><{$r.lx}></td>									
+                                    <{/foreach}>
+                                    </tbody>
+                                </table>
+							<{/if}>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>	
+<!----------右侧内容框 end--------->
+<script type="text/javascript">
+<{if $error_msg}>
+	layer.msg("<{$error_msg}>");
+<{/if}>
+</script>
+
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_i_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

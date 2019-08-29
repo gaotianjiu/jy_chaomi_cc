@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>炒米证管理 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:300px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $act=='qualification_apply'}> class="active"<{/if}>><a href="<{url c='qualification' a='apply'}>">申请炒米证</a></li>
+							  <li<{if $act=='qualification_applyList'}> class="active"<{/if}>><a href="<{url c='qualification' a='applyList'}>">炒米证管理</a></li>
+							  <li<{if $act==2}> class="active"<{/if}>><a onclick="layer.msg('功能开发中')">炒米证交易</a></li>							  
+							</ul>						
+                        </div>						
+                    </div>	
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase am-text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-type">炒米证编号</th>
+                                            <th>域名品种</th>
+                                            <th>锁定域名数</th>
+                                            <th>申请时间</th>
+                                            <th>当前状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if $pager.total_count==0}>
+										<tr style="height:60px;">
+											<td colspan="8" style="text-align:center;line-height: 50px;">暂无数据</td>
+										</tr>
+										<{/if}>			
+									 <{foreach item=v from=$ret key=k}> 
+                                        <tr>
+                                            <td><{$v.id}></td>
+                                            <td><{$v.name}></td>
+                                            <td><{$v.domain_count}></td>
+                                            <td><{$v.create_time}></td>
+                                            <td>										
+											<{if $v.status == 4}> 
+											<span class="am-badge am-radius">已转出</span>
+											<{elseif $v.status == 2}> 
+											<span class="am-badge am-badge-success am-radius">转让中</span>											
+											<{elseif $v.status ==3}> 
+											<span class="am-badge am-radius">已转让</span>											
+											<{elseif $v.status ==5}> 
+											<span class="am-badge am-radius">已回购</span>						
+											<{elseif $v.status ==1}>
+											<span class="am-badge am-badge-danger am-radius">有效</span>
+											<{/if}>
+                                            </td>
+											<td>
+												<{if $v.status==1}>
+												<a onclick="layer.msg('功能开发中')">发布交易转让</a> | <a onclick="outplat('<{$v.id}>','<{$v.name}>','<{$v.domain_count}>')">域名申请转出</a>
+												<{else}>
+												-
+												<{/if}>
+											</td>
+                                        </tr>
+      
+									<{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=qualification a=applyList page=$pager.first_page}>">首页</a></li>
+													<li><a href="<{spUrl c=qualification a=applyList page=$pager.prev_page}>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=qualification a=applyList page=$thepage}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=qualification a=applyList page=$thepage}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=qualification a=applyList page=$pager.next_page}>">下一页</a></li>
+													<li><a href="<{spUrl c=qualification a=applyList page=$pager.last_page}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+function outplat(id,apply_name,domain_count){			
+		layer.confirm("<b>您正在准备提交转出<span class='font-red'>1</span>张"+apply_name+"炒米证</b><br/>请了解本次操作会影响到当前炒米证下的 <span class='font-red'>"+domain_count+"</span> 个"+apply_name+"域名变更成 <span class='font-red'> 证转出 </span>状态，此状态下的域名只能操作将域名转出平台，并且当前炒米证(编号："+id+")也会立即失效。<br/><span class='font-red'>此操作一经确认，无法恢复或撤销，请务必了解并明白！</span><br/>如有疑问请联系客服了解后再操作",{btn:['明白，确认此操作','不明白，先取消此操作'],area: ['650px', '250px'], title:'操作提示',closeBtn: 0}
+		,function(){
+				$.ajax({
+				data: {
+					'id':id,
+				},
+				type: "post",
+				url: "<{url c='qualification' a='outplat'}>", 
+				success: function (data) {
+					if(data.status>1){
+						layer.msg(data.msg)
+					}
+					if(data.status==200){
+						layer.confirm(data.msg+'<br/>炒米证下的<b> '+domain_count+" </b>个"+apply_name+"状态已变更为[证转出]"+"<br/>请前往域名管理列表，继续操作转出",{btn:['点击这里继续转出'],title:'提示',closeBtn: 0}
+						,function(){
+							window.location.href = "/trading/domainList?domain=&pz=0&status=7&registrar=0";
+						});
+					}
+				},
+				error: function () {
+					layer.msg("提交出错，请稍候重试");
+				}
+			});
+		}
+		);
+}
+</script>		
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

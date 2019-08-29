@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>域名转出管理 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:100px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $act=='transfer_apply'}> class="active"<{/if}>><a href="<{url c='transfer' a='apply'}>">提交域名转出</a></li>
+							  <li<{if $act=='transfer_applyList'}> class="active"<{/if}>><a href="<{url c='transfer' a='applyList'}>">域名转出管理</a></li>
+							</ul>							
+                        </div>						
+                    </div>	
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-type">转出编号</th>
+                                            <th>域名品种</th>
+                                            <th>转出数量</th>
+                                            <th>注册商帐号ID</th>
+                                            <th>提交时间</th>
+                                            <th>处理时间</th>
+                                            <th>状态</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if $pager.total_count==0}>
+										<tr style="height:60px;">
+											<td colspan="8" style="text-align:center;line-height: 50px;">暂无转出数据</td>
+										</tr>
+										<{/if}>			
+									 <{foreach item=v from=$ret key=k}> 
+                                        <tr>
+                                            <td><{$v.id}></td>
+                                            <td><{$v.name}></td>
+                                            <td><{$v.domain_count}>个</td>
+                                            <td><{$v.domain_website}></td>
+                                            <td><{$v.create_time}></td>
+                                            <td><{if $v.deal_time}><{$v.deal_time}><{else}>-<{/if}></td>
+                                            <td>																					
+												<{if $v.status==1}><span>审核中</span><{/if}>
+												<{if $v.status==2}><span class="font-red">已审核,待PUSH</span><{/if}>
+												<{if $v.status==3}><span class="font-blue">审核失败</span><{/if}>
+												<{if $v.status==4}>已取消转出<{/if}>
+												<{if $v.status==5}>已转出,已PUSH<{/if}>											
+                                            </td>
+											<td>
+												<{if $v.status==1}>
+												<a onclick="cancel('<{$v.id}>')">取消转出</a>
+												<{else}>
+												-
+												<{/if}>
+											</td>
+                                        </tr>
+      
+									<{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=transfer a=applyList page=$pager.first_page}>">首页</a></li>
+													<li><a href="<{spUrl c=transfer a=applyList page=$pager.prev_page}>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=transfer a=applyList page=$thepage}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=transfer a=applyList page=$thepage}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=transfer a=applyList page=$pager.next_page}>">下一页</a></li>
+													<li><a href="<{spUrl c=transfer a=applyList page=$pager.last_page}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+    //取消域名转出
+    function cancel(id){
+        $.post('<{spUrl c=transfer a=apply from=cancel}>',{'id':id},function(ret){
+            if(ret.status==200){
+                layer.msg(ret.msg);
+				location.reload(true)
+            }else {
+                layer.msg(ret.msg);
+            }
+        },"json");
+    }		
+</script>		
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

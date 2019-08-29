@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title><{$title}> - 管理中心 - 炒米网</title>
+<{include file="amui/am_i_header_css_js.html"}>
+</head>
+<body class="tpl-bg">
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_i_ot_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------右侧内容框 begin--------->
+<div class="am-g tpl-content-wrapper-i">
+    <div class="tpl-portlet-components-i am-padding-bottom-0">
+        <div class="am-g tpl-tabs">
+            <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+                <ul class="am-fl">
+                    <li><a href="<{url c='sso' a='login'}>">会员登录</a></li>
+                    <li class="active"><a href="<{url c='sso' a='register'}><{if $ecommend_mid}>?mid=<{$ecommend_mid}><{/if}>">通过手机注册帐号</a></li>
+                    <li><a href="<{url c='sso' a='register_email'}><{if $ecommend_mid}>?mid=<{$ecommend_mid}><{/if}>">通过邮箱注册帐号</a></li>
+                    <li><a href="<{url c='sso' a='findpsw'}>">通过短信找回密码</a></li>
+                    <li><a href="<{url c='sso' a='findpsw_email'}>">通过邮件找回密码</a></li>
+                    <li><a href="<{url c='sso' a='findmid'}>">通过短信找回帐号ID</a></li>	
+                </ul>
+            </div>
+        </div>
+        <div class="tpl-block">
+            <div class="am-g" style="margin:65px 0 200px 0;">
+                <div class="am-u-sm-12 am-u-md-10 am-u-md-push-1">
+					<form class="am-form am-form-horizontal" id="reg_post" method="post" action="/sso/register?act=post">
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">手机号</label>
+                                    <div class="am-u-sm-6 am-u-end">
+                                        <input type="text" id="mobile" name="mobile" maxlength="11" placeholder="请填写常用的手机号">
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">设置密码</label>
+                                    <div class="am-u-sm-6 am-u-end">
+                                        <input type="password" id="password" name="password" maxlength="16" placeholder="请填写登录密码">
+                                    </div>									
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">确认密码</label>
+                                    <div class="am-u-sm-6 am-u-end">
+                                        <input type="password" id="repassword" name="repassword" maxlength="16" placeholder="请再次确认登录密码">
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+                                    <label for="captcha-target" class="am-u-sm-2 am-form-label">操作验证</label>
+                                    <div class="am-u-sm-5 am-u-md-3">
+                                        <input id="validate" name="validate" type="text" class="am-input-field" maxlength="4" placeholder="请输入右侧验证码"/>
+                                    </div>
+                                    <div class="am-u-sm-4 am-form-label am-u-end" style="text-align:left;padding:0;">
+                                         <img title="点击刷新" alt="点击刷新" id="yzm_img" src="/sso/yzm" onclick="this.src='/sso/yzm?t='+Math.random();"></img>
+                                    </div>									
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">短信验证码</label>
+                                    <div class="am-u-sm-5 am-u-md-3">
+                                        <input id="codes" name="codes" type="text" class="am-input-field" maxlength="6" placeholder=""/>
+                                    </div>
+                                    <div class="am-u-sm-4 am-form-label am-u-end" style="text-align:left;padding:0;">
+                                        <input class="sendsub am-btn am-btn-danger am-radius" type="button" id="sendcode" value="获取短信验证码">
+                                    </div>
+                                </div>
+								<{if !$ecommend_mid}>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">邀请码</label>
+                                    <div class="am-u-sm-2 am-u-end">
+                                        <input id="ecommend_mid" name="ecommend_mid" type="text" class="am-input-field" maxlength="6" placeholder="可不填"/>
+                                    </div>
+                                </div>
+								<{/if}>
+                                <div class="am-form-group">
+                                    <label class="am-u-sm-2 am-form-label">注册协议</label>
+                                    <div class="am-u-sm-6 am-form-label am-u-end" style="text-align:left;">
+                                        <input name="txt" class="checkBox" id="txt" type="checkbox"/>
+                                        <span>我已阅读并同意<a href="<{url c='user' a='packword'}>" target="_blank">《用户注册协议》</a></span>
+                                    </div>
+                                </div>
+                                <div class="am-form-group">
+										<div class="am-u-sm-6 am-u-sm-push-2">									
+											<button type="submit" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交注册中...'}" id="reg_post_sub">确认注册</button>
+										</div>									
+                                </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>	
+<!----------右侧内容框 end--------->
+<script type="text/javascript">
+	//---验证码倒计时---begin	
+	 var clock = '';
+	 var nums = 60;
+	 function settime(){
+		nums--;
+		if(nums > 0){
+			  $('#sendcode').val(nums+'秒后可重新获取');
+		 }else{
+			  clearInterval(clock);
+			  $('#sendcode').removeAttr("disabled"); 
+			  $('#sendcode').val('获取短信验证码');
+			  nums = 60;
+		 }
+	 }	
+	//---验证码倒计时---end
+	$(document).ready(function(){
+
+			//发送验证码判断是否
+			document.getElementById('sendcode').onclick = function(){
+				var validate = $('#validate').val();
+				var mobile = $('#mobile').val();
+				patrn = /^\w{4}$/; //四位验证码
+				if(!patrn.exec(validate)){
+					layer.tips('请正确输入图形里的操作验证码', '#yzm_img');
+					$('#validate').focus();
+					 return false;
+				}				
+				var patrn=/^1[34578]\d{9}$/;
+				if (!patrn.exec(mobile)){
+					layer.tips('请填写正确的手机号码', '#mobile');
+					$('#mobile').focus();
+					return false;
+				}			
+
+				// 允许提交表单
+				$.post('<{url c="sso" a="sendMsg"}>',{'mobile':mobile,'ctype':1,'validate':validate},function(ret){
+					if(ret.status==200){ //发送成功后需处理倒计时
+						layer.msg(ret.msg);
+						$('#codes').focus();
+						$('#sendcode').attr('disabled',"true");
+						clock = setInterval(settime, 1000);
+					}
+					if(ret.status>1 && ret.status!=200){
+						if(ret.ids!=''){
+							layer.tips(ret.msg,ret.ids);
+						}else{
+							layer.alert(ret.msg);
+						}
+					if(ret.ids=='#yzm_img'){
+						$("#validate").val(""); 
+						$('#validate').focus();
+						$("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  
+					}						
+				}
+				});
+			}		
+			//------------提交表单
+			var options = {
+				 type:"POST",//请求方式：get或post
+				 dataType:"json",//数据返回类型：xml、json、script
+				 beforeSerialize:function(){
+						var patrn=/^1[34578]\d{9}$/;
+						if(!patrn.exec($('#mobile').val())){
+							layer.tips('请填写正确的手机号码', '#mobile');
+							$('#mobile').focus();
+							return false						
+						}				 
+						patrn = /^(\S){6,16}$/; //6-16个空格符之外的所有字符
+					 	 if (!patrn.exec($('#password').val())){
+							layer.tips('6-16个字母+数字组合，不能带有空格、区分大小写','#password')
+							$('#password').focus();
+							return false;
+						 }
+						//---验证密码强度---begin
+					    var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g"); 
+						var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g"); 
+						var enoughRegex = new RegExp("(?=.{6,}).*", "g"); 
+						if (false == enoughRegex.test($('#password').val())) { 
+							 //密码小于六位
+							layer.tips('6-16个字母+数字组合，不能带有空格、区分大小写','#password')
+							$('#password').focus();
+							return false;							 
+						} else if (strongRegex.test($('#password').val())) { 
+							 //密码为八位及以上并且字母数字特殊字符三项都包括,强度最强 
+						} else if (mediumRegex.test($('#password').val())) { 
+							 //密码为七位及以上并且字母、数字、特殊字符三项中有两项，强度是中等 
+						} else { 
+							layer.tips('密码太简单，建议6-16个字母+数字混合，区分大小写','#password')
+							$('#password').focus();
+							return false;
+						} 
+						//---验证密码强度---end 						 
+						 if($('#password').val()!=$('#repassword').val()){
+							layer.tips('请检查登录密码与确认登录密码是否相同','#repassword')
+							$('#repassword').focus();
+							return false;
+						 }
+						 patrn = /^\d{6}$/; //六位数字验证码
+						if(!patrn.exec($('#codes').val())){
+							layer.msg('请输入手机号接收到的6位数字验证码');
+							$('#codes').focus();
+							 return false;
+						}  						 
+						if($("#txt").prop('checked')==false || $('#txt').attr('checked')==false){
+							layer.msg('请仔细阅读用户注册协议，并勾选同意！');
+							 return false;
+						}						 
+				 },
+				 beforeSubmit:function(){	
+						$("#reg_post_sub").button('loading'); //显示loading
+				 },
+				 success:function(data){//表单提交成功回调函数
+					// 重置验证码---begin
+					$("#validate").val(""); 
+					$("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  						
+					// 重置验证码---end
+					if(data.status>1){
+						layer.msg(data.msg)
+					}
+					if(data.ids!=''){
+						$(data.ids).focus();
+					}
+					if(data.status==200){
+						$('#reg_post')[0].reset() //重置表单
+						location.reload(true)
+					}
+					$("#reg_post_sub").button('reset');
+				 },
+				 error:function(err){
+					layer.msg('请求提交错误，请稍候重试')
+					$("#reg_post_sub").button('reset');
+				 }
+			};
+			$("#reg_post").ajaxForm(options);			
+	});		
+</script>
+<!----------底部通栏块 begin--------->
+<{include file="amui/am_footer.html"}>
+<!----------底部通栏块 end--------->
+</body>
+</html>

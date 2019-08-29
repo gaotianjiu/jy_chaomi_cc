@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>最近域名成交记录 - 炒米网交易</title>
+<meta name="keywords" content="炒米,炒米交易,炒米网,炒米域名">
+<meta name="Description" Content="炒米网交易中心是一个专业的域名批量交易平台，实时挂单委托成交、24小时开盘交易、方便快捷 - 聪明的米农都在这里！">
+<{include file="amui/am_i_header_css_js.html"}>
+</head>
+<body class="tpl-bg">
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_i_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------平台成交数据一览 begin--------->
+	<div class="tpl-page-container" style="padding:0px;">	
+        <div class="am-g tpl-content-wrapper-i" style="margin-bottom:-10px;">
+            <div class="tpl-portlet-components-i" style="padding-top:10px;padding-bottom:10px;font-size:18px;">
+                   今日总成交额 <span class="font-red" id="now-trans-p">-</span> 元，总成交量 <span class="font-red" id="now-trans-c">-</span> 个 <span class="am-margin-left"></span> 昨日总成交额 <span class="font-red" id="yet-trans-p">-</span> 元，总成交量 <span class="font-red" id="yet-trans-c">-</span> 个 
+				   <!-- <span style="font-size:12px;margin-left:2.5rem;"><span id="now-uptime"></span></span> -->
+				   <!-- <div style="font-size:14px;" id="twos_data">今日已发放</div> -->
+            </div>
+        </div>
+	</div>		
+<!----------平台成交数据一览 end--------->
+		<!----------最近成交记录 begin--------->
+					<div class="tpl-page-container" style="padding:0px;">
+						<div class="am-g tpl-content-wrapper-i">					
+							<div class="am-fl" style="background:#fff;width:100%;padding:0px 0px;margin-top:10px;">
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="deal-data-list">
+									<thead style="background: #f9f9f9;">
+										<tr>
+											<th colspan="10"><span style="font-size:14px;">最新成交记录</span></th>
+
+										</tr>								
+                                    <thead style="background: #fff;">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>域名品种</th>
+                                            <th>成交域名</th>
+                                            <th>成交单价</th>
+                                            <th>买卖</th>
+                                            <th>成交时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+									<{if !$deal_data}>
+									<tr style="height:60px;">
+										<td colspan="6" style="text-align:center;line-height: 50px;">暂无相关记录</td>
+									</tr>
+									<{/if}>										
+
+                                    </tbody>
+                                </table>
+                        </div>
+				
+                    </div>
+                </div>
+		<!----------最近成交记录 end--------->
+	 <div class="tpl-page-container" style="padding:0px;">	 
+         <div class="am-g tpl-content-wrapper-i" style="margin-bottom:-10px;"> 
+			 <div class="am-alert am-alert-secondary"> 
+				 <p>炒米交易最新成交数据接口API：http://jy.chaomi.cc/deal_data/domain_api</p> 
+			 </div>	 
+         </div> 
+	 </div>			 
+<script type="text/javascript">
+function nowApi(){ 
+	//平台成交数据一览
+	$.get('/deal_data/nowApi',function(ret){
+	 if(ret.status==200){
+		$('#now-trans-p').text(ret.nowp);
+		$('#now-trans-c').text(ret.nowc);
+		$('#yet-trans-p').text(ret.yetp);
+		$('#yet-trans-c').text(ret.yetc);
+		$('#twos_data').html(ret.twos_data);
+		$('#now-uptime').text('更新时间：'+ret.update_time);
+	 }	          
+   }, "json");
+}
+function deal_data(){ 
+	//取出最近成交记录数据
+	$.get("/deal_data/api",function(data){
+	 if(data.status==200){
+			var domainlist = data.domainlist;
+			//console.log(domainlist)
+			$("#deal-data-list tbody").empty();
+			if(!domainlist){
+				$("#deal-data-list tbody").append('<tr style="height:20px;"><td colspan="10" style="text-align:center;line-height: 20px;">暂无相关成交记录</td></tr>'	);
+			}			
+		    $.each(domainlist,function(k,v) {
+				var sta = '-';
+				var zb = '';
+				if(v['typeid']>800000) zb = '<br/><span style="color:#888;font-size:12px;">到期时间：'+v['zb']+'</span>';
+				if(v['deal_status']==1) sta = '<span class="font-blue">卖出</span>';
+				if(v['deal_status']==2) sta = '<span class="font-red">买入</span>';			
+				str = '<tr><td>'+(k+1)+'</td><td>'+v['name']+zb+'</td><td>'+v['domain']+'</td><td>'+v['deal_price']+'</td><td>'+sta+'</td><td>'+v['deal_time']+'</td></tr>'
+				$("#deal-data-list tbody").append(str);
+			});		
+	 }	          
+   }, "json");
+}
+
+$(function () {
+	nowApi();
+	deal_data();
+	window.setInterval(nowApi,10000); //最近成交记录
+	window.setInterval(deal_data,10000); //最近成交记录
+});
+
+</script>	
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_i_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

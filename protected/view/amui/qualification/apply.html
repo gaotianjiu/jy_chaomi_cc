@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>申请炒米证 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:300px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $act=='qualification_apply'}> class="active"<{/if}>><a href="<{url c='qualification' a='apply'}>">申请炒米证</a></li>
+							  <li<{if $act=='qualification_applyList'}> class="active"<{/if}>><a href="<{url c='qualification' a='applyList'}>">炒米证管理</a></li>
+							  <li<{if $act==2}> class="active"<{/if}>><a onclick="layer.msg('功能开发中')">炒米证交易</a></li>							  
+							</ul>						
+                        </div>						
+                    </div>				
+                <div class="tpl-block">
+                    <div class="am-g">
+							<!-- <div class="am-alert am-alert-secondary am-margin-left am-margin-right"> -->
+								<!-- <p>提示：申请域名转成搬砖证资格，域名系统锁定后只能操作证转让、证域名转出。</p> -->
+							<!-- </div>	 -->
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-7">
+								<div class="am-form am-form-horizontal">
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">申请域名品种：</label>
+										<div class="am-u-sm-9">
+											<select data-am-selected="" id="typeid">
+												<option></option>
+												<{foreach item=tp from=$type_options}>
+												<option value="<{$tp.code}>"><{$tp.name}></option>
+												<{/foreach}>
+											</select>	
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">可转证域名：</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;color:#ff0000;"><b><span id="domain_count">-</span></span></b></div>
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">比例要求：</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><b><span id="apply_count">-</span><span id="account_count"></span></b></div>
+										</div>
+									</div>		
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">可申请证：</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><b><span id="now_count" class="font-red">-</span></b> <span id="now_count_msg"></span></div>
+										</div>
+									</div>										
+									<div class="am-form-group">
+										<style>
+										.pan-tip p{line-height:24px;}
+										</style>
+										<label class="am-u-sm-3 am-form-label"></label>
+										<div class="am-u-sm-9">
+											<div class="am-cf am-margin-top am-alert am-alert-secondary pan-tip">
+												<p>提示：申请转成炒米证的域名，系统锁定后只能操作证转让或证域名转出</p>
+												<p>申请前请务必了解相关规则，具体请查看<a href="http://my.chaomi.cc/announce/view?id=49" target="_blank">此公告</a>，或联系客服。</p>
+												<span id="apply_name" style="display:none;"></span>
+											</div>	
+										</div>
+											
+									</div>
+									<div class="am-form-group">
+										<div class="am-u-sm-5 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交中...'}" disabled id="sub_apply">确认申请炒米证</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-cf" style="margin-top:100px;"></div>		
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+	$(function() {
+		$("#typeid").change(function(){  
+			   $("#sub_apply").removeAttr("disabled");
+			   var typeid = $("#typeid").val();
+			   $.post("/qualification/apply?from=bl", { "typeid": typeid},
+			   function(ret){
+				 if(ret.status==200){
+					 $("#apply_name").text(ret.name);
+					 $("#domain_count").text(ret.domain_count+'个');
+					 $("#apply_count").text(ret.apply_count+":");
+					 $("#account_count").text(ret.account_count);
+					 $("#now_count").text(ret.now_count+"张");
+					 if(ret.now_count>1)$("#now_count_msg").text("一次申请1张证，如需申请多张，请重复申请即可。");
+				 }
+				 if(ret.status==201){
+					layer.msg(ret.msg)
+				 }
+			   }, "json");	
+		}) 
+
+		$("#sub_apply").click(function(){			
+			var type=$('#typeid option:selected').val();
+			if (type == '') {  
+				layer.msg("请选择域名品种"); 
+				return false;
+			} 
+			var account_count = $("#account_count").text();
+			var apply_name =  $("#apply_name").text();
+			layer.confirm("<b>您正在准备获取<span class='font-red'>1</span>张"+apply_name+"炒米证</b><br/>请了解本次操作会影响到<span class='font-red'>"+account_count+"</span>个"+apply_name+"域名锁定后只能操作证转让或证域名转出。",{btn:['确认','取消'],title:'操作提示',closeBtn: 0}
+			,function(){
+				$("#sub_apply").button('loading');
+				$.ajax({
+				data: {
+					'typeid':type,
+				},
+				type: "post",
+				url: "<{spUrl c=qualification a=apply from=create}>", 
+				success: function (data) {
+					if(data.status>1){
+						layer.msg(data.msg)
+						$("#sub_apply").button('reset');
+					}
+					if(data.status==200){
+						layer.confirm("<b>恭喜，您已成功获取<span class='font-red'>1</span>张"+apply_name+"炒米证</b>",{btn:['好的'],title:'提示',closeBtn: 0}
+						,function(){
+							window.location.href = "<{url c='qualification' a='applyList'}>";
+						});
+					
+					}
+				},
+				error: function () {
+					layer.msg("提交出错，请稍候重试");
+					$("#sub_apply").button('reset');
+				}
+			});
+			}
+		   );
+		})
+	});
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>域名注册商平台帐号 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">域名注册商平台帐号</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+						<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+							<p><span class="label label-danger">温馨提示：</span> 根据您域名分布所在的注册商平台，添加拥有的注册商平台帐号ID，以便进行域名push验证。</p>
+						</div>							
+                        <div class="am-u-sm-12 am-u-md-4">
+							<a class="am-btn am-btn-warning am-btn-sm am-radius" href="<{url c='user' a='memberAccountAdd'}>"><i class="am-icon-plus"></i> 添加绑定注册商平台帐号信息</a>
+                        </div>					
+                    </div>
+                    <div class="am-g am-margin-top">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase am-text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-type">编号ID</th>
+                                            <th>注册商平台</th>
+                                            <th>平台ID</th>
+                                            <th>验证邮箱或手机</th>
+                                            <th>添加时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if !$res}>
+										<tr style="height:60px;">
+											<td colspan="8" style="text-align:center;line-height: 50px;">暂无相关记录</td>
+										</tr>
+										<{/if}>										
+									 <{foreach item=v from=$res key=k}> 
+                                        <tr>
+                                            <td><{$v.id}></td>
+                                            <td><{$v.website}></td>
+                                            <td><{$v.webid}></td>
+                                            <td><{$v.webcheck}></td>
+											<td><{date("Y-m-d H:i:s", $v.addtime)}></td>
+                                        </tr>
+      
+									<{/foreach}>
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+						<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+							<p>提示：已添加的注册商平台帐号ID等信息，暂不支持用户自行删除，如有需要请联系客服。</p>
+						</div>					
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

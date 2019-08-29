@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>停放域名 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:300px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $act=='parking_apply'}> class="active"<{/if}>><a href="<{url c='parking' a='apply'}>">停放域名</a></li>
+							  <li<{if $act=='parking_applyList'}> class="active"<{/if}>><a href="<{url c='parking' a='applyList'}>">停放列表</a></li>
+							</ul>						
+                        </div>						
+                    </div>				
+                <div class="tpl-block">
+                    <div class="am-g">
+							<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+								<p>
+								温馨提示：状态正常的域名可以申请停放。申请成功后，停放周期内域名每天可获取定期收益，停放周期内不可转出，交易。只可以一口价卖出或中介交易，一口价成交后平台收取交易额的10%交易费。
+								</p>
+							</div>	
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-10">
+								<div class="am-form am-form-horizontal">
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">停放域名品种</label>
+										<div class="am-u-sm-9">
+											<select data-am-selected="" id="typeid">
+												<option></option>
+												<{foreach item=tp from=$type_options}>
+												<option value="<{$tp.code}>"><{$tp.name}></option>
+												<{/foreach}>
+											</select>	
+										</div>
+									</div>
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">选择停放周期</label>
+										<div class="am-u-sm-9">
+											<select data-am-selected="" id="cycle_time">
+												<!-- <option></option> -->
+												<!-- <option value="90">★ 90天 : 2 积分/天/个</option> -->
+												<option value="180">★ 180天 : 6 积分/天/个</option>
+												<option value="360">★ 360天 : 10 积分/天/个</option>
+											</select>	
+										</div>
+									</div>									
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">剩余可停放域名数量</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><span id="kt_count" style="color:#ff0000;">0</span>个</div>
+										</div>
+									</div>	
+									
+								<div class="am-form-group">
+									<div class="am-u-sm-9 am-u-sm-push-3" style="">								
+										<table class="am-table am-table-hover tpl-table-uppercase" style="border-bottom:none;">						
+											<thead>
+												<tr>
+													<th><input type="checkbox" name="selectall" id="selectall" action="all"/> 全选</th>                                            
+													<th style="width:28%;">可停放域名列表</th>
+													<th style="width:60%;">(注：当前开放每次只可申请停放5个域名)</th>
+												</tr>
+											</thead>
+										</table>					
+										<div style="max-height: 480px;overflow-y: auto;overflow-x: hidden;margin-top:-21px;border:1px #eee solid;">
+												<table class="am-table am-table-hover" id="domain_list" style="margin-top: 0;margin-bottom:0;">             
+													<tbody>
+														<tr style="height:40px;"><td colspan="5" style="text-align:center;line-height: 40px;">请选择品种与停放周期</td></tr>
+													</tbody>
+												</table>
+											</div>															
+										</div>															
+									</div>															
+
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">选中的域名数量</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><span id="checked_count" style="color:#ff0000;">0</span>个</div>
+										</div>
+									</div>		
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">每日收益</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><span id="checked_today_income" style="color:#ff0000;">0</span>积分/天</div>
+										</div>
+									</div>										
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">可获总收益</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><span id="checked_income_c" style="color:#ff0000;">0</span>积分</div>
+										</div>
+									</div>	           
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">图形验证码</label>
+										<div class="am-u-sm-9">
+											<div class="am-fl am-margin-right">
+												<input id="validate" name="validate" style="width:200px" type="text" class="am-input-field" maxlength="4" placeholder="请输入右侧验证码"/>
+											</div>
+											<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;">
+												 <img title="点击刷新" alt="点击刷新" id="yzm_img" src="/sso/yzm" onclick="this.src='/sso/yzm?t='+Math.random();"></img>
+											</div>													
+										</div>
+									</div>				
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">交易密码</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="password" style="width:200px" id="safecode" placeholder="">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;"><a href="/user/safeCode" target="_blank">设置密码?</a></div>
+												</div>
+										</div>
+									</div>
+									<span id="apply_name" style="display:none;"></span>
+									<span id="income" style="display:none;"></span>
+									<span id="cycle_time_i" style="display:none;"></span>
+
+									<div class="am-form-group">
+										<div class="am-u-sm-5 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交停放中...'}" id="sub_apply">确认提交停放</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-cf" style="margin-top:100px;"></div>		
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+	$('#selectall').on('change',function(){
+		//全选
+		if(this.checked){
+			$('[name="id[]"]').prop({'checked': true});
+		}else{
+			$('[name="id[]"]').prop({'checked': false});
+		}
+		var _checked = $('[name="id[]"]').filter(':checked');
+		var count = $(_checked).size();
+		if(count<=0){
+			$("#checked_count").text(0);
+			$("#checked_today_income").text(0);
+			$("#checked_income_c").text(0);
+			return;
+		}
+		$("#checked_count").text(count);
+		var income = parseInt($("#income").text());
+		var cycle_time = parseInt($("#cycle_time_i").text());
+		$("#checked_today_income").text(count*income);
+		$("#checked_income_c").text(count*income*cycle_time);	
+	});
+	function clickCheckbox(){
+		//单个
+		var _checked = $('[name="id[]"]').filter(':checked');
+		var count = $(_checked).size();
+		if(count<=0){
+			$("#checked_count").text(0);
+			$("#checked_today_income").text(0);
+			$("#checked_income_c").text(0);	
+			return;
+		}
+		$("#checked_count").text(count);
+		var income = parseInt($("#income").text());
+		var cycle_time = parseInt($("#cycle_time_i").text());
+		$("#checked_today_income").text(count*income);
+		$("#checked_income_c").text(count*income*cycle_time);
+	}
+function parking_get(){
+	   var typeid = $("#typeid").val();
+	   var cycle_time = parseInt($("#cycle_time").val());
+	   if(!typeid || !cycle_time)return;
+	    $("#apply_name").text('');
+		$("#checked_count").text(0);
+		$("#checked_today_income").text(0);
+		$("#checked_income_c").text(0);
+		$('[name="selectall"]').prop({'checked': false});
+	   $.post("/parking/apply?from=config", { "typeid": typeid,'cycle_time':cycle_time},
+	   function(ret){
+		 if(ret.status==200){
+			 $("#apply_name").text(ret.name);
+			 $("#income").text(ret.income);
+			 $("#cycle_time_i").text(ret.cycle_time);
+			 $("#kt_count").text(ret.kt_count);
+			var domain_list = ret.domain_list;
+			$("#domain_list tbody").empty();
+			if(!domain_list || domain_list.length==0){
+				$("#domain_list tbody").append('<tr style="height:40px;"><td colspan="5" style="text-align:center;line-height: 40px;">暂无可用域名</td></tr>'	);
+			}				
+			$.each(domain_list,function(k,v) {
+				str = '<tr><td><input type="checkbox" name="id[]" onclick="clickCheckbox()" value="'+v['id']+'"/></td><td>'+v['domain']+'</td><td>'+ret['name']+'</td><td>'+v['expire_time']+'</td><td>正常</td></tr>'
+				$("#domain_list tbody").append(str);
+			});			
+			
+		 }
+		 if(ret.status==201){
+			layer.msg(ret.msg)
+		 }
+	   }, "json");	
+}
+	$(function() {
+		$("#typeid").change(function(){  		   
+				parking_get()
+		}) 
+		$("#cycle_time").change(function(){  
+				parking_get()
+		}) 
+		$("#sub_apply").click(function(){			
+			var chk_value =[];
+			$('input[name="id[]"]:checked').each(function(){
+				chk_value.push($(this).val());
+			});
+			if(chk_value.length==0){
+				layer.msg('您还没有选择任何域名');
+				return;
+			}
+		   var validate=$('#validate').val();
+		   var safecode=$('#safecode').val();			
+		   var typeid = $("#typeid").val();
+		   var cycle_time = parseInt($("#cycle_time").val());
+		   var parking_count = chk_value.length;
+			if (typeid == '') {  
+				layer.msg("请选择域名品种"); 
+				return false;
+			} 
+			if (cycle_time == '') {  
+				layer.msg("请选择停放周期"); 
+				return false;
+			} 			
+			var apply_name =  $("#apply_name").text();
+			
+			patrn = /^\w{4}$/; //四位验证码
+			if(!patrn.exec(validate)){
+				layer.tips('请输入图形里的操作验证码', '#yzm_img');
+				$('#validate').focus();
+				 return false;
+			}
+			if(!safecode){
+				layer.tips('请输入交易密码', '#safecode');
+				$('#safecode').focus();
+				 return false;				
+			}
+			
+			layer.confirm("<b>您正在准备提交<span class='font-red'>"+parking_count+"</span>个"+apply_name+"停放</b><br/>请了解本次操作会影响到<span class='font-red'>"+parking_count+"</span>个"+apply_name+"域名锁定"+cycle_time+"天，停放锁定期间域名无法操作交易、转出。<br/>域名停放期间当前帐号将每日自动获得停放收益",{btn:['确认','取消'],title:'操作提示',closeBtn: 0}
+			,function(){
+				$("#sub_apply").button('loading');
+				$.ajax({
+				data: {
+					'typeid':typeid,
+					'cycle_time':cycle_time,
+					'id':chk_value,
+					'validate':validate,
+					'safecode':safecode					
+				},
+				type: "post",
+				url: "<{spUrl c=parking a=apply from=create}>", 
+				success: function (ret) {
+					if(ret.status==209){
+						layer.msg(ret.msg)
+						$("#validate").val(""); 
+						$('#validate').focus();
+						$("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  							
+					}				
+					if(ret.status>1){
+						layer.msg(ret.msg)
+						$("#sub_apply").button('reset');
+					}
+					if(ret.status==200){
+						layer.open({title:'提示',content:"已成功停放<span class='font-red'>"+parking_count+"</span>个"+apply_name+"域名<br/>系统自动每日发放收益到当前帐号",btn: ['继续停放域名', '查看停放列表'],closeBtn: 0
+						  ,yes: function(index, layero){
+								layer.close(index);
+								location.reload(true)
+						  },btn2: function(index, layero){
+								layer.close(index);
+								window.location.href = "<{url c='parking' a='applyList'}>";
+						  }
+						});						
+					}
+				},
+				error: function () {
+					layer.msg("提交出错，请稍候重试");
+					$("#sub_apply").button('reset');
+				}
+			});
+			}
+		   );
+		})
+	});
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

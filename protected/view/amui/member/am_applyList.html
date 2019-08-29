@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>转入列表 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">转入列表</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-4">
+                            <div class="am-form-group">状态：
+                                <select data-am-selected="{btnSize: 'sm'}" id="apply-status-select">
+								  <option value="0"<{if $status==0}> selected<{/if}> >全部</option>
+								  <option value="2"<{if $status==2}> selected<{/if}> >已审核</option>
+								  <option value="1"<{if $status==1}> selected<{/if}> >待审核</option>
+								  <option value="-1"<{if $status==-1}> selected<{/if}> >审核未通过</option>
+								</select>
+                            </div>
+                        </div>
+						<script type="text/javascript">
+						$(function () { 
+							$("#apply-status-select").change(function(){ //状态跳转
+								window.location.href="<{url c='check' a='applyList'}>?status="+$("#apply-status-select").val();
+							})
+						});
+						</script> 
+                        <div class="am-fr am-padding-right">
+							<a class="am-btn am-btn-warning am-radius" href="<{url c='check' a='index'}>">提交域名转入</a>
+                        </div>						
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase am-text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="table-type">编号ID</th>
+                                            <th>域名包名称</th>
+                                            <th>平台及ID</th>
+                                            <th>提交时间</th>
+                                            <th>当前状态</th>
+                                            <th>备注</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if $pager.total_count==0}>
+										<tr style="height:60px;">
+											<td colspan="8" style="text-align:center;line-height: 50px;">暂无相关记录</td>
+										</tr>
+										<{/if}>									
+									 <{foreach item=v from=$domain_zip key=k}> 
+                                        <tr>
+                                            <td><{$v.id}></td>
+                                            <td><a href="<{spUrl c=check a=applyId id=$v.id}>" target="_blank"><{$v.domain_zip}></a></td>
+                                            <td><{$v.pingtai}></td>
+                                            <td><{$v.time}></td>
+                                            <td>
+											<{if $v.audit_status == -1}> 
+											<span class="am-badge am-radius">审核未通过</span>
+											<{elseif $v.audit_status ==1 }> 
+											<span class="am-badge am-badge-success am-radius">待审核中</span>
+											<{elseif $v.audit_status ==2}>
+											<span class="am-badge am-badge-danger am-radius">已审核入盘</span>
+											<{/if}>
+                                            </td>
+											<td><{$v.description}></td>
+                                        </tr>
+      
+									<{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=check a=applyList page=$pager.first_page status=$status}>">首页</a></li>
+													<li><a href="<{spUrl c=check a=applyList page=$pager.prev_page status=$status}>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=check a=applyList page=$thepage status=$status}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=check a=applyList page=$thepage status=$status}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=check a=applyList page=$pager.next_page status=$status}>">下一页</a></li>
+													<li><a href="<{spUrl c=check a=applyList page=$pager.last_page status=$status}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

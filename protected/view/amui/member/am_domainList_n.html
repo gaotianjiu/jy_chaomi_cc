@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>我的域名 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:400px;">
+                <div class="portlet-title">
+                    <div class="caption">我的域名</div>
+                </div>
+                <div class="tpl-block" style="padding-top: 0px;">
+
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+								<div style="font-size:16px; padding-bottom:10px">域名总数：<span style="color:#F37B1D; font-weight:bold;"><{$DomainCount}></span></div>
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="filter">
+                                    <thead>
+                                        <tr>
+                                            <th>域名品种</th>
+                                            <th>域名总数</th>
+                                            <th>正常状态</th>
+                                            <th>停放中</th>
+                                            <th>域名续费</th>
+                                            <th>域名操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+										<{if $DomainCount==0}>
+										<tr style="height:60px;">
+											<td colspan="6" style="text-align:center;line-height: 50px;">暂无持有域名，您可<a href="/check/index">提交域名入盘</a>或<a href="http://jy.chaomi.cc/">买入域名</a></td>
+										</tr>
+										<{/if}>
+                                    <{foreach from=$ret item=r}>
+                                    <tr>
+                                        <td><{$r.name}></td>
+                                        <td><span style="color:#F37B1D; font-weight:bold;"><{$r.num}></span></td>
+                                        <td><span style="color:#666666; font-weight:bold;"><{$r.locked_0_num}></span></td>
+                                        <td><span style="color:#ff0000; font-weight:bold;"><{$r.locked_9_num}></span> <span style="font-size:12px;"><a href="/parking/apply">提交停放</a> <span style="font-size:12px;"><a href="/parking/applyList">停放管理</a></td>
+                                        <td>
+                                           <span style="color:#666666;font-size:12px;"><{if $r.renew_status==0}>免续费<{else}>扣除持仓费<{/if}></span>
+                                        </td>
+                                        <td>
+                                            <a class="am-badge am-radius am-badge-warning am-btn-sm" href="/parking/apply">停放</a>
+                                            <a class="am-badge am-badge-primary am-radius am-btn-sm" target="_blank" href="http://jy.chaomi.cc/f/<{$r.typeid}>">挂单</a>
+                                            <a class="am-badge am-radius am-btn-sm" target="_blank" href="/transfer/apply">转出</a>
+                                            <a class="am-badge am-radius am-btn-sm" onclick="tmp()">转出[临时]</a>
+                                        </td>
+                                    </tr>
+                                    <{/foreach}>
+							
+                                    <tfoot>
+                                        <tr style="height:40px;line-height:40px;background-color:#f5f5f5;">
+                                            <td colspan="12">
+													提示：<br/>
+													1，正常状态下的域名，可操作挂单交易、提交转出、提交停放<br/>
+													2，非免续费的域名品种，每日系统自动扣除相应的持仓费用
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+																		
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>								
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+<script type="text/javascript">
+	function tmp(){
+		layer.confirm("新版域名转出已启用，旧版的转出可能随时会停用。",{btn:['前往旧版转出','取消'],title:'提示',closeBtn: 0}
+		,function(){
+			window.location.href = "<{url c='trading' a='domainList_old'}>";
+		});	
+	}
+</script>
+</body>
+</html>

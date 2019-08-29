@@ -1,0 +1,375 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>域名一口价 - 炒米网交易</title>
+<meta name="keywords" content="炒米网">
+<meta name="Description" Content="炒米网交易中心是一个专业的域名批量交易平台，实时挂单委托成交、24小时开盘交易、方便快捷 - 聪明的米农都在这里！">
+<{include file="amui/am_i_header_css_js.html"}>
+</head>
+<body class="tpl-bg">
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_i_header.html"}>
+<!----------顶部通栏块 end--------->
+<div class="tpl-page-container">		
+		<style>
+		.am-selected {width:180px;_width:200px;}
+		.font_d{font-size: 24px;font-weight: 400;font-weight: bold;color: #F60;}	
+		.box_d{text-align: center}
+		.ykj-active {
+			background-color: #F60;
+			color: #fff;
+		}
+		.group-tp {
+			font-size: 14px;
+			padding: 3px 5px;
+			line-height: 30px;
+			margin-right: 5px;
+		}		
+		.ykj-active:hover{
+			color:#fff;
+		}
+		.introduction{
+			max-width: 300px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+		</style>
+        <div class="am-g tpl-content-wrapper-i">
+            <div class="tpl-portlet-components-i am-padding-bottom-0">
+             <div class="portlet-title">
+                    <div class="caption">域名一口价</div>
+                </div>
+                <div class="tpl-block">
+				
+                    <div class="am-g">
+                        <div class="am-u-sm-12" style="padding-top:0px;padding-bottom:10px;">
+						<span style="color:#F60;font-weight:bold;">域名类型：</span>
+						<a class="group-tp<{if !$cond.typeid}> ykj-active<{/if}>" href="/ykj">全部</a>
+						<{foreach item=tp from=$types}>
+							<a class="group-tp<{if $cond.typeid eq $tp.id}> ykj-active<{/if}>" href="/ykj?typeid=<{$tp.id}><{if $cond.domain}>&domain=<{$cond.domain}><{/if}><{if $cond.price_px}>&price_px=<{$cond.price_px}><{/if}><{if $cond.is_park}>&is_park=<{$cond.is_park}><{/if}>"><{$tp.name}></a>
+						<{/foreach}>
+						</div>
+					</div>
+                    <div class="am-g am-form am-form-horizontal">
+					<form action="/ykj" method="get">
+                        <!---------右侧 头部 搜索框  begin----------------->
+                        <div class="am-u-sm-12 am-u-md-4">
+                            <div class="am-form-group am-form-group-sm">
+                                <label style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;line-height:30px;color:#F60;font-weight:bold;">域名搜索：</label>
+                                <input type="text" id="domain" value="<{urldecode($cond.domain)}>" id="doc-ipt-3-a" class="am-form-field am-radius" style="width:220px;height:30px;font-size: 14px" >
+                            </div>
+                        </div>	
+                        <div class="am-u-sm-12 am-u-md-2">
+                            <div class="am-form-group">
+                                <input type="button" value="搜索" id="search" class="am-btn am-btn-sm am-btn-warning  am-radius" style="padding-left:50px;padding-right:50px;"/>
+                            </div>
+                        </div>					
+                        <div class="am-u-sm-12 am-u-md-3">
+                            <div class="am-form-group">
+								<label style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;line-height:30px;color:#F60;font-weight:bold;">价格排序： </label>
+                                <select id="price_px" style="max-width:100px;height:33px;font-size: 14px">
+                                    <option value="0">选择</option>
+                                    <option value="1"<{if $cond.price_px==1}> selected<{/if}>>从低到高</option>
+                                    <option value="2"<{if $cond.price_px==2}> selected<{/if}>>从高到低</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="am-u-sm-12 am-u-md-3">
+                            <div class="am-form-group">
+								<label style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;line-height:30px;color:#F60;font-weight:bold;">到期排序： </label>
+                                <select id="expire_time" style="max-width:100px;height:33px;font-size: 14px">
+                                    <option value="0">选择</option>
+                                    <option value="1"<{if $cond.expire_time==1}> selected<{/if}>>从低到高</option>
+                                    <option value="2"<{if $cond.expire_time==2}> selected<{/if}>>从高到低</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+								<div style="font-size:16px; padding-bottom:10px">搜索结果：<span style="color:#F37B1D; font-weight:bold;"><{$pager.total_count}></span></div>
+                                <table class="am-table am-table-hover tpl-table-uppercase" id="filter">
+                                    <thead>
+                                        <tr>
+                                            <th>域名</th>
+                                            <th>品种</th>
+                                            <th>简介</th>
+                                            <th>注册商</th>
+                                            <th>到期时间</th>
+                                            <!-- <th>积分停放收益</th> -->
+                                            <!-- <th>交易方式</th> -->
+                                            <th>一口价</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody  style="font-size:12px;">
+										<{if $pager.total_count==0}>
+										<tr style="height:50px;">
+											<td colspan="10" style="text-align:center;line-height: 50px;">暂无数据</td>
+										</tr>
+										<{/if}>
+                                    <{foreach from=$ret item=r}>
+                                    <tr>
+                                        <td style="font-weight:bold;color:#3374CA;"><{$r.domain}></td>
+                                        <td><{$r.name}></td>
+                                        <td title="<{$r.introduction}>"><div class="introduction"><{$r.introduction}></div></td>
+                                        <td><{$r.pingtai}></td>
+                                        <td><{$r.expire_time}></td>
+                                        <!-- <td><{if $r.is_score>0}><{$r.is_score}>积分/每天<{else}>无<{/if}></td> -->
+										<!-- <td><{if $r.sale_type==1}>人民币<{/if}><{if $r.sale_type==2}>积分<{/if}></td> -->
+										<td style="font-weight:bold;color:#FF0000;"><{$r.sale_price}><{if $r.sale_type==1}>元<{/if}><{if $r.sale_type==2}>积分<{/if}></td>
+                                        <td><a class="am-badge am-radius am-badge-primary am-btn-sm" onclick="buy_box(<{$r['id']}>)">购买</a></td>
+    								
+                                    <{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=ykj page=$pager.first_page typeid=$cond.typeid domain=$cond.domain}>">首页</a></li>
+													<li><a href="<{spUrl c=ykj page=$pager.prev_page typeid=$cond.typeid domain=$cond.domain}>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=ykj page=$thepage typeid=$cond.typeid domain=$cond.domain}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=ykj page=$thepage typeid=$cond.typeid domain=$cond.domain}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=ykj page=$pager.next_page typeid=$cond.typeid domain=$cond.domain}>">下一页</a></li>
+													<li><a href="<{spUrl c=ykj page=$pager.last_page typeid=$cond.typeid domain=$cond.domain}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>  
+                        </div>
+                    </div>								
+                </div>
+            </div>
+        </div>
+</div>	
+<div id="buy_box" style="display:none;padding:10px;font-size:12px;">
+    <span style="font-weight:bold;">购买一口价域名</span>
+	<div class="am-g">
+		<div class="am-u-sm-12">
+			<div class="am-form am-form-horizontal">
+						<input id="buy_id" type="hidden"/>
+						<input id="_sale_price" type="hidden"/>
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">域名</label>		
+								<div class="am-u-sm-9">
+										<div style="margin-top:.5rem;font-size:14px;"><span id="buy_domain"></span></div>
+								</div>								
+						</div>															
+						<!-- <div class="am-form-group"> -->
+							<!-- <label class="am-u-sm-3 am-form-label">交易方式</label> -->
+							<!-- <div class="am-u-sm-9"> -->
+									<!-- <div style="margin-top:.5rem;"><span style="color:#3374CA;" id="sale_type"></span></div> -->
+							<!-- </div> -->
+						<!-- </div>										 -->
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">价格</label>
+							<div class="am-u-sm-9">
+										<div style="margin-top:.5rem;"><span style="font-weight:bold;color:#FF0000;font-size:14px;" id="sale_type_tmp"></span> <span id="sale_type_tmp_d"></span></div>
+							</div>
+						</div>																											
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">图形验证码</label>
+							<div class="am-u-sm-9">
+								<div class="am-fl am-margin-right">
+									<input id="validate" name="validate" style="width:200px;font-size:14px;" type="text" class="am-input-field" maxlength="4" placeholder="请输入右侧验证码"/>
+								</div>
+								<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;">
+									 <img title="点击刷新" alt="点击刷新" id="yzm_img" src="/sso/yzm" onclick="this.src='/sso/yzm?t='+Math.random();"></img>
+								</div>													
+							</div>
+						</div>				
+						<div class="am-form-group">
+							<label class="am-u-sm-3 am-form-label">交易密码</label>
+							<div class="am-u-sm-9">
+									<div class="am-fl">
+										<input type="password" style="width:200px;font-size:14px;" id="safecode" placeholder="">
+									</div>	
+									<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+										<div style="margin-top:.7rem;"><a href="/user/safeCode" target="_blank">设置密码?</a></div>
+									</div>
+							</div>
+						</div>
+						<div class="am-form-group">
+							<div class="am-u-sm-5 am-u-sm-push-3">
+								<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '提交购买中...'}" id="sub_apply">确认购买</button>
+							</div>
+						</div>
+					</div>
+				</div>   
+			</div>   
+	</div>		
+<script type="text/javascript">
+var sale_type_tmp = '';
+var sale_type = '';
+var sale_type_tmp_d = '';
+function buy_box(id){
+	//购买框
+	sale_type_tmp = '';
+	sale_type = '';
+	layer.open({
+		  type: 1,
+		  title: false,
+		  closeBtn: 1,
+		  area: ['620px', '300px'],
+		  shade:0.6,
+		  shadeClose: true,
+		  content: $('#buy_box')
+	});	
+	$('#buy_id').val(0);
+	$('#_sale_price').val(0);
+	$('#buy_domain').text('');
+	$('#validate').val('');
+	$('#safecode').val('');
+	sale_type_tmp = '';	
+	$("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  	
+	$.get('/ykj/buy?from=info&id='+id,function(ret){
+		 if(ret.status==200){
+			var r = ret.data;
+			$('#buy_domain').text(r.domain);
+			$('#buy_id').val(id);
+			$('#_sale_price').val(r._sale_price);
+			<!-- if(r.sale_type==1){ -->
+				sale_type_tmp = r.sale_price+'元';		
+				sale_type = '人民币';
+			<!-- }			 -->
+			<!-- if(r.sale_type==2){ -->
+				<!-- sale_type_tmp = r.sale_price+'积分';			 -->
+				<!-- sale_type = '积分';			 -->
+			<!-- } -->
+			sale_type_tmp_d = '(大写：'+smalltoBIG(r._sale_price)+')';
+			$('#sale_type_tmp_d').html(sale_type_tmp_d);
+			$('#sale_type_tmp').html(sale_type_tmp);
+			$('#sale_type').text(sale_type);
+		 }
+		if(ret.status!=200){
+			layer.msg(ret.msg);
+		}
+	   }, "json");	
+}
+$(function() {
+	//提交搜索
+	$("#expire_time").change(function(){  		   
+		$("#search").click();
+	}) 
+	$("#price_px").change(function(){  
+		$("#search").click();
+	}) 
+	$("#search").click(function(){			
+	   var expire_time=$('#expire_time').val();
+	   var price_px=$('#price_px').val();
+	   var domain=$('#domain').val();
+	   window.location.href = "/ykj?typeid=<{$cond.typeid}>&domain="+domain+"&price_px="+price_px+"&expire_time="+expire_time;
+	});
+	//提交购买
+	$("#sub_apply").click(function(){			
+	   var id=$('#buy_id').val();
+	   var domain=$('#buy_domain').text();
+	   var validate=$('#validate').val();
+	   var safecode=$('#safecode').val();			
+	   var _sale_price=$('#_sale_price').val();			
+	   var sale_type_tmp = $("#sale_type_tmp").text();
+		patrn = /^\w{4}$/; //四位验证码
+		if(!patrn.exec(validate)){
+			layer.tips('请输入图形里的操作验证码', '#yzm_img');
+			$('#validate').focus();
+			 return false;
+		}
+		if(!safecode){
+			layer.tips('请输入交易密码', '#safecode');
+			$('#safecode').focus();
+			 return false;				
+		}
+		
+		layer.confirm("域名：<span class='font-red'>"+domain+"</span><br/>价格："+sale_type_tmp+"<br/>确认购买的域名及价格信息都正确吗？",{btn:['确认购买','取消'],title:'操作提示',closeBtn: 0}
+		,function(){
+			$("#sub_apply").button('loading');
+			$.ajax({
+			data: {
+				'id':id,
+				'_sale_price':_sale_price,
+				'validate':validate,
+				'safecode':safecode					
+			},
+			type: "post",
+			url: "<{spUrl c=ykj a=buy from=create}>", 
+			success: function (ret) {
+				if(ret.status==209){
+					layer.msg(ret.msg)
+					$("#validate").val(""); 
+					$('#validate').focus();
+					$("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  							
+				}				
+				if(ret.status>1){
+					layer.msg(ret.msg)
+					$("#sub_apply").button('reset');
+				}
+				if(ret.status==200){
+					layer.open({title:'提示',content:ret.msg,btn: ['好的'],closeBtn: 0
+					  ,yes: function(index, layero){
+							layer.close(index);
+							location.reload(true)
+					  }
+					});						
+				}
+			},
+			error: function () {
+				layer.msg("提交出错，请稍候重试");
+				$("#sub_apply").button('reset');
+			}
+		});
+		}
+	   );
+	})
+});
+//数字金额大写转换(可以处理整数,小数,负数)    
+function smalltoBIG(n){    
+	var fraction = ['角', '分'];    
+	var digit = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];    
+	var unit = [ ['', '万', '亿'], ['', '拾', '佰', '仟']  ];    
+	var head = n < 0? '欠': '';    
+	n = Math.abs(n);    
+  
+	var s = '';    
+  
+	for (var i = 0; i < fraction.length; i++)     
+	{    
+		s += (digit[Math.floor(n * 10 * Math.pow(10, i)) % 10] + fraction[i]).replace(/零./, '');    
+	}    
+	s = s || '整';    
+	n = Math.floor(n);    
+  
+	for (var i = 0; i < unit[0].length && n > 0; i++)     
+	{    
+		var p = '';    
+		for (var j = 0; j < unit[1].length && n > 0; j++)     
+		{    
+			p = digit[n % 10] + unit[1][j] + p;    
+			n = Math.floor(n / 10);    
+		}    
+		s = p.replace(/(零.)*零$/, '').replace(/^$/, '零')  + unit[0][i] + s;    
+	}    
+	return head + s.replace(/(零.)*零/, '').replace(/(零.)+/g, '零').replace(/^整$/, '零整');    
+}  
+</script>					
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_i_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

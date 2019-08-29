@@ -1,0 +1,60 @@
+<style>
+html,body{min-width:1200px;}
+.tpl-logo-i {display: inline-block;vertical-align: middle;margin-top: 0px;padding-left: 0px;margin-left: 0px;width: 217px;}
+.tpl-banner {background:url('//static.chaomi.cc/images/t-banner-2017.jpg') no-repeat; height:65px; width:250px;margin-left:-20px;margin-top: 10px;}
+</style>
+<!----------顶部通栏块 begin--------->
+<header class="am-topbar am-topbar-inverse">	
+	<div class="tpl-top-a am-padding-left am-padding-right">
+		<div class="am-fl">您好，欢迎来到炒米网！</div>
+		<div class="am-fr">
+			<{if $mid==0}>
+			<!--登录前状态 begin-->
+			<a href="//my.chaomi.cc/sso/register" target="_blank"><span class="am-icon-user-plus"></span> 注册</a><a href="//my.chaomi.cc/sso/login" target="_blank"><span class="am-icon-sign-in"></span> 登录</a>
+			<!--登录前状态 end-->
+			<{else}>
+			<!--登录后状态 begin-->
+			<a href="//my.chaomi.cc/member">ID：<{$mid}></a>
+			<a href="/user/web_message">站内信</a>
+			<a href="//my.chaomi.cc/sso/login_out"><span class="am-icon-power-off"></span> 安全退出</a>
+			<!--登录后状态 end-->
+			<{/if}>
+		</div>
+	</div>
+	<style>
+	.tpl-logo{width:217px;}
+	</style>
+	<div class="am-topbar-brand">
+		<a href="//www.chaomi.cc/" class="tpl-logo">
+			<img src="//static.chaomi.cc/images/logo_f_c.jpg" alt="炒米网 - 聪明的米农都在这里！">
+		</a>
+	</div>
+	<div class="tpl-banner am-fl"></div>
+</header>
+<!----------通用导航条 ------begin-->
+<style>
+/*通用导航条*/
+.cm-top-tabs{border-bottom:1px solid #e9ecf3;border-top:1px solid #e9ecf3;line-height:43px;margin-top:-20px;clear:both;background:#f5f5f5;margin-bottom:10px;}
+.cm-top-tabs-nav{background:#f5f5f5;}
+.cm-top-tabs li{float:left;padding:0px 25px;}
+.cm-top-tabs a{color:#666;}
+.cm-top-tabs li:hover{border-bottom:2px solid #F37B1D;color:#666;margin-bottom:-2px;}
+.cm-top-tabs li:hover a{color:#666;}
+.cm-top-tabs .active,.cm-top-tabs .active:hover{border-bottom:2px solid #F37B1D;margin-bottom:-2px;}
+.cm-top-tabs .active a,.cm-top-tabs .active:hover a{color:#666;}
+</style>
+<div class="cm-top-tabs">
+	<ul class="am-g cm-top-tabs-nav">
+		<a href="//www.chaomi.cc/"><li class="am-icon-line-chart"> 行情数据</li></a>
+		<a href="//jy.chaomi.cc/"><li class="am-icon-bar-chart<{if $cm_nav=='jy'}> active<{/if}>"> 炒米交易</li></a>
+		<!--<a href="//jy.chaomi.cc/ykj"><li class="am-icon-y-combinator<{if $cm_nav=='domainykj'}> active<{/if}>"> 一口价</li></a>-->		
+		<a href="//my.chaomi.cc/announce"><li class="am-icon-volume-up<{if $cm_nav=='announce'}> active<{/if}>"> 网站公告</li></a>		
+		<a href="//my.chaomi.cc/member" rel="nofollow"><li class="am-icon-user"> 会员中心</li></a>						  
+		<a href="//my.chaomi.cc/helps" rel="nofollow"><li class="am-icon-question-circle<{if $cm_nav=='helps'}> active<{/if}>"> 网站帮助</li></a>
+		<a href="//my.chaomi.cc/helps/about" rel="nofollow"><li class="am-icon-phone<{if $cm_nav=='helps_about'}> active<{/if}>"> 联系我们</li></a>
+	</ul>											
+</div>
+<!----------通用导航条 end--------->
+<div class="am-cf"></div>
+<div class="tpl-page-container">
+<!----------顶部通栏块 end--------->

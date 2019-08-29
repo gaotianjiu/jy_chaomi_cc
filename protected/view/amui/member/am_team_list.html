@@ -1,0 +1,116 @@
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>我的域名 - 管理中心 - 炒米网</title>
+        <{include file="amui/am_header_css_js.html"}>
+    </head>
+
+    <body>
+        <!----------顶部通栏块 begin--------->
+        <{include file="amui/am_header.html"}>
+        <!----------顶部通栏块 end--------->
+        <!----------左侧导航菜单 begin--------->
+        <{include file="amui/am_left_nav.html"}>
+        <!----------左侧导航菜单 end--------->
+        <!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components"<{if $pager.total_count==0}> style="padding-bottom:200px;"<{/if}>>
+                 <div class="portlet-title">
+                    <div class="caption">我的分组</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g am-form am-form-horizontal">
+                        <form action="/trading/domainList" method="get">
+                            <!---------右侧 头部 搜索框  begin----------------->
+
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <div style="font-size:16px; padding-bottom:10px">搜索结果：<span style="color:#F37B1D; font-weight:bold;"><{$pager.total_count}></span></div>
+                            <table class="am-table am-table-hover tpl-table-uppercase" id="filter">
+                                <thead>
+                                    <tr>
+                                        <{if $pager.total_count>0}>	<th><input type="checkbox" name="selectall" id="selectall"/></th><{/if}>
+                                        <th class="table-type">分组ID</th>
+                                        <th>分组名</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <{foreach from=$team item=domain}>
+                                    <tr>
+                                        <td><input type="checkbox" name="id[]" value="<{$domain['id']}>"/>"<{$domain['id']}>" </td>
+                                        <td><{$domain.teamName}></td>
+                                        <td>
+                                            <a title="删除" target="ajaxTodo" href="/ym_team/team_del?id=<{$domain.id}>" class="btnDel">删除</a>
+                                        </td>
+                                    </tr>
+                                    <{/foreach}>
+                                    <{if $pager.total_count>0}>
+                                <tfoot>
+                                    <tr style="height:40px;line-height:40px;background-color:#f5f5f5;">
+                                        <td colspan="12">
+                                            <div class="am-g">
+                                                <div class="am-u-sm-12">
+                                                    <input type="checkbox" name="selectall1" id="selectall1" /> 全选
+                                                    <select id="action" style="padding:5px;font-size:14px;margin-left:10px;padding-right:20px;border: 1px solid #ccc;border-radius: 3px;">
+                                                        <option>请选择批量操作</option>
+                                                        <!-- <option value="1">批量一口价</option> -->
+                                                        <option value="13">批量PUSH域名</option>
+                                                        <option value="2">转出选中域名</option>
+                                                        <option value="3">续费选中域名</option>
+                                                        <option value="4">锁定选中域名</option>
+                                                        <option value="5">解锁选中域名</option>
+                                                        <option value="6">全部TXT导出</option>
+                                                    </select>
+                                                    <span><input type="button" value="执行批量操作" class="am-btn am-radius am-btn-primary am-btn-xs am-margin-left" onClick="return _action()" /></span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                                <{/if}>
+                                </tbody>
+                            </table>
+                            <div class="am-cf">
+                                <!--分页部分 begin-->
+                                <div class="am-fr">
+                                    <ul class="am-pagination tpl-pagination">
+                                        <{if $pager}>
+                                        <li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+                                        <{if $pager.current_page != $pager.first_page}>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$pager.first_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">首页</a></li>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$pager.prev_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">上一页</a></li>
+                                        <{/if}>
+                                        <{foreach from=$pager.all_pages item=thepage}>
+                                        <{if $thepage != $pager.current_page}>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$thepage pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>"><{$thepage}></a></li>
+                                        <{else}>
+                                        <li class="am-active"><a href="<{spUrl c=trading a=domainList page=$thepage  pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>"><{$thepage}></a></li>
+                                        <{/if}>
+                                        <{/foreach}>
+                                        <{if $pager.current_page != $pager.last_page}>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$pager.next_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">下一页</a></li>
+                                        <li><a href="<{spUrl c=trading a=domainList page=$pager.last_page pz=$cond.pz expire=$cond.expire registrar=$cond.registrar status=$cond.status order=$order}>">末页</a></li>
+                                        <{/if}>
+                                        <{/if}>
+                                    </ul>
+                                </div>
+                                <!--分页部分 end-->
+                            </div>
+                        </div>
+                        <div ><a href="/ym_team/team_add">增加分组</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!----------右侧内容框 end--------->
+        <!----------底部通栏块 begin--------->
+        <{include file="amui/am_footer.html"}>
+        <!----------底部通栏块 end--------->
+    </body>
+</html>

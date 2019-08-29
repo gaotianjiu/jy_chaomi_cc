@@ -1,0 +1,264 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>收到的PUSH请求详情 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="padding-bottom:300px;">
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li<{if $act=='push_apply'}> class="active"<{/if}>><a href="<{url c='push' a='apply'}>">PUSH域名</a></li>
+							  <li<{if $act=='push_accept_list'}> class="active"<{/if}>><a href="<{url c='push' a='accept_list'}>">收到的请求</a></li>
+							  <li<{if $act=='push_send_list'}> class="active"<{/if}>><a href="<{url c='push' a='send_list'}>">发送的请求</a></li>
+							</ul>						
+                        </div>						
+                    </div>				
+                <div class="tpl-block">
+                    <div class="am-g">
+							<div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+								<p>
+								温馨提示：接收push请求后，域名将过户到当前帐号、索要的金额直接支付给对方，请认真正确核对接收PUSH的域名、索要的金额、对方的会员ID等重要信息。
+								</p>
+							</div>					
+						<div class="am-g am-padding">
+							<div class="am-u-sm-12 am-u-md-10">
+								<div class="am-form am-form-horizontal">
+									
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">PUSH类型</label>
+										<div class="am-u-sm-9">
+											<div style="margin-top:.7rem;" class="font-red">接收PUSH</div>									
+										</div>
+									</div>	
+									
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">对方的会员ID</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;"><{$ret.send_mid}></div>
+										</div>
+									</div>		
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">域名数量</label>
+										<div class="am-u-sm-9">
+													<div style="margin-top:.7rem;" class="font-blue"><{$ret.domain_count}>个</div>
+										</div>
+									</div>										
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">索要金额</label>
+										<div class="am-u-sm-9">
+											<div style="margin-top:.7rem;"><{$ret.money}>元</div>									
+										</div>
+									</div>	
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">手续费</label>
+										<div class="am-u-sm-9">
+											<div style="margin-top:.7rem;">0%</div>
+										</div>
+									</div>	
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">备注</label>
+										<div class="am-u-sm-9">
+												<div style="margin-top:.7rem;max-width:450px;word-wrap:break-word; word-break:break-all;"><{$ret.note}></div>									
+										</div>
+									</div>		
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">状态</label>
+										<div class="am-u-sm-9">
+												<div style="margin-top:.7rem;">
+													<{if $ret.status == 1}> 
+													<span style="color:#ff4800;">我未接收</span>
+													<{elseif $ret.status == 2}> 
+													<span class="font-green">我已接收</span>
+													<{elseif $ret.status == 3}> 
+													<span class="font-red">我已拒绝</span>
+													<{elseif $ret.status == 4}> 
+													对方已取消											
+													<{/if}>											
+												
+												</div>									
+										</div>
+									</div>	
+
+									<{if $ret.status == 1}> 
+									<input type="hidden" id="id" value="<{$ret.id}>" />
+									<input type="hidden" id="money" value="<{$ret.money}>" />
+									<input type="hidden" id="domain_count" value="<{$ret.domain_count}>" />
+									<input type="hidden" id="send_mid" value="<{$ret.send_mid}>" />
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">图形验证码</label>
+										<div class="am-u-sm-9">
+											<div class="am-fl am-margin-right">
+												<input id="validate" name="validate" style="width:200px" type="text" class="am-input-field" maxlength="4" placeholder="请输入右侧验证码"/>
+											</div>
+											<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;">
+												 <img title="点击刷新" alt="点击刷新" id="yzm_img" src="/sso/yzm" onclick="this.src='/sso/yzm?t='+Math.random();"></img>
+											</div>													
+										</div>
+									</div>	
+										
+									<div class="am-form-group">
+										<label class="am-u-sm-3 am-form-label">交易密码</label>
+										<div class="am-u-sm-9">
+												<div class="am-fl">
+													<input type="password" style="width:200px" id="safecode" placeholder="">
+												</div>	
+												<div class="am-u-sm-5 am-form-label am-u-end" style="text-align:left;padding:0;padding-left:10px;">
+													<div style="margin-top:.7rem;"><a href="/user/safeCode" target="_blank">设置密码?</a></div>
+												</div>
+										</div>
+									</div>											
+									<div class="am-form-group">
+										<div class="am-u-sm-5 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-primary am-btn-block am-radius" data-am-loading="{spinner: 'spinner', loadingText: '接收PUSH中...'}" id="sub_push">我已了解，确定接收PUSH</button>
+										</div>
+									</div>									
+									
+									
+									
+									<div class="am-form-group">
+										<div class="am-u-sm-5 am-u-sm-push-3">
+											<button type="button" class="am-btn am-btn-warning am-btn-block am-radius" onclick="push_cancel(<{$ret.id}>)">取消PUSH</button>
+										</div>
+									</div>
+									<{/if}>
+
+								<div class="am-form-group">
+									<label class="am-u-sm-3 am-form-label">接收的域名</label>
+									<div class="am-u-sm-9" style="">								
+										<table class="am-table am-table-hover tpl-table-uppercase">						
+											<thead>
+												<tr>
+													<th>域名</th>
+													<th>品种</th>
+													<th>到期时间</th>
+													<th>注册商平台</th>
+												</tr>
+											</thead>
+													<tbody>
+													<{if !$domain_list}>
+														<tr style="height:40px;"><td colspan="3" style="text-align:center;line-height: 40px;">暂无域名</td></tr>
+													<{/if}>
+													<{foreach item=v from=$domain_list key=k}>
+													<tr style="height:40px;">
+														<td><{$v.domain}></td>
+														<td><{$v.name}></td>
+														<td><{$v.expire_time}></td>
+														<td><{$v.pingtai}></td>
+													</tr>
+													<{/foreach}>	
+												
+													</tbody>		
+													
+										</table>																			
+										</div>															
+									</div>	
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="am-cf" style="margin-top:100px;"></div>		
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+		
+<script type="text/javascript">
+	$(function() {
+		$("#sub_push").click(function(){	
+			var id=$('#id').val();
+			var tomid=$('#send_mid').val();
+			var money=$('#money').val();
+			var domainCount=$('#domain_count').val();
+			var validate=$('#validate').val();
+			var safecode=$('#safecode').val();
+			patrn = /^\w{4}$/; //四位验证码
+	
+			if(!patrn.exec(validate)){
+				layer.tips('请输入图形里的操作验证码', '#yzm_img');
+				$('#validate').focus();
+				 return false;
+			}
+			if(!safecode){
+				layer.tips('请输入交易密码', '#safecode');
+				$('#safecode').focus();
+				 return false;				
+			}			
+			
+			layer.confirm("确认接收来源于炒米ID：<span class='font-red'>"+tomid+"</span>，对方PUSH<span class='font-red'> "+domainCount+" </span>"+"个域名给您，并向您索要金额<span class='font-red'> "+money+" </span>元？",{btn:['确认接收','取消'],title:'操作提示',area:['650px'],closeBtn: 1}
+			,function(){
+				$("#sub_push").button('loading');
+				$.ajax({
+					data: {
+						'id':id,
+						'validate':validate,
+						'safecode':safecode
+					},
+					type: "post",
+					url: "<{url c='push' a='receive'}>", 
+					success: function (ret) {
+						if(ret.status==209){
+							layer.msg(ret.msg)
+							$("#validate").val(""); 
+							$('#validate').focus();
+							$("#yzm_img").attr("src", '/sso/yzm?t='+ Math.random());  							
+						}					
+						if(ret.status>1){
+							layer.msg(ret.msg)
+							$("#sub_push").button('reset');
+						}
+						if(ret.status==200){
+							layer.confirm("成功接收PUSH，<span class='font-red'>"+domainCount+"</span>"+" 个域名已过户到当前帐号",{btn:['好的'],title:'提示'}
+							,function(){
+								location.reload(true)
+							});
+						}
+					},
+					error: function () {
+						layer.msg("提交出错，请稍候重试");
+						$("#sub_push").button('reset');
+					}
+				});
+			}
+		   );
+		});
+	});
+
+    function push_cancel(id){
+		layer.confirm("确定拒绝接收这条域名PUSH吗？",{btn:['确定'],title:'提示'}
+				,function(){
+				 
+				$.get('/push/cancel?action=accept&id='+id,function(ret){
+					if(ret.status>1){
+						if(ret.status==200){
+							layer.confirm(ret.msg,{btn:['好的'],title:'提示'}
+									,function(){
+									  location.reload(true)
+							});
+							return;
+						}else{
+							layer.msg(ret.msg)
+						}
+					}
+					layer.msg('取消push出错，请稍等重试')
+				}, "json");
+		});	
+    }
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

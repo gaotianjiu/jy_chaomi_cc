@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption" style="font-size:16px;">
+						管理首页
+						<!-- <a href="http://my.chaomi.cc/announce/view?id=<{$announce_ret['id']}>" target="_blank" style="color:#ff6000"><span class="am-icon-volume-up"> 公告：<{$announce_ret['title']}> <{$announce_ret['update_time']}></span></a> -->
+					</div>
+                </div>
+
+				<style>
+					.box {
+						width: 100%;
+						float: left;
+						padding: 20px 20px;
+						box-sizing: border-box;
+						position: relative;
+					}
+					.box.c4 {
+						width: 33%;
+					}	
+					.box .number {
+						font-size: 24px;
+						color: #0099cc;
+					}				
+					.box .btn-group {
+						position: absolute;
+						width: 80px;
+						top: 20px;
+						right: 10px;
+						text-align: right;
+						}
+					.box .subtitle {
+						font-size: 14px;
+						margin-top: 5px;
+					}					
+					.box .btn-group a {
+						display: block;
+						margin-bottom: 5px;
+					}
+					.box .button-s {
+						padding: 0px 3%;
+						line-height: 30px;
+						box-sizing: border-box;
+						height: 30px;
+						text-align: center;	
+						cursor: pointer;
+						font-size: 14px;
+						display: inline-block;
+						box-sizing: border-box;
+					}					
+				</style>
+                <div class="am-g">
+                    <div class="box c4">
+                        <div class="number"><{$m_kyye}></div>
+                        <div class="subtitle">帐号可用余额</div>
+                        <div class="btn-group">
+							<a class="button-s am-btn-primary am-radius" href="/capital/recharge">充值</a>
+							<a class="button-s am-btn-default am-radius" href="/capital/bankInfo">提现</a>
+                        </div>
+                    </div>
+                    <div class="box c4">
+                        <div class="number"><{$res['all']|default:'0'}></div>
+                        <div class="subtitle">我的域名总数</div>
+                        <div class="btn-group">
+							<a class="button-s am-btn-primary am-radius" href="/check/index">转入</a>
+							<a class="button-s am-btn-default am-radius" href="/trading/domainList">转出</a>
+                        </div>                        
+                        
+                    </div>
+                    <div class="box c4" title="包括可用余额，域名估值">
+                        <div class="number"><{$jc_price}></div>
+                        <div class="subtitle" title="资金+拥有域名*行情价">我的资产总数</div>
+                                            
+                        
+                    </div>
+                    <!-- <div class="box c4" title="积分可以兑换域名"> -->
+                        <!-- <div class="number"><{$score_balance}></div> -->
+                        <!-- <div class="subtitle">我的积分</div> -->
+                        <!-- <div class="btn-group"> -->
+                        <!-- <a class="button-s am-btn-primary am-radius" href="/score/push">转移</a> -->
+                        <!-- <a class="button-s am-btn-warning am-radius" target="_blank" href="/announce/view?id=60">兑换</a>                       -->
+                        <!-- </div>                         -->
+                    <!-- </div> -->
+                </div>
+				
+                <div class="tpl-block am-padding-bottom-0">			
+                    <div class="am-g">
+						<div class="am-u-sm-12 am-u-md-12">
+							<div class="am-panel am-panel-default am-panel-bd" style="line-height:14px;background:#f7f7f7;height:148px;">
+								<p>帐号ID：<span class="am-text-warning"><{$mid}></span></p>
+								我的资金总额：<span class="am-text-warning"><{$m_ye}></span>元  
+								可用余额：<span class="am-text-warning"><{$m_kyye}></span>元
+								锁定金额：<span class="am-text-warning"><{$m_djje}></span>元
+								可提现余额：<span class="am-text-warning"><{$m_draw}></span>元
+								</p>
+								<p>
+									域名总数：<span class="am-text-warning"><a class="am-text-warning" href="<{url c='trading' a='domainList}>"><{$res['all']|default:'0''}></a></span>个
+									交易中域名：<span class="am-text-warning"><{$res[2]|default:'0'}></span>个
+									转出中域名：<span class="am-text-warning"><{$res[4]|default:'0'}></span>个
+								</p>
+								<p>上次登录：<{$last_time}> <a href="<{url c='user' a='mlog'}>" class="font-blue">更多 <i class="am-icon-angle-double-right"></i></a>
+								绑定： <a href="<{url c='user' a='safeCode'}>" class="am-icon-lock am-padding-right-sm"> 安全码</a> <a href="<{url c='user' a='bindMobile'}>" class="am-icon-mobile am-icon-sm am-padding-right-sm"> 手机</a>  <a href="<{url c='user' a='bindEmail'}>" class="am-icon-envelope-o am-padding-right-sm"> 邮箱</a>  <a href="<{url c='authentic' a='name_AUT'}>" class="am-icon-street-view am-padding-right-sm"> 实名</a>  <a href="<{url c='user' a='memberAccount'}>" class="am-icon-male"> 注册商帐号</a>
+								</p>
+								
+							</div>
+						</div>						
+                    </div>
+					<style>
+					.panel-box i {
+						width: 3px;
+						height: 3px;
+						background: #ccc;
+						float: left;
+						margin-top: 12px;
+						margin-right: 5px;	
+					}
+					</style>
+                    <!--div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-6">
+							<div class="am-panel am-panel-default am-panel-bd" style="padding: .8rem 1.25rem;min-height:130px;">
+								<div style="font-weight: 600;padding-bottom:5px;">最新公告</div>		
+									<{foreach from=$announce_list_ret item=r}>
+                                   <div style="padding-bottom:5px;margin-bottom:0px;">    
+                                        <div class="panel-box"><i></i> <a href="/announce/view?id=<{$r.id}>" target="_blank" style="font-size:14px;"><{$r.title}></a><span class="am-fr"> <{$r.update_time}></span></div>
+    								</div>
+                                    <{/foreach}>
+								  <{if !$announce_list_ret}>
+                                   <div style="padding-bottom:5px;margin-top:15px;">    
+                                        <div class="panel-box"><i></i> 暂无公告</div>
+    								</div>
+                                  <{/if}>									
+							</div>						
+                        </div>						
+                        <div class="am-u-sm-12 am-u-md-6">
+							<div class="am-panel am-panel-default am-panel-bd" style="padding: .8rem 1.25rem;min-height:130px;">
+								<div style="font-weight: 600;padding-bottom:5px;">站内短信</div>		
+									<{foreach from=$web_msg_ret item=r}>
+                                   <div style="padding-bottom:5px;margin-bottom:0px;">    
+                                        <div class="panel-box"><i></i> <a href="/user/msg_content?id=<{$r.content_id}>" target="_blank" style="font-size:14px;">【系统消息】<{$r.title}></a><span class="am-fr"> <{$r.to_time}></span></div>
+    								</div>
+                                    <{/foreach}>
+								  <{if !$web_msg_ret}>
+                                   <div style="padding-bottom:5px;margin-top:15px;">    
+                                        <div class="panel-box"><i></i> 暂无消息</div>
+    								</div>
+                                  <{/if}>									
+							</div>						
+                        </div>							
+                    </div-->					
+
+                    <!----展示委托单 begin------>
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-12">
+                            <div class="am-scrollable-horizontal">
+                            <table class="am-table am-table-hover tpl-table-uppercase am-text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>时间</th>
+                                        <th>品种</th>
+                                        <th>类型</th>
+                                        <th>单价</th>
+                                        <th>总数量</th>
+                                        <th>已成交</th>
+                                        <th>剩余</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+									<{if !$reg}>
+									<tr style="height:60px;">
+										<td colspan="8" style="text-align:center;line-height: 250px;">暂无委托</td>
+									</tr>
+									<{/if}>									
+                                 <{foreach item=v from=$reg key=k}>
+                                    <tr>
+                                        <td><{$v.order_time}></td>
+                                        <td><{$v.name}><{if $v.typeid>800000}><br/><span style="color:#888;font-size:12px;">到期时间：<{$v.pt_zb}></span><{/if}></td>
+                                        <td><{if $v.status_2==0}><span class="font-blue">卖出</span><{elseif $v.status_2==1}><span class="font-red">买入</span><{/if}> </td>
+                                        <td>￥<{$v.price}></td>
+                                        <td><{$v.number}></td>
+                                        <td><{$v.deal_num}></td>
+                                        <td><{$v.number - $v.deal_num}></td>
+                                        <td>
+                                            <{if $v.status_1==0}><a onclick="order_cancel('<{$v.id}>')">撤单</a>
+                                            <{elseif $v.status_1==1}><span class="am-badge am-badge-danger am-radius">交易成功</span>
+                                            <{elseif $v.status_1==2}><span class="am-badge am-radius">交易取消</span>
+                                            <{elseif $v.status_1==3}><span class="am-badge am-radius">系统下架</span>
+                                            <{/if}>
+                                        </td>
+                                    </tr>
+                                <{/foreach}>
+                                </tbody>
+                            </table>
+                     
+							</div>
+						</div>
+					</div>
+                    <!-----展示委托单  end-------->
+                </div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<script>
+    function order_cancel(id){
+        //撤销委托订单
+        $.get('/trading/cancel_order_buyer?id='+id,function(ret){
+            if(ret.status>1){
+                layer.msg(ret.msg)
+                if(ret.status==200){
+                    location.reload(true)
+                }
+                return;
+            }
+            layer.msg('撤销委托订单出错，请稍等重试')
+        }, "json");
+    }
+</script>
+
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

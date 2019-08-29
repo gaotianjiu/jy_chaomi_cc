@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>添加银行卡- 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components" style="min-height:650px;">
+                <div class="portlet-title">
+                    <div class="caption">提现管理</div>
+                </div>
+                    <div class="am-g tpl-tabs">
+                        <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+							<ul class="am-fl">
+							  <li><a href="<{url c='capital' a='bankInfo'}>">银行信息</a></li>
+							  <li class="active"><a href="<{url c='capital' a='bindBank'}>">添加账号</a></li>
+							  <li><a href="<{url c='capital' a='cashApply'}>">申请提现</a></li>
+                               <li><a href="<{url c='capital' a='cashList'}>">提现列表</a></li>
+							</ul>						
+                        </div>						
+                    </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <div class="am-g am-padding">
+                                <form action="<{url c='capital' a='bindBankSub'}>" class="alipayform" method="post" name="form1">
+                                <div class="am-form am-form-horizontal">
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">户名</label>
+                                        <div class="am-u-sm-9 am-u-end" >
+                                            <div id="sm_name" style="line-height:37px;font-size:16px;"><{if $sm_name==''}>请先实名登记<{else}><{$sm_name}><{/if}></div>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">开户银行</label>
+                                        <div class="am-u-sm-6 am-u-end">
+                                           <select data-am-selected="" name="blankname" id="blankname">
+                                               <option selected="selected" value="">请选择银行</option>
+                                               <option value="招商银行">招商银行</option>
+                                               <option value="建设银行">建设银行</option>
+                                               <option value="农业银行">农业银行</option>
+                                               <option value="工商银行">工商银行</option>
+                                               <option value="支付宝">支付宝</option>
+                                               <option value="中国银行">中国银行</option>
+                                               <option value="交通银行">交通银行</option>
+                                               <option value="兴业银行">兴业银行</option>
+                                               <option value="杭州银行">杭州银行</option>
+                                               <option value="中信银行">中信银行</option>
+                                               <option value="民生银行">民生银行</option>
+                                               <option value="光大银行">光大银行</option>
+                                               <option value="华夏银行">华夏银行</option>
+                                               <option value="平安银行">平安银行</option>
+                                               <option value="上海浦东发展银行">上海浦东发展银行</option>
+                                               <option value="中国邮政储蓄银行">中国邮政储蓄银行</option>
+                                           </select>
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">账号</label>
+                                        <div class="am-u-sm-3 am-u-end">
+                                            <input type="text" class="input" name="bankno" id="bankno" />
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">确认账号</label>
+                                        <div class="am-u-sm-3 am-u-end">
+                                            <input type="text" class="input" name="rebankno" id="rebankno" />
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <label class="am-u-sm-2 am-form-label">开户地址</label>
+                                        <div class="am-u-sm-3 am-u-end">
+                                            <input type="text" class="input" name="blankadder" id="blankadder" />
+                                        </div>
+                                    </div>
+                                    <div class="am-form-group">
+                                        <div class="am-u-sm-3 am-u-sm-push-2">
+                                            <button type="button" class="am-btn am-btn-primary am-radius" data-am-loading="{spinner: 'spinner', loadingText: '添加中...'}" id="sub_post">确认添加</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="am-alert am-alert-secondary am-margin-left am-margin-right">
+                    <p>1、银行帐号户名必须与你实名认证的身份证姓名一致</p>
+                    <p>2、开户地址必须按要求填写，否则无法到帐</p>
+                </div>	
+				<div style="margin-top:200px;"></div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<script>
+	$("#blankname").change(function(){  
+		$('#blankadder').val('');
+		if($("#blankname").val()=='支付宝'){
+			$('#blankadder').val('支付宝');
+		}
+	})
+    $('#sub_post').click(function(){
+        var blankname=$('#blankname option:selected').val();
+        var bankno=$('#bankno').val();
+        var rebankno=$('#rebankno').val();
+		
+		if($("#blankname").val()!='支付宝'){
+			if(isNaN(bankno)){
+				layer.msg('请输入正确的账号');
+				$('#bankno').focus();
+				return false;
+			}
+			if(isNaN(rebankno)){
+				layer.msg('请输入正确的账号');
+				$('#rebankno').focus();
+				return false;
+			}			
+		}		
+        var blankadder=$('#blankadder').val();
+
+        if(blankname==''){
+            layer.msg('请选择开户银行');
+            return false;
+        }
+        if(bankno == ''){
+            layer.msg('请输入正确的账号');
+            $('#bankno').focus();
+            return false;
+        }
+        if(rebankno == ''){
+            layer.msg('请重新输入正确的账号');
+            $('#rebankno').focus();
+            return false;
+        }
+        if(rebankno != bankno){
+            layer.msg('账号不一致，请重新输入');
+            $('#rebankno').focus();
+            return false;
+        }
+        if(blankadder == ''){
+            layer.msg('开户地址不可为空');
+            $('#blankadder').focus();
+            return false;
+        }
+		$("#sub_post").button('loading');
+			$.ajax({
+			data: {
+				"blankname": blankname,
+				'bankno':bankno,
+				'rebankno':rebankno,
+				'blankadder':blankadder
+			},
+			type: "post",
+			url: "<{spUrl c=capital a=bankInfo act=create}>", 
+			success: function (data) {
+				if(data.status>1){
+					layer.msg(data.msg)
+					$("#sub_post").button('reset');
+				}		
+				if(data.status==200){
+					location.href = "/capital/bankInfo";
+				}
+			},
+			error: function () {
+				layer.msg("添加出错，请稍候重试");
+				$("#sub_post").button('reset');
+			}
+		});
+		});
+</script>
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

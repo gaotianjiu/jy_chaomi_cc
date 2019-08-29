@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>盈亏统计 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="portlet-title">
+                    <div class="caption">盈亏统计</div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g">
+                        <div class="am-u-sm-12 am-u-md-12" style="margin:5px 0;">
+
+                            <p>当日盈亏<b><{$datas.dr_yk}></b>元 累计盈亏<b><{$datas.lj_yk}></b>元
+
+                            持仓盈亏率<b><{$datas.yk_bl}></b></p>
+
+                            <p>持米市值<b><{$datas.dq_sz}></b>元 持仓成本<b><{$datas.z_cb}></b>元 持米数量<b><{$datas.count}></b>个</p>
+
+                        </div>
+                    </div>
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                                <table class="am-table am-table-hover tpl-table-uppercase">
+                                    <thead>
+                                        <tr>
+                                            <th>域名品种</th>
+                                            <th>成本价</th>
+                                            <th>最新价</th>
+                                            <th>当日盈亏</th>
+                                            <th>持米数量</th>
+                                            <th>累计盈亏</th>
+                                            <th>持仓盈亏率</th>
+                                            <th>当前市值</th>
+                                            <th>持仓管理</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <{foreach from=$lists item=i}>
+
+                                    <tr>
+
+                                        <td><a href="http://www.chaomi.cc/ym/<{$i.cid}>/<{$i.hid}>" target="_blank"><{$i.name}></a></td>
+
+                                        <td><{$i.dg_cb}></td>
+
+                                        <td><{$i.dq_price}></td>
+
+                                        <td><{$i.dr_yk}></td>
+
+                                        <td><{$i.ym_count}></td>
+
+                                        <td><{$i.lj_yk}></td>
+
+                                        <td><{$i.yk_bl}></td>
+
+                                        <td><{$i.dq_sz}></td>
+
+                                        <td><a href="/yk/d?cid=<{$i.cid}>&hid=<{$i.hid}>" target="_blank">买入 | 卖出</a></td>
+
+                                    </tr>
+
+                                    <{/foreach}>
+                                    </tbody>
+                                </table>
+                                <div class="am-cf" style="display:none;">
+									<!--分页部分 begin-->
+									<div class="am-fr">
+										<ul class="am-pagination tpl-pagination">					
+											<{if $pager}>
+												<li class="am-disabled"><span>共<{$pager.total_count}>条/<{$pager.total_page}>页</span></li>
+												<{if $pager.current_page != $pager.first_page}>
+													<li><a href="<{spUrl c=trading a=orderList page=$pager.first_page status=$status}>">首页</a></li>
+													<li><a href="<{spUrl c=trading a=orderList page=$pager.prev_page status=$status}>">上一页</a></li>
+												<{/if}>
+												<{foreach from=$pager.all_pages item=thepage}>
+													<{if $thepage != $pager.current_page}>
+														<li><a href="<{spUrl c=trading a=orderList page=$thepage status=$status}>"><{$thepage}></a></li>
+													<{else}>
+														<li class="am-active"><a href="<{spUrl c=trading a=orderList page=$thepage status=$status}>"><{$thepage}></a></li>
+													<{/if}>
+												<{/foreach}>
+												<{if $pager.current_page != $pager.last_page}>
+													<li><a href="<{spUrl c=trading a=orderList page=$pager.next_page status=$status}>">下一页</a></li>
+													<li><a href="<{spUrl c=trading a=orderList page=$pager.last_page status=$status}>">末页</a></li>
+												<{/if}>
+											<{/if}>	
+										</ul>		
+									</div>
+								    <!--分页部分 end-->	
+								</div>
+                        </div>
+                    </div>
+                    <!--添加  begin--->
+                    <div class="am-g">
+                        <div class="am-u-sm-12">
+                            <form class="am-form-inline"  onSubmit="return get_yk();">
+                                <div class="am-form-group" style="width:200px;">
+                                    <label>品种</label>
+                                    <select id="cid"  style="width:150px;">
+
+                                        <option selected value="1">四声母</option>
+
+                                        <option value="11">四字母</option>
+
+                                        <option value="4">四数字</option>
+
+                                        <option value="8">四数字不带04</option>
+
+                                        <option value="3">三声母</option>
+
+                                        <option value="5">三字母</option>
+
+                                        <option value="9">三数字</option>
+
+                                        <option value="10">三数字不带04</option>
+
+                                        <option value="7">三杂</option>
+
+                                        <option value="2">五数字</option>
+
+                                        <option value="6">五数字不带04</option>
+
+                                        <option value="12">六数字</option>
+
+                                        <option value="13">六数字不带04</option>
+
+                                    </select>
+                                </div>
+                                <div class="am-form-group">
+                                    <label class="am-margin-left">后辍</label>
+
+                                    <select id="hid" class="t" style="width:100px;">
+
+                                        <option selected value="1">Com</option>
+
+                                        <option value="2">Cn</option>
+
+                                        <option value="3">Com.cn</option>
+
+                                        <option value="4">Net</option>
+
+                                        <option value="5">Org</option>
+
+                                        <option value="6">Cc</option>
+
+                                        <option value="7">Net.cn</option>
+
+                                        <option value="8">Biz</option>
+
+                                        <option value="9">Wang</option>
+
+                                        <option value="10">Top</option>
+
+                                        <option value="11">Org.cn</option>
+
+                                        <option value="12">Xin</option>
+
+                                    </select>
+                                </div>
+                                <div class="am-form-group">
+                                    <label  class="am-margin-left">类型</label>
+
+                                    <select id="type" class="t" style="width:75px;">
+
+                                        <option selected value="add">买入</option>
+
+                                        <option value="del">卖出</option>
+
+                                    </select>
+                                </div>
+                                <div class="am-form-group">
+                                    <label  class="am-margin-left">数量</label>
+                                    <input id="count" type="text"  maxlength="20" style="width:50px;border:1px solid rgb(169, 169, 169);" /> 个
+
+                                </div>
+                                <div class="am-form-group">
+                                    <label  class="am-margin-left">单价</label>
+
+                                    <input id="price" type="text"  maxlength="20" style="width:60px;border:1px solid rgb(169, 169, 169);" /> 元
+                                </div>
+                                <div class="am-form-group">
+                                    <input class="am-btn am-btn-warning am-margin-left" type="button" value="添加交易" onClick="get_yk();" id="sub">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--添加  end-->
+                </div>
+            </div>
+        </div>
+<script type="text/javascript">
+    //盈亏post
+    function get_yk() {
+        var cid = $("#cid").val();
+        var hid = $("#hid").val();
+        var type = $("#type").val();
+        var count = $("#count").val();
+        var price = $("#price").val();
+        if (count == '' || count == 0) {
+            layer.msg("请填写域名数量");
+            $("#count").focus();//获取焦点
+            return false;
+        }
+        if (price == '' || price == 0) {
+            layer.msg("请填写域名单价");
+            $("#price").focus();//获取焦点
+            return false;
+        }
+        $.ajax({
+            type: "post",
+            url: "/yk/type",
+            async: true, //同步执行
+            timeout: 5000, //超时
+            datatype: "json",
+            data: {act: type, cid: cid, hid: hid, count: count, price: price},
+            success:
+                    function (data) {
+                        var datas = eval("(" + data + ")");//解析json
+                        if (datas.status == 200) {
+                            layer.alert(datas.msg);
+                            $("#count").val("");
+                            $("#price").val("");
+                            location.href = '/yk';
+                        } else if (datas.status == 201) {
+                            layer.alert(datas.msg);
+                        } else {
+                            layer.alert('请求出错，请稍候重试。');
+                        }
+                    },
+            error:
+                    function (data) {
+                        layer.alert('请求出错，请稍候重试。');
+                    }
+        });
+    }
+</script>		
+		<!----------右侧内容框 end--------->
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">	
+<title>在线充值 - 管理中心 - 炒米网</title>
+<{include file="amui/am_header_css_js.html"}>
+</head>
+<body>
+<!----------顶部通栏块 begin--------->
+<{include file="amui/am_header.html"}>
+<!----------顶部通栏块 end--------->
+<!----------左侧导航菜单 begin--------->
+<{include file="amui/am_left_nav.html"}>
+<!----------左侧导航菜单 end--------->
+		<!----------右侧内容框 begin--------->
+        <div class="tpl-content-wrapper">
+            <div class="tpl-portlet-components">
+                <div class="am-g tpl-tabs">
+                    <div class="am-u-sm-12 am-u-md-12 tpl-tabs-nav">
+                        <ul class="am-fl">
+                            <li class="active"><a href="<{url c='capital' a='recharge'}>">在线充值</a></li>
+                            <li><a href="<{url c='capital' a='rechargeOrder'}>">充值订单</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tpl-block">
+                    <div class="am-g" style="padding-bottom:100px;">			
+
+					
+  <div data-am-widget="tabs" data-am-tabs-noswipe="1" class="am-tabs am-tabs-default">
+      <ul class="am-tabs-nav am-cf">
+          <li class="am-active"><a href="[data-tab-panel-0]">支付宝扫码</a></li>
+          <li class=""><a href="[data-tab-panel-1]">支付宝转账</a></li>
+          <li class=""><a href="[data-tab-panel-2]">银行转账</a></li>
+          <li class=""><a href="[data-tab-panel-3]">支付宝充值</a></li>
+      </ul>
+      <div class="am-tabs-bd">
+          <div data-tab-panel-0 class="am-tab-panel am-active">
+		  
+				<table align="center">
+					<tr><td align="center" style="background: url(//static.chaomi.cc/images/pay_s/alipay_pay@chaomi.cc.jpg?=v2) center no-repeat;height:400px;width:700px;"><div style="padding:150px 0 0 378px;color:red;float:left;width:100px;height:50px;font-size:24px;font-weight:bold;"><{$mid}></div></td></tr>
+					<tr><td align="center" class="font-blue" style="font-size:18px;background:#f9f9f9;padding:10px;">您也可以直接转账到 <span style="color:red;font-weight:bold;">pay@chaomi.cc</span> 深圳炒米金融服务有限公司<br>填写备注 <span style="color:red;font-weight:bold;"><{$mid}></span>（纯数字），5秒内自动入账</td></tr>
+				</table>	  
+		  
+          </div>
+          <div data-tab-panel-1 class="am-tab-panel ">
+		  
+				<table align="center">
+					<tr><td align="center" style="background: url(//static.chaomi.cc/images/pay_s/alipay_pay@chaomi.cc_t.jpg?=v2) center no-repeat;height:443px;width:767px;"><div style="padding:95px 0 0 180px;color:red;float:left;width:100px;height:50px;font-size:24px;font-weight:bold;"><{$mid}></div></td></tr>
+					<tr><td align="center" class="font-blue" style="font-size:18px;background:#f9f9f9;padding:10px;">您也可以直接转账到 <span style="color:red;font-weight:bold;">pay@chaomi.cc</span> 深圳炒米金融服务有限公司<br>填写备注 <span style="color:red;font-weight:bold;"><{$mid}></span>（纯数字），5秒内自动入账</td></tr>
+				</table>		  
+		  
+          </div>
+          <div data-tab-panel-2 class="am-tab-panel ">
+						<div class=" am-margin-left am-margin-right">
+							<p>您可以通过网银汇款至以下帐号，备注请填写您的炒米网ID：<span style="font-size:16px;font-weight:bold;"><{$mid}></span><br/>
+							建设银行：<span style="font-size:16px;font-weight:bold;">6217 0072 0003 4403 728</span><br/>
+							收款姓名：<span style="font-size:16px;font-weight:bold;">徐海涛</span><br/>
+							开户银行：深圳市南山区鸿瑞支行<br/>
+							转账后请点击<a href="javascript:;" onClick="prompt();">发送查账提醒</a>，同时并<a href="/helps/about" target="_blank">联系客服</a>完成充值入账。</p>
+						</div>			  
+          </div>
+          <div data-tab-panel-3 class="am-tab-panel ">
+						<div class="am-margin-left am-margin-right" style="font-size:18px;border-bottom: 1px solid #f3f3f3;padding-bottom:8px;">
+							在线充值
+						</div>	
+						<div class="am-g am-fl am-padding">
+								<div class="am-u-sm-12">
+									<form name="alipayform" action="<{url c='capital' a='orderMaker'}>" class="alipayform" method="post" target="_blank">
+										<!----商品描述------>
+										<input type="hidden" name="w_info_order" value="炒米网预付款" />
+									<div class="am-form am-form-horizontal">
+										<div class="am-form-group" style="display:none;">
+											<label class="am-u-sm-5 am-form-label">名称</label>
+											<div class="am-u-sm-7">
+												<select data-am-selected="" name="w_name_goods" id="goodsname">
+													<option value="炒米网预付款">炒米网预付款</option>
+												</select>
+											</div>
+										</div>
+										<div class="am-form-group">
+											<label class="am-u-sm-5 am-form-label" >充值金额(￥)</label>
+											<div class="am-u-sm-7">
+												<input type="number" min="1" step="10" name="w_money_order" style="font-size:18px;" id="price" placeholder="最小1元起">
+											</div>
+										</div>
+										<style>
+											.pay_all_ul li{width: 121px;height: 45px;margin: 10px 0px;margin-right:10px;border: 1px solid #ddd;cursor: pointer;position: relative;}
+											.pay_all_ul .type.llpay{background: url('http://static.chaomi.cc/images/llpay_118x42.png') no-repeat;}
+											.pay_all_ul .type.alipay{background: url('http://static.chaomi.cc/images/alipay_118x42.png') no-repeat;}
+											.pay_all_ul li.active{border: 1px solid #ff4800;}
+											.pay_all_ul li.active .yes{background: url(http://static.chaomi.cc/images/pay_type_radio.png) no-repeat;display: inline-block;width: 20px;height: 20px;position: absolute;right: 0;bottom: 0;}		
+										</style>				
+										<div class="am-form-group">
+											<label class="am-u-sm-5 am-form-label" >支付方式</label>
+											<div class="am-u-sm-7">
+													   <ul class="pay_all_ul">
+														   <!-- <li class="type llpay"> -->
+																<!-- <input type="radio" style="display:none;" id="401" name="pay_type" value="401" /> -->
+															<!-- </li> -->
+														   <li class="type alipay">
+																<input type="radio" style="display:none;" id="402" name="pay_type" value="402" />
+															</li>
+														</ul>
+												
+													<script type="text/javascript">
+														$(".pay_all_ul li").click(function(){
+															$(".pay_all_ul li").removeClass('active');
+															$(".pay_all_ul li").find("span").remove();
+															$(".pay_all_ul li").find("input:radio").removeAttr("checked");
+															$(this).find('input:radio').attr('checked', 'true');
+															$(this).addClass('active');
+															$(this).html($(this).html()+'<span class="yes"></span>');
+														})
+													</script>
+											</div>
+										</div>									
+										<div class="am-form-group">
+											<div class="am-u-sm-7 am-u-sm-push-5">
+												<input type="button" value="前往充值" class="am-btn am-btn-primary am-btn-block am-radius" id="sub_post">
+											</div>
+										</div>
+															
+									</div>
+									</form>
+								</div>
+							</div>
+
+          </div>	
+
+
+
+
+		  
+      </div>
+  </div>					
+					
+						<div class="am-alert am-alert-secondary" style="margin:10px;margin-top:20px;">
+							<div style="font-size:18px;">
+								充值付款遇到问题？
+							</div>
+							如付款后超过5分钟未到账或其它问题，请及时<a href="/helps/about" target="_blank">联系客服</a></p>
+						</div>
+					
+					
+						</div>
+					</div>
+            </div>
+        </div>
+		<!----------右侧内容框 end--------->
+<script src="//cdn.staticfile.org/toastr.js/latest/toastr.min.js"></script>
+<link href="//cdn.staticfile.org/toastr.js/latest/toastr.min.css" rel="stylesheet">
+<script>
+	toastr.options = {
+	  "closeButton": true,
+	  "debug": false,
+	  "positionClass": "toast-bottom-right",
+	  "onclick": null,
+	  "showDuration": "300",
+	  "hideDuration": "1000000",
+	  "timeOut": "1000000",
+	  "extendedTimeOut": "1000000",
+	  "showEasing": "swing",
+	  "hideEasing": "linear",
+	  "showMethod": "fadeIn",
+	  "hideMethod": "fadeOut"
+	}
+	//入账提醒
+	window.setInterval(tips,1000);
+	function tips(){  
+		   $.post("/pay_s/push", { "time": $.now()},
+		   function(ret){
+			 if(ret.status==200){
+				toastr['success'](ret.msg, "<span style='font-size:16px;'>充值成功提醒</span>")	  
+			 }
+		   }, "json");	
+	}
+	//发送提醒
+	function prompt(){  
+		   var typeid = $("#typeid").val();
+		   $.post("/capital/prompt", { "time": $.now()},
+		   function(ret){
+			 if(ret.status>1){
+				layer.msg(ret.msg, {time:10000})
+			 }
+		   }, "json");	
+	}
+	$('#price').focus();
+    $("#sub_post").click(function(){
+        var goodsname=$('#goodsname option:selected').val();
+        var price=$('#price').val();
+
+        if(goodsname==''){
+            layer.msg('请选择充值商品名称');
+            $('#goodsname').focus();
+            return false;
+        }
+        if(price=='' || isNaN(price)){
+            layer.msg('请填写正确的充值金额，最小1元起');
+            $('#price').focus();
+            return false;
+        }
+		if(price<1){
+            layer.msg('充值金额最小1元起');
+            $('#price').focus();
+            return false;		
+		}
+		if(price>9999999){
+            layer.msg('充值金额不能大于9999999元');
+            $('#price').focus();
+            return false;		
+		}	
+		var pay_type = $('input:radio[name="pay_type"]:checked').val();
+		if(!pay_type) 
+		{
+			layer.msg("您还未选择支付方式");
+			return false;
+		}		
+        document.alipayform.submit();
+    });
+</script>
+
+<!----------底部通栏块 begin--------->	
+<{include file="amui/am_footer.html"}>	
+<!----------底部通栏块 end--------->	
+</body>
+</html>
