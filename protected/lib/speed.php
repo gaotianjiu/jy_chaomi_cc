@@ -511,15 +511,7 @@ function _err_handle($errno, $errstr, $errfile, $errline){
 	if($errno == E_STRICT)$msg = "STRICT";
 	if($errno == 8192)$msg = "DEPRECATED";
 	err("$msg: $errstr in $errfile on line $errline");
-}
-
-//function spClass($class){
-//    $gb = null;
-//    if($class){
-//        $gb = new $class();
-//    }
-//    return $gb;
-//}
+} 
 
 function err($msg){
 	$msg = htmlspecialchars($msg);
