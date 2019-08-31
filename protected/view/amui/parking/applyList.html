@@ -37,7 +37,7 @@
 								<div class="am-form-group">域名类型：
 									<select name="typeid" data-am-selected="{btnSize: 'sm'}" style="width:200px;">
 										<option value="0">全部</option>
-										<{foreach item=tp from=$types}>
+										<{foreach $types as $tp}>
 										<option value="<{$tp.id}>" <{if $cond.typeid==$tp.id}>selected<{/if}>><{$tp.name}></option>
 										<{/foreach}>
 									</select>

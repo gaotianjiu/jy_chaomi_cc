@@ -37,7 +37,7 @@
 								<label style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;line-height:30px;">域名品种：</label>
                                 <select name="pz" data-am-selected="{btnSize: 'sm'}">
                                     <option value="0">全部</option>
-                                    <{foreach item=tp from=$types}>
+                                    <{foreach $types as $tp}>
                                     <option value="<{$tp.id}>" <{if $cond.pz eq $tp.id}>selected<{/if}> ><{$tp.name}></option>
                                     <{/foreach}>
                                 </select>
@@ -306,7 +306,7 @@
             return;
         }
    
-		$.post('<{spUrl c=first a=apply from=check}>',{"id":chk_value},function(ret){
+		$.post('<{url c='first' a='apply' from='check'}>',{"id":chk_value},function(ret){
 			if(ret.status==201){
 				layer.msg(ret.msg);
 				return;

@@ -46,6 +46,11 @@ $__module     = isset($_REQUEST['m']) ? strtolower($_REQUEST['m']) : '';
 $__controller = isset($_REQUEST['c']) ? strtolower($_REQUEST['c']) : 'main';
 $__action     = isset($_REQUEST['a']) ? strtolower($_REQUEST['a']) : 'index';
 
+
+//echo $__module. ' | '.$__controller. ' | '.$__action;
+//exit;
+
+
 spl_autoload_register('inner_autoload');
 function inner_autoload($class){
 	GLOBAL $__module;
@@ -70,7 +75,7 @@ function inner_autoload($class){
 }
 
 $controller_name = $__controller.'Controller';
-$action_name = 'action'.$__action;
+$action_name = 'action'.$__action;  
 
 if(!empty($__module)){
 	if(!is_available_classname($__module))_err_router("Err: Module '$__module' is not correct!");

@@ -47,7 +47,7 @@
 												<div class="am-u-sm-9">
 													<select data-am-selected="" id="tq_typeid">
 														<option></option>
-														<{foreach item=tp from=$type_options}>
+														<{foreach $type_options as $tp}>
 														<option value="<{$tp.id}>"><{$tp.name}></option>
 														<{/foreach}>  
 													</select>	
@@ -177,7 +177,7 @@
 			var tomid  = $(this).val();
 			if(tomid){
 				$.ajax({
-					url:"<{spUrl c=push a=apply from=tomid_info}>",
+					url:"<{url c='push' a='apply' from='tomid_info'}>",
 					data:{'tomid':tomid},
 					type:"post",
 					success:function(ret){
@@ -214,7 +214,7 @@
 				return;
 			}		
 			$.ajax({
-				url:"<{spUrl c=push a=apply from=tq}>",
+				url:"<{url c='push' a='apply' from='tq'}>",
 				data:{'tq_typeid':tq_typeid,'tq_count':tq_count},
 				type:"post",
 				success:function(ret){
@@ -290,7 +290,7 @@
 						'safecode':safecode
 					},
 					type: "post",
-					url: "<{spUrl c=push a=apply from=create}>", 
+					url: "<{url c='push' a='apply' from='create'}>", 
 					success: function (ret) {
 						if(ret.status==209){
 							layer.msg(ret.msg)

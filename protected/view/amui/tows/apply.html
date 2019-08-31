@@ -45,7 +45,7 @@
 										<div class="am-u-sm-9">
 											<select data-am-selected="" id="typeid">
 												<option></option>
-												<{foreach item=tp from=$type_options}>
+												<{foreach $type_options as $tp}>
 												<option value="<{$tp.code}>"><{$tp.name}></option>
 												<{/foreach}>  
 											</select>	
@@ -274,7 +274,7 @@ function domains_get(){
 					'safecode':safecode					
 				},
 				type: "post",
-				url: "<{spUrl c=tows a=apply from=create}>", 
+				url: "<{url c='tows' a='apply' from='create'}>", 
 				success: function (ret) {
 					if(ret.status==209){
 						layer.msg(ret.msg)

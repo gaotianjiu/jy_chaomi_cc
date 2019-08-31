@@ -473,7 +473,7 @@
             return;
         }
 
-        $.post('<{spUrl c=push a=apply from=check}>', {"id": chk_value}, function (ret) {
+        $.post('<{url c='push' a='apply' from='check'}>', {"id": chk_value}, function (ret) {
             if (ret.status == 201) {
                 layer.msg(ret.msg);
                 return;
@@ -497,7 +497,7 @@
             return;
         }
 
-        $.post('<{spUrl c=first a=apply from=check}>', {"id": chk_value}, function (ret) {
+        $.post('<{url c='first' a='apply' from='check'}>', {"id": chk_value}, function (ret) {
             if (ret.status == 201) {
                 layer.msg(ret.msg);
                 return;

@@ -38,7 +38,7 @@
 								<label style="float:left;padding:0;margin:0;font:inherit;margin-right:4px;line-height:30px;">品种： </label>
                                 <select name="typeid" data-am-selected="{btnSize: 'sm'}" style="width:150px;_width:150px;height:33px;font-size: 14px">
                                     <option value="0">全部品种</option>
-                                    <{foreach item=tp from=$types}>
+                                    <{foreach $types as $tp}>
                                     <option value="<{$tp.id}>" <{if $cond.typeid eq $tp.id}>selected<{/if}> ><{$tp.name}></option>
                                     <{/foreach}>
                                 </select>

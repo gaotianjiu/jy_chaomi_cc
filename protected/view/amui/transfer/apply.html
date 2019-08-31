@@ -37,7 +37,7 @@
 										<div class="am-u-sm-10">
 											<select data-am-selected="" id="typeid">
 												<option></option>
-												<{foreach item=tp from=$type_options}>
+												<{foreach $type_options as $tp}>
 												<option value="<{$tp.code}>"><{$tp.name}></option>
 												<{/foreach}>
 											</select>	
@@ -60,7 +60,7 @@
 										<div class="am-u-sm-10">
 											<select data-am-selected="" id="registrar_852">
 											  <option>选择易名平台帐号ID</option>
-											  <{foreach item=v from=$registrar_852}> 
+											  <{foreach $registrar_852 as $v}> 
 											  <option value="<{$v.id}>">易名(ID：<{$v.webid}>)</option>
 											  <{/foreach}>
 											  <{if !$registrar_852}>
@@ -69,7 +69,7 @@
 											</select>
 											<select data-am-selected="" id="registrar_851">
 											  <option>选择爱名平台帐号ID</option>
-											  <{foreach item=v from=$registrar_851}> 
+											  <{foreach $registrar_851 as $v}> 
 											  <option value="<{$v.id}>">爱名(ID：<{$v.webid}>)</option>
 											  <{/foreach}>
 											  <{if !$registrar_851}>
@@ -78,7 +78,7 @@
 											</select>
 											<select data-am-selected="" id="registrar_854">
 											  <option>选择万网平台帐号ID</option>
-											  <{foreach item=v from=$registrar_854}> 
+											  <{foreach $registrar_854 as $v}> 
 											  <option value="<{$v.id}>">万网(ID：<{$v.webid}>)</option>
 											  <{/foreach}>
 											  <{if !$registrar_854}>
@@ -199,7 +199,7 @@ function transfer_get(){
 					'registrar_854':registrar_854
 				},
 				type: "post",
-				url: "<{spUrl c=transfer a=apply from=create}>", 
+				url: "<{url c='transfer' a='apply' from='create'}>", 
 				success: function (data) {
 					if(data.status>1){
 						layer.msg(data.msg)

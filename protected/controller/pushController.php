@@ -17,7 +17,7 @@ class pushController extends BaseController{
             exit();
         }
     }
-    function actionapply(){
+    function actionapply(){ 
 		//发起PUSH域名
 		$uid = $this->uid;
 		$mid = $this->mid;
@@ -30,7 +30,7 @@ class pushController extends BaseController{
 		$id = $this->spArgs('id'); 
 
 		$from = $this->spArgs('from');
-		
+		$this->domain_list = '';
 		if($from=='tq'){
 			//快速提取域名列表
 			$tq_typeid = $this->spArgs('tq_typeid'); 
@@ -744,7 +744,7 @@ class pushController extends BaseController{
 		$pub_user = spClass('pub_user');
 		$cond = array('send_uid'=>$uid);
 		if($status>0)$cond['status'] = $status;
-		$_ret = $pan_domain_push->spPager($page, pgsize)->findAll($cond,"id desc");
+		$_ret = $pan_domain_push->findAll($cond,"id desc","*",array($page, pgsize,10));
 		$ret = array();
 		foreach ($_ret as $v) {
 			$r = $pub_user->find(array('uid'=>$v['accept_uid']));		
@@ -763,7 +763,8 @@ class pushController extends BaseController{
 			$ret[] = $v;
 		}		
 		//分页开始
-        $pager = $pan_domain_push->spPager()->getPager();
+        //$pager = $pan_domain_push->spPager()->getPager();
+        $pager  = $pan_domain_push->page;
         if ($pager['total_page'] > 5) {
             if ($page <= 3) {
                 $pager['all_pages'] = array_slice($pager['all_pages'], 0, 5);
@@ -788,7 +789,8 @@ class pushController extends BaseController{
 		$pub_user = spClass('pub_user');
 		$cond = array('accept_uid'=>$uid);
 		if($status>0)$cond['status'] = $status;		
-		$_ret = $pan_domain_push->spPager($page, pgsize)->findAll($cond,"id desc");
+		//$_ret = $pan_domain_push->spPager($page, pgsize)->findAll($cond,"id desc");
+                $_ret = $pan_domain_push->findAll($cond,"id desc","*",array($page, pgsize,10));
 		$ret = array();
 		foreach ($_ret as $v) {
 			$r = $pub_user->find(array('uid'=>$v['send_uid']));		
@@ -808,7 +810,7 @@ class pushController extends BaseController{
 		}		
 
 		//分页开始
-        $pager = $pan_domain_push->spPager()->getPager();
+        $pager = $pan_domain_push->page;
         if ($pager['total_page'] > 5) {
             if ($page <= 3) {
                 $pager['all_pages'] = array_slice($pager['all_pages'], 0, 5);

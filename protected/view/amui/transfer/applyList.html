@@ -109,7 +109,7 @@
 <script type="text/javascript">
     //取消域名转出
     function cancel(id){
-        $.post('<{spUrl c=transfer a=apply from=cancel}>',{'id':id},function(ret){
+        $.post('<{url c='transfer' a='apply' from='cancel'}>',{'id':id},function(ret){
             if(ret.status==200){
                 layer.msg(ret.msg);
 				location.reload(true)

@@ -39,7 +39,7 @@
 										<!-- <div class="am-u-sm-9"> -->
 											<!-- <select data-am-selected="" id="typeid" style="width:250px"> -->
 												<!-- <option></option> -->
-												<!-- <{foreach item=tp from=$type_options}> -->
+												<!-- <{foreach $type_options as $tp}> -->
 												<!-- <option value="<{$tp.code}>"><{$tp.name}></option> -->
 												<!-- <{/foreach}> -->
 											<!-- </select>	 -->
@@ -124,7 +124,7 @@
 			var tomid  = $(this).val();
 			if(tomid){
 				$.ajax({
-					url:"<{spUrl c=score a=push from=tomid_info}>",
+					url:"<{url c='score' a='push' from='tomid_info'}>",
 					data:{'tomid':tomid},
 					type:"post",
 					success:function(ret){
@@ -178,7 +178,7 @@
 						'safecode':safecode
 					},
 					type: "post",
-					url: "<{spUrl c=score a=push from=create}>", 
+					url: "<{url c='score' a='push' from='create'}>", 
 					success: function (ret) {
 						if(ret.status==209){
 							layer.msg(ret.msg)

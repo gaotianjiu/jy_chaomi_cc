@@ -38,7 +38,7 @@
 										<div class="am-u-sm-9">
 											<select data-am-selected="" id="typeid">
 												<option></option>
-												<{foreach item=tp from=$type_options}>
+												<{foreach $type_options as $tp}>
 												<option value="<{$tp.code}>"><{$tp.name}></option>
 												<{/foreach}>
 											</select>	
@@ -128,7 +128,7 @@
 					'typeid':type,
 				},
 				type: "post",
-				url: "<{spUrl c=qualification a=apply from=create}>", 
+				url: "<{url c='qualification' a='apply' from='create'}>", 
 				success: function (data) {
 					if(data.status>1){
 						layer.msg(data.msg)

@@ -44,7 +44,7 @@
                                 </thead>
                                 <tbody>
                                 <{if $banks}>
-                                <{foreach item=v from=$banks}>
+                                <{foreach $banks as $v}>
                                 <tr>
                                     <td><{$v.bankname}></td>
                                     <td>

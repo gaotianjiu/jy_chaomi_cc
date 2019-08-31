@@ -10,9 +10,7 @@ $config = array(
         'deal_data'=>"deal_data/index",
         '<c>$'=>"<c>/index",     
         'announce/view\?id=<id>$'=>"announce/view",        
-        'sso/login\?act=<act>$'=>"sso/login",   
-
-        
+        'sso/login\?act=<act>$'=>"sso/login",           
         
         'admin/index.html' => 'admin/main/index',
         'admin/<c>_<a>.html' => 'admin/<c>/<a>',

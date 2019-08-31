@@ -47,7 +47,7 @@
 								</tr>
 								<{/if}>										
                                 <{if $order}>
-                                <{foreach item=v from=$order}>
+                                <{foreach $order as $v}>
                                 <tr>
                                     <td><{$v.order_id}></td>
                                     <td>

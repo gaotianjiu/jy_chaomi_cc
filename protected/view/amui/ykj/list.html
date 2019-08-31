@@ -48,7 +48,7 @@
                         <div class="am-u-sm-12" style="padding-top:0px;padding-bottom:10px;">
 						<span style="color:#F60;font-weight:bold;">域名类型：</span>
 						<a class="group-tp<{if !$cond.typeid}> ykj-active<{/if}>" href="/ykj">全部</a>
-						<{foreach item=tp from=$types}>
+						<{foreach $types as $tp}>
 							<a class="group-tp<{if $cond.typeid eq $tp.id}> ykj-active<{/if}>" href="/ykj?typeid=<{$tp.id}><{if $cond.domain}>&domain=<{$cond.domain}><{/if}><{if $cond.price_px}>&price_px=<{$cond.price_px}><{/if}><{if $cond.is_park}>&is_park=<{$cond.is_park}><{/if}>"><{$tp.name}></a>
 						<{/foreach}>
 						</div>
@@ -308,7 +308,7 @@ $(function() {
 				'safecode':safecode					
 			},
 			type: "post",
-			url: "<{spUrl c=ykj a=buy from=create}>", 
+			url: "<{url c='ykj' a='buy' from='create'}>", 
 			success: function (ret) {
 				if(ret.status==209){
 					layer.msg(ret.msg)
